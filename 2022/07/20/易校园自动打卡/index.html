@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>易校园自动打卡 | swedsn</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="易校园自动打卡 | swedsn">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctfshow刷题记录-sql注入">
+<meta property="og:url" content="http://example.com/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="swedsn">
+<meta property="og:description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714094708518.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100039465.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100809368.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714102501924.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140322101.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140556079.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220716144032670.png">
+<meta property="article:published_time" content="2022-07-20T11:05:57.000Z">
+<meta property="article:modified_time" content="2022-07-20T11:08:13.411Z">
+<meta property="article:author" content="swedsn">
+<meta property="article:tag" content="web安全、sql注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+
+
+<link rel="icon" href="/img/logo.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/kimbie-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>swedsn</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/swedsn?tab=repositories"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="csdn"
+               href="https://blog.csdn.net/qq_51032807?spm=1000.2115.3001.5343"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-csdn"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="email"
+               href="mailto:jaytp@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=1627319559&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(23)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        开发
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="开发<--->支付宝接口">
+                                        
+                                        支付宝接口
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="开发<--->Java开发">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        Java开发
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="开发<--->Java开发基础知识">
+                                                        
+                                                        基础知识
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="工具箱">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具箱
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具箱<--->Misc">
+                                        
+                                        Misc
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Pwn入门">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Pwn入门
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->格式化字符串漏洞">
+                                        
+                                        格式化字符串漏洞
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->基础知识">
+                                        
+                                        基础知识
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->栈溢出">
+                                        
+                                        栈溢出
+                                        
+                                            <small>(8
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Web安全">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Web安全
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Web安全<--->SQL注入">
+                                        
+                                        SQL注入
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="23">
+<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
+           data-tag="web安全、sql注入"
+           data-author="" >
+            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
+            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="SQL注入总结">SQL注入总结</span>
+            <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="杂记">杂记</span>
+            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/20/%E6%98%93%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="易校园自动打卡">易校园自动打卡</span>
+            <span class="post-date" title="2022-07-20 18:49:05">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
+            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E6%A0%88%E8%BF%81%E7%A7%BB/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出--栈迁移">花式栈溢出--栈迁移</span>
+            <span class="post-date" title="2022-07-12 13:45:03">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-mprotect%E7%BB%95%E8%BF%87NX%E4%BF%9D%E6%8A%A4/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-mprotect绕过NX保护">花式栈溢出-mprotect绕过NX保护</span>
+            <span class="post-date" title="2022-07-12 13:44:49">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
+            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
+            <span class="post-date" title="2022-07-12 13:44:21">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
+            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
+            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
+            <span class="post-date" title="2022-07-12 13:43:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 支付宝接口 "
+           href="/2022/07/12/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="支付宝接口开发">支付宝接口开发</span>
+            <span class="post-date" title="2022-07-12 09:55:16">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/12/Latex%E7%9A%84%E5%AD%A6%E4%B9%A0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Latex的学习">Latex的学习</span>
+            <span class="post-date" title="2022-07-12 09:54:45">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 Java开发 基础知识 "
+           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-易校园自动打卡" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">易校园自动打卡</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="工具箱">工具箱</a> > 
+            
+            <a  data-rel="工具箱&lt;---&gt;Misc">Misc</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:55:20'>2022-07-20 18:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:2k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">一、 实现原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-text">二、获取请求的内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="toc-text">三、发送请求</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8F%91%E9%80%81%E6%96%B9%E5%BC%8F"><span class="toc-text">1. 发送方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BD%AC%E6%8D%A2%E6%A0%BC%E5%BC%8F"><span class="toc-text">2.转换格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%B0%86-amp-%E8%BD%AC%E6%8D%A2%E6%88%90%E5%9B%9E%E8%BD%A6"><span class="toc-text">（1）将&amp;转换成回车</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%BD%AC%E6%8D%A2%E6%88%90%E5%A4%9A%E4%B8%AA%E5%85%83%E7%BB%84"><span class="toc-text">（2）转换成多个元组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E6%9C%80%E7%BB%88%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-text">（3）最终转换成字典</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%95%B0%E6%8D%AE%E4%BF%AE%E6%94%B9"><span class="toc-text">3. 数据修改</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%AF%B4%E6%98%8E"><span class="toc-text">（1）说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%89%93%E5%8D%A1%E6%97%B6%E9%97%B4%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="toc-text">（2）打卡时间的修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E7%BB%8F%E7%BA%AC%E5%BA%A6%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="toc-text">（3）经纬度的修改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%A8%E9%83%A8%E4%BB%A3%E7%A0%81"><span class="toc-text">4. 全部代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="toc-text">四、自动化运行脚本</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、-实现原理"><a href="#一、-实现原理" class="headerlink" title="一、 实现原理"></a>一、 实现原理</h1><p>通过定时向健康系统的页面发送一个请求，请求的内容为每次打卡需要的信息。就可实现自动打卡</p>
+<h1 id="二、获取请求的内容"><a href="#二、获取请求的内容" class="headerlink" title="二、获取请求的内容"></a>二、获取请求的内容</h1><p>通过抓包软件抓取，手机上面主要使用的是小黄鸟——HttpCanary 抓取信息，电脑上面主要是通过Fiddler软件。抓取易校园的数据，找到有关<a target="_blank" rel="noopener" href="https://h5.xiaofubao.com/marketing/health/getDetail">https://h5.xiaofubao.com/marketing/health/getDetail</a> 链接的请求，然后里面会存在一条关于url文件，url解码即可得到自己发送请求时发送的内容</p>
+<p>可以看到抓取到的信息解码后是（只展示了解码后的一部分）</p>
+<blockquote>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235337676.png"></p>
+</blockquote>
+<p>可以发现，传递的内容就是就是你的个人信息。接下来就是将这些内容发送到指定的位置</p>
+<h1 id="三、发送请求"><a href="#三、发送请求" class="headerlink" title="三、发送请求"></a>三、发送请求</h1><p>将请求的内容，发送到健康系统的那个页面</p>
+<h2 id="1-发送方式"><a href="#1-发送方式" class="headerlink" title="1. 发送方式"></a>1. 发送方式</h2><p>发送请求的方式主要的方式是通过python中的一个requests库。</p>
+<p>request库方法介绍</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">requests.request()</td>
+<td align="center">构造一个请求，支撑一下各方法的基础方法</td>
+</tr>
+<tr>
+<td align="center">requests.get()</td>
+<td align="center">获取HTML网页的主要方法，对应于HTTP的GET</td>
+</tr>
+<tr>
+<td align="center">requests.head()</td>
+<td align="center">获取HTML网页头信息的方法，对应于HTTP的HEAD</td>
+</tr>
+<tr>
+<td align="center">requests.post()</td>
+<td align="center">向HTML网页提交POST请求的方法，对应于HTTP的POST</td>
+</tr>
+<tr>
+<td align="center">requests.put()</td>
+<td align="center">向HTML网页提交PUT请求的方法，对应于HTTP的PUT</td>
+</tr>
+<tr>
+<td align="center">requests.patch()</td>
+<td align="center">向HTML网页提交局部修改请求，对应于HTTP的PATCH</td>
+</tr>
+<tr>
+<td align="center">requests.delete()</td>
+<td align="center">向HTML页面提交删除请求，对应于HTTP的DELETE</td>
+</tr>
+</tbody></table>
+<p>由于在抓取的数据时，发现易校园主要采用的时post的请求方式，所以这里要使用到的是post方法</p>
+<p>requests.put(url, data&#x3D;None, **kwargs)</p>
+<ul>
+<li>url：拟更新页面的url链接</li>
+<li>data：字典、字节序列或文件，Request的内容</li>
+<li>**kwargs：12个控制访问参数</li>
+</ul>
+<p>也就是说通过下面的方式就可以发送请求</p>
+<pre><code class="python">requests.post(url, data= &quot;传递的内容&quot;)
+</code></pre>
+<h2 id="2-转换格式"><a href="#2-转换格式" class="headerlink" title="2.转换格式"></a>2.转换格式</h2><p>可以看到前面传递内容的data采取的是一个字典的格式，字典就是键值对（一个键对应一个数值），所以需要把上面url内容转换成下面这种格式，才能发送内容</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235523762.png"></p>
+<p>转换的话有两种解法：</p>
+<p>（1）自己一个一个的手动修改成字典的形式，这样的话就很费时费力</p>
+<p>（2）写脚本</p>
+<p>这里我采用第二种，脚本不唯一，下面的只是一种思路</p>
+<h3 id="（1）将-amp-转换成回车"><a href="#（1）将-amp-转换成回车" class="headerlink" title="（1）将&amp;转换成回车"></a>（1）将&amp;转换成回车</h3><p>首先查看两者的区别， 字典中没有&amp;， 而且&amp;是作为一组键值对的分界</p>
+<p>利用python中正则表达式的一个方法sub， 来将&amp;替换成回车</p>
+<blockquote>
+<p>正则表达式是一个特殊的字符序列，它能帮助你方便的检查一个字符串是否与某种模式匹配。</p>
+<p>sub方法：实现正则的替换</p>
+</blockquote>
+<p>函数原型：re.sub(pattern, repl, string, count&#x3D;0, flags&#x3D;0)	</p>
+<ul>
+<li>pattern : 正则中的模式字符串。</li>
+<li>repl : 替换的字符串，也可为一个函数。</li>
+<li>string : 要被查找替换的原始字符串。</li>
+<li>count : 模式匹配后替换的最大次数，默认 0 表示替换所有的匹配。</li>
+<li>flags : 编译时用的匹配模式，数字形式。</li>
+</ul>
+<p><font color=red>其中前三个为必选参数，后两个为可选参数。</font></p>
+<p>这里利用的方式：</p>
+<pre><code class="python">data_str = re.sub(r&#39;&amp;&#39;, &#39;\n&#39;, info_daka)  # 其中 info_daka 表示的是你url解码以后的内容，data_str表示转换的内容
+</code></pre>
+<p>将&amp;换成 回车</p>
+<p>目前已经被修改成了：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235613591.png"></p>
+<h3 id="（2）转换成多个元组"><a href="#（2）转换成多个元组" class="headerlink" title="（2）转换成多个元组"></a>（2）转换成多个元组</h3><p>利用正则表达式的findall方法将上面的data_str转换成元组（类似于列表，不了解就当作C语言的数组）</p>
+<p>findall方法：</p>
+<blockquote>
+<p>在字符串中找到正则表达式所匹配的所有子串，并返回一个列表，如果有多个匹配模式，则返回元组列表，如果没有找到匹配的，则返回空列表。</p>
+<p><strong>注意：</strong> match 和 search 是匹配一次 findall 匹配所有。</p>
+</blockquote>
+<p>语法格式为：</p>
+<blockquote>
+<pre><code>findall(string[, pos[, endpos]])
+</code></pre>
+</blockquote>
+<ul>
+<li><strong>string</strong> : 待匹配的字符串。</li>
+<li><strong>pos</strong> : 可选参数，指定字符串的起始位置，默认为 0。</li>
+<li><strong>endpos</strong> : 可选参数，指定字符串的结束位置，默认为字符串的长度。</li>
+</ul>
+<pre><code class="python">content = re.findall(r&#39;(.*?)=(.*)&#39;, data_str)
+</code></pre>
+<p>这里重点讲一下<font color=red>‘(.*?)&#x3D;(.*)’</font>的作用， </p>
+<p>首先先看 不加（） 的情况。其中的？表示非贪婪模式，它会自动匹配最少的内容，一般情况默为贪婪模式。匹配更多的情况</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117012037635.png"></p>
+<p>可以发现它是以回车键为截断的，首先它会将回车键的前部分转换成元组的一个元素，然后将后面的name作为一个元素，放到第二位</p>
+<p>但是加上一个（）以后就发生了变化</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117012347741.png"></p>
+<p>？就是不贪婪了，前一个括号里不会有等号</p>
+<p>从前往后，找到的第一个等号，就作为划分，后面全部算等号右边的值，包括又出现等号的情况，因为后面是贪婪匹配</p>
+<p><font color=red>这里理解可能还存在问题</font></p>
+<p>那么此时的content里面的内容为：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235846679.png"></p>
+<h3 id="（3）最终转换成字典"><a href="#（3）最终转换成字典" class="headerlink" title="（3）最终转换成字典"></a>（3）最终转换成字典</h3><p>最终再通过for循环每一个元组将元素提取出来形成字典，i表示每一个元组，第一个元组：key&#x3D;id，vaule为id的值</p>
+<pre><code class="python">  for i in content:
+        key = i[0]
+        value = i[1]
+        sign_data[key] = value
+</code></pre>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117001711505.png"></p>
+<h2 id="3-数据修改"><a href="#3-数据修改" class="headerlink" title="3. 数据修改"></a>3. 数据修改</h2><h3 id="（1）说明"><a href="#（1）说明" class="headerlink" title="（1）说明"></a>（1）说明</h3><p>上面的转换成了字典，但是还有一些内容是实时的需要修改，这里我只修改了其中的两项</p>
+<h3 id="（2）打卡时间的修改"><a href="#（2）打卡时间的修改" class="headerlink" title="（2）打卡时间的修改"></a>（2）打卡时间的修改</h3><p>利用python中的time库的strftime方法实现当前的时间</p>
+<pre><code class="python">datatime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, time.localtime(time.time()))
+</code></pre>
+<p>然后直接利用update修改字典里面的键对应的值即可</p>
+<pre><code> sign_data.update(&#123;&#39;updateTime&#39;: datatime&#125;)
+</code></pre>
+<h3 id="（3）经纬度的修改"><a href="#（3）经纬度的修改" class="headerlink" title="（3）经纬度的修改"></a>（3）经纬度的修改</h3><p>这个经纬度其实可改可不改</p>
+<pre><code class="python">num1 = random.randrange(100, 999)
+num2 = random.randrange(100, 999)
+
+addres = re.findall(&#39;(\d&#123;3&#125;\.\d&#123;3&#125;)\d*,(\d&#123;2&#125;\.\d&#123;3&#125;)&#39;, sign_data[&#39;longitudeAndLatitude&#39;])
+sign_data[&#39;longitudeAndLatitude&#39;]  =  f&#39;&#123;addres[0][0]&#125;&#123;num1&#125;,&#123;addres[0][1]&#125;&#123;num2&#125;&#39;
+</code></pre>
+<p>前面两行代码表示随机生成随机数</p>
+<p>第三行代码表示减小精度，</p>
+<p>第四行代码表示在最后几位数上随机生成几个数，以此来造成变化</p>
+<h2 id="4-全部代码"><a href="#4-全部代码" class="headerlink" title="4. 全部代码"></a>4. 全部代码</h2><pre><code class="python"># -*- coding:utf-8 -*-
+import re
+import time
+
+import random
+import requests
+
+datatime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, time.localtime(time.time()))
+
+num1 = random.randrange(100, 999)
+num2 = random.randrange(100, 999)
+
+info_daka = &#39;&#39;
+
+def main(*args):
+    sign_url = &#39;https://h5.xiaofubao.com/marketing/health/doDetail&#39;
+
+    data_str = re.sub(r&#39;&amp;&#39;, &#39;\n&#39;, info_daka)
+    content = re.findall(r&#39;(.*?)=(.*)&#39;, data_str)
+    sign_data = &#123;&#125;
+    for i in content:
+        key = i[0]
+        value = i[1]
+        sign_data[key] = value
+    # print(sign_data)
+    addres = re.findall(&#39;(\d&#123;3&#125;\.\d&#123;3&#125;)\d*,(\d&#123;2&#125;\.\d&#123;3&#125;)&#39;, sign_data[&#39;longitudeAndLatitude&#39;])
+    sign_data[
+        &#39;longitudeAndLatitude&#39;] = f&#39;&#123;addres[0][0]&#125;&#123;num1&#125;,&#123;addres[0][1]&#125;&#123;num2&#125;&#39;
+    sign_data.update(&#123;&#39;updateTime&#39;: datatime&#125;)
+    print(sign_data)
+    res_sign = requests.post(url=sign_url, data=sign_data)
+    print(res_sign.text)
+
+
+# 云函数入口
+def main_handler(event, context):
+    main()
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220112180434408.png"></p>
+<h1 id="四、自动化运行脚本"><a href="#四、自动化运行脚本" class="headerlink" title="四、自动化运行脚本"></a>四、自动化运行脚本</h1><p>上面的脚本虽然实现了内容的传递的方式，但是仍然需要运行脚本才能发送请求，如果每次打卡都需要运行脚本的话，那么所做的将毫无意义。采取的方式是，利用腾讯云的云函数，利用里面的定时触发器，每日定时打卡。</p>
+<p>在使用之前，需要在代码中添上两行代码作为云函数的入口</p>
+<pre><code class="python"># 云函数入口
+def main_handler(event, context):
+    main()
+</code></pre>
+<p>接下来就是注册一个腾讯云账号，进入腾讯云函数网址<a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/scf/list">https://console.cloud.tencent.com/scf/list</a></p>
+<p>（1）新建函数，选择从头开始，</p>
+<p>（2）在高级配置中修改执行超过时间</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117002904550.png"></p>
+<p>（3）在触发配置中选择自定义创建，具体要实现的情况自己选择，也可以直接确定</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117003015028.png"></p>
+<p>（4）在函数管理中，将前面的代码写进去，然后再测试，部署即可</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2017 swedsn
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 572px;
+    }
+    .nav.fullscreen {
+        margin-left: -572px;
+    }
+    .nav-left {
+        width: 150px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 512px;
+        }
+        .nav.fullscreen {
+            margin-left: -512px;
+        }
+        .nav-left {
+            width: 120px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 512px;
+            margin-left: -512px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #FFE7BA;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://browser9.qhimg.com/bdm/1000_618_85/t0183def7a3a7924215.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

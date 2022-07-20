@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>格式化字符串漏洞--基本原理 | swedsn</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="格式化字符串漏洞--基本原理 | swedsn">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctfshow刷题记录-sql注入">
+<meta property="og:url" content="http://example.com/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="swedsn">
+<meta property="og:description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714094708518.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100039465.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100809368.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714102501924.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140322101.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140556079.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220716144032670.png">
+<meta property="article:published_time" content="2022-07-20T11:05:57.000Z">
+<meta property="article:modified_time" content="2022-07-20T11:08:13.411Z">
+<meta property="article:author" content="swedsn">
+<meta property="article:tag" content="web安全、sql注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+
+
+<link rel="icon" href="/img/logo.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/kimbie-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>swedsn</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/swedsn?tab=repositories"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="csdn"
+               href="https://blog.csdn.net/qq_51032807?spm=1000.2115.3001.5343"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-csdn"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="email"
+               href="mailto:jaytp@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=1627319559&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(23)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        开发
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="开发<--->支付宝接口">
+                                        
+                                        支付宝接口
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="开发<--->Java开发">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        Java开发
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="开发<--->Java开发基础知识">
+                                                        
+                                                        基础知识
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="工具箱">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具箱
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具箱<--->Misc">
+                                        
+                                        Misc
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Pwn入门">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Pwn入门
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->格式化字符串漏洞">
+                                        
+                                        格式化字符串漏洞
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->基础知识">
+                                        
+                                        基础知识
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->栈溢出">
+                                        
+                                        栈溢出
+                                        
+                                            <small>(8
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Web安全">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Web安全
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Web安全<--->SQL注入">
+                                        
+                                        SQL注入
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="23">
+<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
+           data-tag="web安全、sql注入"
+           data-author="" >
+            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
+            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="SQL注入总结">SQL注入总结</span>
+            <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="杂记">杂记</span>
+            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/20/%E6%98%93%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="易校园自动打卡">易校园自动打卡</span>
+            <span class="post-date" title="2022-07-20 18:49:05">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
+            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E6%A0%88%E8%BF%81%E7%A7%BB/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出--栈迁移">花式栈溢出--栈迁移</span>
+            <span class="post-date" title="2022-07-12 13:45:03">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-mprotect%E7%BB%95%E8%BF%87NX%E4%BF%9D%E6%8A%A4/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-mprotect绕过NX保护">花式栈溢出-mprotect绕过NX保护</span>
+            <span class="post-date" title="2022-07-12 13:44:49">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
+            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
+            <span class="post-date" title="2022-07-12 13:44:21">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
+            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
+            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
+            <span class="post-date" title="2022-07-12 13:43:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 支付宝接口 "
+           href="/2022/07/12/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="支付宝接口开发">支付宝接口开发</span>
+            <span class="post-date" title="2022-07-12 09:55:16">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/12/Latex%E7%9A%84%E5%AD%A6%E4%B9%A0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Latex的学习">Latex的学习</span>
+            <span class="post-date" title="2022-07-12 09:54:45">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 Java开发 基础知识 "
+           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-格式化字符串漏洞-基本原理" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">格式化字符串漏洞--基本原理</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Pwn入门">Pwn入门</a> > 
+            
+            <a  data-rel="Pwn入门&lt;---&gt;格式化字符串漏洞">格式化字符串漏洞</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:24:35'>2022-07-12 13:51</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">一、格式化字符串的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%86%E8%A7%A3printf%E5%87%BD%E6%95%B0%E6%97%8F"><span class="toc-text">1、了解printf函数族</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81printf%E7%9A%84%E8%BE%93%E5%87%BA%E5%8E%9F%E7%90%86"><span class="toc-text">2、printf的输出原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81printf%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%82%B9"><span class="toc-text">3、printf的漏洞利用点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">4、$的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E4%BB%BB%E6%84%8F%E8%AF%BB"><span class="toc-text">二、格式化字符串漏洞——任意读</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%B3%84%E9%9C%B2canary"><span class="toc-text">1、泄露canary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%B3%84%E9%9C%B2pie%E5%9F%BA%E5%9C%B0%E5%9D%80"><span class="toc-text">2、泄露pie基地址</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E4%BB%BB%E6%84%8F%E5%86%99"><span class="toc-text">三、格式化字符串漏洞——任意写</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BB%95%E8%BF%87%E5%88%A4%E6%96%AD%EF%BC%8C%E4%BF%AE%E6%94%B9%E6%9F%90%E4%B8%AA%E6%95%B0%E5%80%BC"><span class="toc-text">1、绕过判断，修改某个数值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E4%BB%BB%E6%84%8F%E5%86%99%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94fmtstr-payload"><span class="toc-text">2、任意写神器——fmtstr_payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF"><span class="toc-text">四、格式化字符串漏洞——无限循环</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E9%A2%98%E7%9B%AE"><span class="toc-text">五、常见格式化字符串漏洞题目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">六、参考链接</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、格式化字符串的基本原理"><a href="#一、格式化字符串的基本原理" class="headerlink" title="一、格式化字符串的基本原理"></a>一、格式化字符串的基本原理</h1><h2 id="1、了解printf函数族"><a href="#1、了解printf函数族" class="headerlink" title="1、了解printf函数族"></a>1、了解printf函数族</h2><p>格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串</p>
+<p>像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png" alt="image-20220430215411006"></p>
+<p>常见的符号i说明：</p>
+<p>（1）%d：以十进制形式输出带符号整数</p>
+<p>（2） %s：不是打印栈中的内容，而是通过栈中地址寻址。 把存储单元内的数据转换成ASCII字符格式输出，直到遇到字符””\0”才会停止</p>
+<p>（3）%p：将所指向的内容当成是指针来输出，不是输出它的地址，实际上与输出十六进制格式差不多</p>
+<p>它打印出来的是这个栈地址所指向的内容：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101408921.png" alt="image-20220430101408921"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101529916.png" alt="image-20220430101529916"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101458769.png" alt="image-20220430101458769"></p>
+<h2 id="2、printf的输出原理"><a href="#2、printf的输出原理" class="headerlink" title="2、printf的输出原理"></a>2、printf的输出原理</h2><p>（1）其中，它的第一个是格式化字符串，然后接下来的就是它的后门几个参数，格式化字符串位于esp处</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main()&#123;
+
+    char str[] = &quot;Hello&quot;;
+    int x = 32;
+    char s[] = &quot;pwnpwnpwn&quot;;
+    printf(&quot;%s %d %s %c&quot;, str, x, s, &#39;\n&#39;);
+    return 0;
+&#125;
+</code></pre>
+<p>（2）printf的读取方式：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153742463.png" alt="image-20220430153742463"></p>
+<p>（3）它会按照参数的顺序以此读取内容，但是此时如果我修改掉它的第一个参数的内容为第三个参数的数值，那么此时它的输出就会发生变化</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153850406.png" alt="image-20220430153850406"></p>
+<p>（4）此时它的输出就为：pwnpwnpwn 32 pwnpwnpwn</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153944418.png" alt="image-20220430153944418"></p>
+<p>结论：</p>
+<p>① 如果我们能够控制格式化字符串的内容，我们就能得到栈上所有内容的值</p>
+<p>② 再通过%s能够任意地址读取了</p>
+<h2 id="3、printf的漏洞利用点"><a href="#3、printf的漏洞利用点" class="headerlink" title="3、printf的漏洞利用点"></a>3、printf的漏洞利用点</h2><p>（1）我们都知道printf格式化字符串的里的个数和参数的个数都是相同的。 正常使用printf函数：</p>
+<pre><code class="c">char str[100];
+scnaf(&quot;%s&quot;, &amp;str);
+printf(&quot;%s&quot;, str);
+</code></pre>
+<p>（2）但是有时候为了简写，它会省略格式化字符串</p>
+<pre><code class="c">char str[100];
+scnaf(&quot;%s&quot;, &amp;str);
+printf(str);
+</code></pre>
+<p>（4）如果我们str输入的内容是：格式化字符串的形式，它就会把这些内容当作是格式化字符串，然后一次输出格式化字符串后面的每一个参数</p>
+<p>然而，有时候为了省事会写成</p>
+<pre><code class="c">char str[100];
+scanf(&quot;%s&quot;, &amp;str);
+printf(str);
+</code></pre>
+<p>（5）这种情况正常情况下是没有什么问题，但是我如果添加上格式化字符串以后</p>
+<blockquote>
+<p>aaaa-%p-%p-%p-%p-%p-%p-%p-%p</p>
+</blockquote>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104238788.png" alt="image-20220430104238788"></p>
+<p>（6）而printf输出的都是栈上的所有内容，也就是说这样就可以通过格式化字符串泄露任意地址，其中较为常见的就是泄露cananry的地址，只要知道canary地址相对于esp的地址，就可以通过%k$p的相对地址来泄露canary的数值</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104303662.png" alt="image-20220430104303662"></p>
+<h2 id="4、-的使用"><a href="#4、-的使用" class="headerlink" title="4、$的使用"></a>4、$的使用</h2><p>（4）%K$d：将更改参数对应顺序，与格式化字符串后的第K个参数进行对应</p>
+<p>比如下面的printf，他的第一个参数是</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main()&#123;
+
+    int a = 4, b = 6, c = 2;
+    printf(&quot;%3$d + %1$d = %2$d\n&quot;,a, b, c);
+    return 0;
+&#125;
+</code></pre>
+<p>正常情况下根据参数的位置输出的是4 + 6 &#x3D; 2，但是在%d加上指定的参数的位置以后就可以获取到相应的内容</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430102055996.png" alt="image-20220430102055996"></p>
+<p>%k在任何的格式化情况下都可以使用：</p>
+<h1 id="二、格式化字符串漏洞——任意读"><a href="#二、格式化字符串漏洞——任意读" class="headerlink" title="二、格式化字符串漏洞——任意读"></a>二、格式化字符串漏洞——任意读</h1><h2 id="1、泄露canary"><a href="#1、泄露canary" class="headerlink" title="1、泄露canary"></a>1、泄露canary</h2><p>其实前面讲解的很清楚了，gdb动态调试能知道canary的位置相对于esp的起始位置，然后利用%K$p 将canary打印出来即可。解题步骤</p>
+<p>（1） 获取到canary的地址，可以发现canary距离esp的位置为15，所以利用 %15$p 就可以获取到canary的值</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430183334854.png" alt="image-20220430183334854"></p>
+<p><img src="/img/image-20220430183527080.png" alt="image-20220430183527080"></p>
+<p>（2）此时需要编写脚本来实现接收到数据</p>
+<pre><code class="python">r.sendline(&#39;%15$p&#39;)
+canary = int(r.recv(10), 16)
+print(&#39;canary ==&gt;&#39; + hex(canary))
+print type(canary)
+</code></pre>
+<p>canary共有十位，所以需要接收十位。由于接收到的数据类型为str类型，而p32打包的时候需要用到的是整型。所以需要用 int函数将字符转换成整型，后门的16表示转换的进制数，默认十进制</p>
+<p>（3） 溢出时将canary的值重新填写回去，溢出覆盖返回地址即可</p>
+<pre><code class="python">payload = &#39;a&#39; * 32 + p32(canary) + &#39;a&#39;*12 + p32(0x080484df)
+</code></pre>
+<h2 id="2、泄露pie基地址"><a href="#2、泄露pie基地址" class="headerlink" title="2、泄露pie基地址"></a>2、泄露pie基地址</h2><p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211730385.png" alt="image-20220430211730385"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211756994.png" alt="image-20220430211756994"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211920243.png" alt="image-20220430211920243"></p>
+<h1 id="三、格式化字符串漏洞——任意写"><a href="#三、格式化字符串漏洞——任意写" class="headerlink" title="三、格式化字符串漏洞——任意写"></a>三、格式化字符串漏洞——任意写</h1><h2 id="1、绕过判断，修改某个数值"><a href="#1、绕过判断，修改某个数值" class="headerlink" title="1、绕过判断，修改某个数值"></a>1、绕过判断，修改某个数值</h2><p>%n：把前面已经打印的长度写入某个内存地址，写入的是四个字节</p>
+<p>%hn：写入的是两个字节</p>
+<p>%hhn：写入的是一个字节</p>
+<p>如：</p>
+<blockquote>
+<p>利用 %hhn把值0x6a686664 写道0x8045566地址里面</p>
+</blockquote>
+<p>0x64 写进 0x8045566</p>
+<p>0x66 写进 0x8045567</p>
+<p>0x68 写进 0x8045568</p>
+<p>0x6a 写进 0x8045569</p>
+<p>p32(0x8045566) + p32(0x8045567) + p32(0x8045568) + p32(0x8045569) + ‘%84c%offset$hnn’ + ‘%84c%offset+1$hnn’ + ‘%2c%offset$hnn’  +  ‘%2c%offset+2$hnn’   +  ‘%2c% offset+3+2$hnn’</p>
+<p>如果是逆序的化就需要溢出，取低字节</p>
+<p>（4） %n：将%n之前打印出来的字符个数，赋值给一个变量</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212240038.png" alt="image-20220430212240038"></p>
+<p>很典型的格式化字符串漏洞的任意写题目，只要让pwnme &#x3D;&#x3D; 8就能getshell。</p>
+<p>首先测量格式化输入的地址距离esp的距离：为10</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212852204.png" alt="image-20220430212852204"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212730081.png" alt="image-20220430212730081"></p>
+<p>接下来就是修改pwnme地址处的值了，先</p>
+<pre><code># payload = fmtstr_payload(10, &#123;0x0804A068: 8&#125;)
+payload = p32(0x0804A068) + &#39;%4c%10$n&#39;
+</code></pre>
+<h2 id="2、任意写神器——fmtstr-payload"><a href="#2、任意写神器——fmtstr-payload" class="headerlink" title="2、任意写神器——fmtstr_payload"></a>2、任意写神器——fmtstr_payload</h2><p>fmtstr_payload是pwntools里面的一个工具</p>
+<pre><code class="python">fmtstr_payload(offset, writes, numbwritten=0, write_size=&#39;byte&#39;)
+# 第一个参数表示格式化字符串的偏移
+# 第二个参数表示需要利用%n写入的数据，采用字典形式，我们要将printf的GOT数据改为system地址，就写成&#123;printf: system&#125;
+# 第三个参数表示已经输出的字符个数，这里没有为，采用默认0
+# 第四个参数表示写入方式，是按照字节(byte)、双字节(short)、还是四字节(int)。他对应着hhn、hn、n。默认为hhn
+#fmtstr_payload函数返回的就是payload
+
+一般做题主要就是前面的两个参数，基本格式为：
+fmtstr_payload(offset, &#123;address:vaule1&#125;) 	==&gt; 	payload = fmtstr_payload(10, &#123;atoi_addr: system_addr&#125;)
+</code></pre>
+<p>所以直接利用fmtstr_payload函数修改任意地址的值为任意值即可getshell</p>
+<p>如果整个程序都没有开启relor保护的化，可以直接下面存在的一个函数的got表指向system函数的地址，使其执行该函数时会自动执行system函数的地址</p>
+<pre><code class="python">payload = fmtstr_payload(10, &#123;e.got[&quot;puts&quot;]: 0x080486E8&#125;)
+</code></pre>
+<h1 id="四、格式化字符串漏洞——无限循环"><a href="#四、格式化字符串漏洞——无限循环" class="headerlink" title="四、格式化字符串漏洞——无限循环"></a>四、格式化字符串漏洞——无限循环</h1><h1 id="五、常见格式化字符串漏洞题目"><a href="#五、常见格式化字符串漏洞题目" class="headerlink" title="五、常见格式化字符串漏洞题目"></a>五、常见格式化字符串漏洞题目</h1><p>（1）jarvisoj_fm：</p>
+<p>（2）第五空间2019 决赛]PWN5</p>
+<p>（3）CGfsb</p>
+<h1 id="六、参考链接"><a href="#六、参考链接" class="headerlink" title="六、参考链接"></a>六、参考链接</h1><p>（1）</p>
+<p>（2）<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39268483/article/details/92399248">https://blog.csdn.net/qq_39268483/article/details/92399248</a></p>
+<p>（3）<a target="_blank" rel="noopener" href="https://www.kanxue.com/book-57-857.htm">https://www.kanxue.com/book-57-857.htm</a></p>
+<p>（4）<a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/user-mode/fmtstr/fmtstr-example/">https://ctf-wiki.org/pwn/linux/user-mode/fmtstr/fmtstr-example/</a></p>
+<p>（5）<a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1669093381463931480&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1669093381463931480&amp;wfr=spider&amp;for=pc</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2017 swedsn
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 572px;
+    }
+    .nav.fullscreen {
+        margin-left: -572px;
+    }
+    .nav-left {
+        width: 150px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 512px;
+        }
+        .nav.fullscreen {
+            margin-left: -512px;
+        }
+        .nav-left {
+            width: 120px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 512px;
+            margin-left: -512px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #FFE7BA;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://browser9.qhimg.com/bdm/1000_618_85/t0183def7a3a7924215.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

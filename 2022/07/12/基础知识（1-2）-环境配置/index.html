@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>基础知识（1-2）-环境配置 | swedsn</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="基础知识（1-2）-环境配置 | swedsn">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctfshow刷题记录-sql注入">
+<meta property="og:url" content="http://example.com/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="swedsn">
+<meta property="og:description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714094708518.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100039465.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100809368.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714102501924.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140322101.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140556079.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220716144032670.png">
+<meta property="article:published_time" content="2022-07-20T11:05:57.000Z">
+<meta property="article:modified_time" content="2022-07-20T11:08:13.411Z">
+<meta property="article:author" content="swedsn">
+<meta property="article:tag" content="web安全、sql注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+
+
+<link rel="icon" href="/img/logo.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/kimbie-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>swedsn</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/swedsn?tab=repositories"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="csdn"
+               href="https://blog.csdn.net/qq_51032807?spm=1000.2115.3001.5343"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-csdn"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="email"
+               href="mailto:jaytp@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=1627319559&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(23)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        开发
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="开发<--->支付宝接口">
+                                        
+                                        支付宝接口
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="开发<--->Java开发">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        Java开发
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="开发<--->Java开发基础知识">
+                                                        
+                                                        基础知识
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="工具箱">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具箱
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具箱<--->Misc">
+                                        
+                                        Misc
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Pwn入门">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Pwn入门
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->格式化字符串漏洞">
+                                        
+                                        格式化字符串漏洞
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->基础知识">
+                                        
+                                        基础知识
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->栈溢出">
+                                        
+                                        栈溢出
+                                        
+                                            <small>(8
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Web安全">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Web安全
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Web安全<--->SQL注入">
+                                        
+                                        SQL注入
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="23">
+<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
+           data-tag="web安全、sql注入"
+           data-author="" >
+            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
+            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="SQL注入总结">SQL注入总结</span>
+            <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="杂记">杂记</span>
+            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/20/%E6%98%93%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="易校园自动打卡">易校园自动打卡</span>
+            <span class="post-date" title="2022-07-20 18:49:05">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
+            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E6%A0%88%E8%BF%81%E7%A7%BB/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出--栈迁移">花式栈溢出--栈迁移</span>
+            <span class="post-date" title="2022-07-12 13:45:03">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-mprotect%E7%BB%95%E8%BF%87NX%E4%BF%9D%E6%8A%A4/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-mprotect绕过NX保护">花式栈溢出-mprotect绕过NX保护</span>
+            <span class="post-date" title="2022-07-12 13:44:49">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
+            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
+            <span class="post-date" title="2022-07-12 13:44:21">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
+            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
+            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
+            <span class="post-date" title="2022-07-12 13:43:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 支付宝接口 "
+           href="/2022/07/12/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="支付宝接口开发">支付宝接口开发</span>
+            <span class="post-date" title="2022-07-12 09:55:16">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/12/Latex%E7%9A%84%E5%AD%A6%E4%B9%A0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Latex的学习">Latex的学习</span>
+            <span class="post-date" title="2022-07-12 09:54:45">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 Java开发 基础知识 "
+           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-基础知识（1-2）-环境配置" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">基础知识（1-2）-环境配置</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Pwn入门">Pwn入门</a> > 
+            
+            <a  data-rel="Pwn入门&lt;---&gt;基础知识">基础知识</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:27:33'>2022-07-12 13:40</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.6k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%881-3%EF%BC%89-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">栈溢出（1-3）-基础知识-环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">一、安装虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85linux%E5%BF%85%E5%A4%87%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="toc-text">二、安装linux必备的环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-text">前提条件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B0%86%E4%B8%AD%E6%96%87%E7%9B%AE%E5%BD%95%EF%BC%88%E5%A6%82%E6%A1%8C%E9%9D%A2%EF%BC%89%E6%94%B9%E6%88%90%E8%8B%B1%E6%96%87%E7%9B%AE%E5%BD%95"><span class="toc-text">1.将中文目录（如桌面）改成英文目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85VMware-tools"><span class="toc-text">2.安装VMware-tools</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="toc-text">注意：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0%E6%B8%85%E5%8D%8E%E6%BA%90"><span class="toc-text">3.更新清华源</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A"><span class="toc-text">（1）方式一：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-text">（2）方式二</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="toc-text">4. 更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AE%89%E8%A3%85%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-text">5.安装编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%89%E8%A3%85vim"><span class="toc-text">（1）安装vim</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%89%E8%A3%85sublime"><span class="toc-text">（2）安装sublime</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="toc-text">5.小技巧</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85pwn%E7%8E%AF%E5%A2%83%EF%BC%88Ubuntu16%EF%BC%89"><span class="toc-text">三、安装pwn环境（Ubuntu16）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%9A%E5%AE%89%E8%A3%85pwntools"><span class="toc-text">1：安装pwntools</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89-python2-%E5%AE%89%E8%A3%85pwntools%E5%BA%93"><span class="toc-text">（1） python2 安装pwntools库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89-python3-%E5%AE%89%E8%A3%85pwntools%E5%BA%93"><span class="toc-text">（2） python3 安装pwntools库</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%9A%E5%AE%89%E8%A3%85one-gadget"><span class="toc-text">2：安装one_gadget</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%9A%E5%AE%89%E8%A3%85gdb%E6%8F%92%E4%BB%B6"><span class="toc-text">3：安装gdb插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%89%E8%A3%85pwndbg"><span class="toc-text">（1）安装pwndbg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%89%E8%A3%85peda"><span class="toc-text">（2）安装peda</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89pwndbg%E4%B8%8Epeda%E6%8F%92%E4%BB%B6%E7%9A%84%E5%88%87%E6%8D%A2"><span class="toc-text">（3）pwndbg与peda插件的切换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%9A%E8%AE%BE%E7%BD%AE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-text">4：设置共享文件夹</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="栈溢出（1-3）-基础知识-环境配置"><a href="#栈溢出（1-3）-基础知识-环境配置" class="headerlink" title="栈溢出（1-3）-基础知识-环境配置"></a>栈溢出（1-3）-基础知识-环境配置</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>下面包含的是pwn做题时用到的一些环境和工具，注意：一定安装每一步骤过来，一旦中间有一步省略就会报错。</p>
+<p>当前的版本为Ubuntu16</p>
+<h2 id="一、安装虚拟机"><a href="#一、安装虚拟机" class="headerlink" title="一、安装虚拟机"></a>一、安装虚拟机</h2><p>前提条件：下载VMware，输入密钥、下载你想要安装版本的iso镜像文件</p>
+<p>（1）配置一些信息</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515163157362.png" alt="image-20220515163157362"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515163108240.png" alt="image-20220515163108240"></p>
+<p>（2）选择版本，最好选择Ubuntu 64位的</p>
+<p>（3）然后选择存储位置，最好单独开一个盘，不要选择C盘，除非你的内存很大。</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515163315397.png" alt="image-20220515163315397"></p>
+<p>（4）确定以后，再点击编辑虚拟机设置</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126105123191.png" alt="image-20211126105123191"></p>
+<p>（5）接下来，打开该虚拟机</p>
+<h2 id="二、安装linux必备的环境"><a href="#二、安装linux必备的环境" class="headerlink" title="二、安装linux必备的环境"></a>二、安装linux必备的环境</h2><h3 id="前提条件："><a href="#前提条件：" class="headerlink" title="前提条件："></a>前提条件：</h3><p>熟练基本的linux基本命令，可以参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ex411x7Em">https://www.bilibili.com/video/BV1ex411x7Em</a> 的命令，重点掌握前40节的命令，其余的了解即可</p>
+<h3 id="1-将中文目录（如桌面）改成英文目录"><a href="#1-将中文目录（如桌面）改成英文目录" class="headerlink" title="1.将中文目录（如桌面）改成英文目录"></a>1.将中文目录（如桌面）改成英文目录</h3><p>先改目录名称（要注意：此时不能从主机里复制内容，这个需要安装VMware-tools才能）</p>
+<p>最开始进去的目录名称是中文，需要改成英文，这样更方便。</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126105208612.png" alt="image-20211126105208612"></p>
+<p>在终端输入命令：</p>
+<pre><code class="c">export LANG=en_US
+
+xdg-user-dirs-gtk-update
+</code></pre>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515163405132.png" alt="image-20220515163405132"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126105259756.png" alt="image-20211126105259756"></p>
+<pre><code>export LANG=zh_CN.UTF-8
+</code></pre>
+<h3 id="2-安装VMware-tools"><a href="#2-安装VMware-tools" class="headerlink" title="2.安装VMware-tools"></a>2.安装VMware-tools</h3><p>好处：作用很多，自习百度了解</p>
+<p>（1）左上角 &#x3D;&#x3D;》虚拟机 &#x3D;&#x3D;》安装VMware-tools</p>
+<p>会弹出下面的DVD的文件夹，提取到你想要提取的位置</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515163524220.png" alt="image-20220515163524220"></p>
+<p>（2）接下来进入这个目录，运行下面的语句</p>
+<pre><code class="shell">sudo ./install.pl
+</code></pre>
+<p>之后运行这个程序以后就是按照提示输入yes、回车就可以安装成功</p>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><blockquote>
+<p>如果是Ubuntu20的话它会自动安装VMwaretools。但是此时如果你想设置共享文件夹就会发现当你每次重启虚拟机时就无法再次使用该共享文件夹。此时就需要你重新安装vmtool， 跟前面的安装方式一样，你需要自行下载vmtools，并且全部输入yes</p>
+</blockquote>
+<h3 id="3-更新清华源"><a href="#3-更新清华源" class="headerlink" title="3.更新清华源"></a>3.更新清华源</h3><h4 id="（1）方式一："><a href="#（1）方式一：" class="headerlink" title="（1）方式一："></a>（1）方式一：</h4><p>（1）先备份</p>
+<pre><code>cd /etc/apt
+sudo  cp sources.list ~/Desktop/sources.list.bak
+</code></pre>
+<p>（2）替换</p>
+<p>前往  <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/</a>  找到你的版本，复制</p>
+<p>输入下列命令，然后将复制的直接粘贴进去，再保存</p>
+<pre><code>sudo gedit sources.list    
+</code></pre>
+<p>（3）更新源文件</p>
+<pre><code>更新清华源
+sudo apt-get update
+更新软件源
+sudo apt-get  upgrade 
+</code></pre>
+<p>可能会报错，自行访问<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45556441/article/details/118306506">https://blog.csdn.net/weixin_45556441/article/details/118306506</a></p>
+<h4 id="（2）方式二"><a href="#（2）方式二" class="headerlink" title="（2）方式二"></a>（2）方式二</h4><p>点击软件管理器当中的设置，然后在Ubuntu软件里面设置一下镜像源</p>
+<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220515162714680.png" alt="image-20220515162714680" style="zoom: 150%;" />
+
+
+
+
+
+<h3 id="4-更新操作"><a href="#4-更新操作" class="headerlink" title="4. 更新操作"></a>4. 更新操作</h3><pre><code class="shell">sudo apt-get update  //更新软件源
+
+sudo apt-get upgrade   // 更新升级所有软件
+</code></pre>
+<h3 id="5-安装编辑器"><a href="#5-安装编辑器" class="headerlink" title="5.安装编辑器"></a>5.安装编辑器</h3><h4 id="（1）安装vim"><a href="#（1）安装vim" class="headerlink" title="（1）安装vim"></a>（1）安装vim</h4><pre><code>sudo apt install vim
+</code></pre>
+<p>vim是一款自带的编辑器，有点麻烦的是你需要掌握一些基本的语法</p>
+<p><strong>要求：掌握vim基本语法</strong></p>
+<h4 id="（2）安装sublime"><a href="#（2）安装sublime" class="headerlink" title="（2）安装sublime"></a>（2）安装sublime</h4><pre><code class="shell">sudo apt install curl
+sudo apt update
+sudo apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+sudo add-apt-repository &quot;deb https://download.sublimetext.com/ apt/stable/&quot;
+sudo apt update
+sudo apt install sublime-text
+</code></pre>
+<p>等待1~2分钟即可</p>
+<p>验证subl +文件名</p>
+<p>更改sublime菜单栏成中文</p>
+<p>①  使用快捷键 Shift+Ctrl+P 弹出查询栏</p>
+<p>② 在搜索框中输入关键字 install，然后点击  install Package Control。会弹出一个消息框</p>
+<p>③在菜单栏中选择Preferences &#x3D;&#x3D;》Package Contorol &#x3D;&#x3D;》输入install package，选择第一个</p>
+<p>④ 之后会弹出一个窗口，输入chinese，选择插件ChineseLocaloztions点击安装。</p>
+<p>⑤ 出现中文字体说明安装好了。在help &#x3D;&#x3D;》 Language中可自由切换</p>
+<p>⑥接下来自己配置自己喜欢的方式。</p>
+<p><br><br></p>
+<h3 id="5-小技巧"><a href="#5-小技巧" class="headerlink" title="5.小技巧"></a>5.小技巧</h3><p>（1）如果你需要修改@后面的主机名：</p>
+<pre><code>sudo vim /etc/hostname （输入你想要改的名字）
+sudo vim /etc/hosts(将里面的127.0.1.1       你上一步改的名字)
+</code></pre>
+<p>然后重启即可</p>
+<p>（2）对于shell的一些布局的控制均在</p>
+<h2 id="三、安装pwn环境（Ubuntu16）"><a href="#三、安装pwn环境（Ubuntu16）" class="headerlink" title="三、安装pwn环境（Ubuntu16）"></a>三、安装pwn环境（Ubuntu16）</h2><h3 id="1：安装pwntools"><a href="#1：安装pwntools" class="headerlink" title="1：安装pwntools"></a>1：安装pwntools</h3><p>要求：掌握pwntools的作用、以及基本的语法，pwntools是一个ctf框架和漏洞利用开发库，用Python开发，目的是更快的写exp脚本。<br>参考：<a target="_blank" rel="noopener" href="https://www.yuque.com/cyberangel/rg9gdm/uqazzg">https://www.yuque.com/cyberangel/rg9gdm/uqazzg</a></p>
+<h4 id="（1）-python2-安装pwntools库"><a href="#（1）-python2-安装pwntools库" class="headerlink" title="（1） python2 安装pwntools库"></a>（1） python2 安装pwntools库</h4><p>注意：Ubuntu对于python2的已经停止更新，python2安装pwntools库相对也比较麻烦，所以尽量用python3来安装</p>
+<p>① 设置python2为默认的python（Ubuntu16好像默认就是python2）</p>
+<pre><code class="shell">sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+sudo update-alternatives --list python
+</code></pre>
+<p> ② 安装pip</p>
+<pre><code>curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+
+sudo python get-pip.py
+</code></pre>
+<p>④ 安装pwntools</p>
+<pre><code>git clone https://github.com/aquynh/capstone
+cd capstone
+make
+make install
+</code></pre>
+<pre><code>git clone https://github.com/Gallopsled/pwntools
+cd pwntools
+python setup.py install
+</code></pre>
+<h4 id="（2）-python3-安装pwntools库"><a href="#（2）-python3-安装pwntools库" class="headerlink" title="（2） python3 安装pwntools库"></a>（2） python3 安装pwntools库</h4><p>① 安装pip3（Ubuntu20不需要）</p>
+<pre><code>①先安装pip3
+sudo apt install python3-pip
+
+②再更新pip3（如果报错安装下面的操作）
+sudo pip3 install --upgrade pip
+
+③如果查看pipi3版本报错（pip -V），没报错就不用执行下面命令
+curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5
+</code></pre>
+<p>②   安装pwntools</p>
+<pre><code>sudo apt update
+sudo apt install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential -y
+python3 -m pip install --upgrade pip 
+pip3 install --upgrade pwntools
+</code></pre>
+<br>
+
+<h3 id="2：安装one-gadget"><a href="#2：安装one-gadget" class="headerlink" title="2：安装one_gadget"></a>2：安装one_gadget</h3><pre><code>sudo apt -y install ruby
+
+
+sudo gem install one_gadget
+</code></pre>
+<h3 id="3：安装gdb插件"><a href="#3：安装gdb插件" class="headerlink" title="3：安装gdb插件"></a>3：安装gdb插件</h3><p>要求：要求掌握gdb的动态调式功能（动态调式将一直伴随你做题）</p>
+<h4 id="（1）安装pwndbg"><a href="#（1）安装pwndbg" class="headerlink" title="（1）安装pwndbg"></a>（1）安装pwndbg</h4><pre><code>① git clone https://github.com/pwndbg/pwndbg.git
+如果存在问题将 https改成git
+
+② cd pwndbg
+
+③ ./setup.sh
+</code></pre>
+<p>查看是否安装完成</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126105409935.png" alt="image-20211126105409935"></p>
+<h4 id="（2）安装peda"><a href="#（2）安装peda" class="headerlink" title="（2）安装peda"></a>（2）安装peda</h4><pre><code>git clone https://github.com/longld/peda.git ~/peda
+</code></pre>
+<h4 id="（3）pwndbg与peda插件的切换"><a href="#（3）pwndbg与peda插件的切换" class="headerlink" title="（3）pwndbg与peda插件的切换"></a>（3）pwndbg与peda插件的切换</h4><pre><code>① 命令行输入：vim ~/.gdbinit
+
+②往文件中中输入下面内容
+source ~/peda/peda.py
+
+③你想要用哪个，就用#注释掉另外一个
+
+注意：如果你不会使用vim编辑器，就用sublime编辑器。不过记得要保存。
+</code></pre>
+<p><br><br></p>
+<h3 id="4：设置共享文件夹"><a href="#4：设置共享文件夹" class="headerlink" title="4：设置共享文件夹"></a>4：设置共享文件夹</h3><p>点击虚拟机 &#x3D;&#x3D;&gt; 选项 &#x3D;&#x3D;》共享文件夹&#x3D;&#x3D;》设置你想要共享的文件 &#x3D;&#x3D;》确定</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126105427811.png" alt="image-20211126105427811"></p>
+<p>此时在cd &#x2F;mnt&#x2F;hgfs&#x2F;（你设置文件夹的名字） 是已经存在了的</p>
+<p>接下里就是将这个文件软链接到家目录</p>
+<pre><code>①cd /mnt/hgfs
+
+② ln -s /mnt/hgfs/文件名/ ~/文件名
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/slyu/p/13362005.html">https://www.cnblogs.com/slyu/p/13362005.html</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2017 swedsn
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 572px;
+    }
+    .nav.fullscreen {
+        margin-left: -572px;
+    }
+    .nav-left {
+        width: 150px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 512px;
+        }
+        .nav.fullscreen {
+            margin-left: -512px;
+        }
+        .nav-left {
+            width: 120px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 512px;
+            margin-left: -512px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #FFE7BA;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://browser9.qhimg.com/bdm/1000_618_85/t0183def7a3a7924215.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

