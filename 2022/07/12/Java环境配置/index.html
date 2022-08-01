@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>花式栈溢出-mprotect绕过NX保护 | swedsn</title>
+  <title>Java环境配置 | swedsn</title>
   <meta name="keywords" content="">
-  <meta name="description" content="花式栈溢出-mprotect绕过NX保护 | swedsn">
+  <meta name="description" content="Java环境配置 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
 <meta property="og:type" content="article">
@@ -615,9 +615,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-花式栈溢出-mprotect绕过NX保护" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java环境配置" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">花式栈溢出-mprotect绕过NX保护</h1>
+        <h1 class="article-title">Java环境配置</h1>
     
     <div class="article-meta">
         
@@ -627,9 +627,11 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Pwn入门">Pwn入门</a> > 
+            <a  data-rel="开发">开发</a> > 
             
-            <a  data-rel="Pwn入门&lt;---&gt;栈溢出">栈溢出</a>
+            <a  data-rel="开发&lt;---&gt;Java开发">Java开发</a> > 
+            
+            <a  data-rel="开发&lt;---&gt;Java开发&lt;---&gt;基础知识">基础知识</a>
             
         </span>
         
@@ -637,12 +639,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:45:00'>2022-07-12 13:44</time>
+            发布时间 : <time class="date" title='最后更新: 2022-08-01 13:34:50'>2022-07-12 09:54</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:355</span>
+        <span>字数:1.8k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -661,7 +663,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x1%EF%BC%9Amprotect%E5%87%BD%E6%95%B0"><span class="toc-text">0x1：mprotect函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x2%EF%BC%9A%E9%AA%8C%E8%AF%81mprotect%E5%87%BD%E6%95%B0"><span class="toc-text">0x2：验证mprotect函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x3%EF%BC%9A%E5%AE%9E%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">0x3：实例解析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Java%E6%A6%82%E8%BF%B0"><span class="toc-text">一、Java概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85JDK"><span class="toc-text">二、下载和安装JDK</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81JDK%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">三、JDK目录介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-bin%E7%9B%AE%E5%BD%95"><span class="toc-text">1. bin目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-jre%E7%9B%AE%E5%BD%95"><span class="toc-text">2. jre目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-include%E7%9B%AE%E5%BD%95"><span class="toc-text">3. include目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-lib%E7%9B%AE%E5%BD%95"><span class="toc-text">4. lib目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-src-zip%E6%96%87%E4%BB%B6"><span class="toc-text">5. src.zip文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">四. 环境变量的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">1. 配置环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%E8%BF%9B%E5%85%A5"><span class="toc-text">搜索环境变量，进入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA-gt-%E5%8F%98%E9%87%8F%E5%90%8D%E2%80%9DJAVA-HOME%E2%80%9D%EF%BC%8C%E5%8F%98%E9%87%8F%E5%80%BC%E2%80%9DC-Program-Files-Java-jdk-17-0-1%E2%80%9D%EF%BC%88%E5%8D%B3JDK%E7%9A%84%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84%EF%BC%89"><span class="toc-text">新建-&gt;变量名”JAVA_HOME”，变量值”C:\Program Files\Java\jdk-17.0.1”（即JDK的安装路径）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%8C%E5%87%BB-%E5%8F%98%E9%87%8F%E5%90%8D%E2%80%9DPath%E2%80%9D%EF%BC%8C%E7%82%B9%E5%87%BB%E2%80%9D%E6%96%B0%E5%BB%BA%E2%80%9D%EF%BC%8C%E7%84%B6%E5%90%8E%E8%BE%93%E5%85%A5%E4%B8%8A%E2%80%9D-JAVA-HOME-bin%E2%80%9D%EF%BC%8C%E7%82%B9%E5%87%BB%E2%80%9D%E7%A1%AE%E5%AE%9A%E2%80%9D%EF%BC%8C%E5%86%8D%E6%AC%A1%E7%82%B9%E5%87%BB%E2%80%9D%E6%96%B0%E5%BB%BA%E2%80%9D%EF%BC%8C%E7%84%B6%E5%90%8E%E8%BE%93%E5%85%A5%E4%B8%8A%E2%80%9D-JAVA-HOME-jre-bin%E2%80%9D%EF%BC%8C%E7%82%B9%E5%87%BB%E7%A1%AE%E5%AE%9A%E3%80%82"><span class="toc-text">双击 变量名”Path”，点击”新建”，然后输入上”%JAVA_HOME%\bin”，点击”确定”，再次点击”新建”，然后输入上”%JAVA_HOME%\jre\bin”，点击确定。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA-gt-%E5%8F%98%E9%87%8F%E5%90%8D%E2%80%9DCLASSPATH%E2%80%9D-%E5%8F%98%E9%87%8F%E5%80%BC%E2%80%9D-JAVA-HOME-lib-JAVA-HOME-lib-dt-jar-JAVA-HOME-lib-tools-jar%E2%80%9D"><span class="toc-text">新建-&gt;变量名”CLASSPATH”,变量值”.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar”</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A3%80%E6%B5%8Bjdk%E5%AE%89%E8%A3%85%E6%98%AF%E5%90%A6%E5%AE%8C%E6%88%90%EF%BC%9A%E8%BF%9B%E5%85%A5cmd-%E8%BE%93%E5%85%A5java-%E2%80%93version%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%98%BE%E7%A4%BA%E5%87%BAjdk%E7%89%88%E6%9C%AC%E5%8D%B3%E8%AF%81%E6%98%8E%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90"><span class="toc-text">检测jdk安装是否完成：进入cmd 输入java –version，如果显示出jdk版本即证明安装完成</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AF%B4%E6%98%8E"><span class="toc-text">2. 环境变量说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Java%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="toc-text">四、Java的运行机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="toc-text">1. 运行方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-text">2. 举例说明：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BD%BF%E7%94%A8Java%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7IDEA"><span class="toc-text">五、使用Java集成开发工具IDEA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95"><span class="toc-text">1、安装目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%AE%BE%E7%BD%AE%E7%9B%AE%E5%BD%95"><span class="toc-text">2、设置目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E8%8E%B7%E5%8F%96%E6%BF%80%E6%B4%BB%E7%A0%81"><span class="toc-text">3、获取激活码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="toc-text">4、常见的设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%A1%E6%81%AF"><span class="toc-text">（1）设置文件头信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81-JDK%E3%80%81JRE%E3%80%81JVM%E7%9A%84%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%8C%BA%E5%88%AB"><span class="toc-text">六、 JDK、JRE、JVM的作用及区别</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -677,36 +679,119 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	现在的大部分程序都会在编译时开启NX保护，这样我们就无法向栈上注入shellcode从而获得一个shell；只能利用其他手段来泄露sytem函数的地址（ret2libc、dynELF）。 但是当程序存在mprotect函数时，我们通过mprotect函数来修改某个程序段的权限从而让这个段可执行，以此来绕过NX保护。（当然当程序不可使用system函数时，也可使用此方法）</p>
-<h2 id="0x1：mprotect函数"><a href="#0x1：mprotect函数" class="headerlink" title="0x1：mprotect函数"></a>0x1：mprotect函数</h2><p>函数原型：</p>
-<pre><code class="c">int mprotect(void *addr, size_t len, int prot)
-
-mprotect函数把从start开始的，长度为len的内存区的保护属性修改为prot指定的值
-    
-第一个参数：开始地址（该地址是0x1000的倍数， 以页方式对齐）
-第二个参数：指定长度（修改权限的长度， 长度也应该是0x1000的倍数）
-第三个参数：指定修改的权限（与linux下文件权限相类似，1表示可执行、2表示可写、4表示可读。一般为7表示可读可写可执行）
-</code></pre>
-<h2 id="0x2：验证mprotect函数"><a href="#0x2：验证mprotect函数" class="headerlink" title="0x2：验证mprotect函数"></a>0x2：验证mprotect函数</h2><p>（1）编写以个C语言程序</p>
-<pre><code class="c">#include&lt;stdio.h&gt;
-#include &lt;sys/mman.h&gt;
-
-int main()
-&#123;
-    void *addr;
-    addr = 0x555555554000;
-    mprotect(addr, 0x1000, 7);
-    return 0;
+        <h1 id="一、Java概述"><a href="#一、Java概述" class="headerlink" title="一、Java概述"></a>一、Java概述</h1><blockquote>
+<ul>
+<li>java是一种纯面向对象的编程语言，支持类、对象、抽象、封装、继承和多态等特性。</li>
+<li></li>
+<li>没有C++的指针、结构体、多重继承等等功能。</li>
+<li>可跨平台使用，存在内存的自动垃圾收集</li>
+</ul>
+</blockquote>
+<h1 id="二、下载和安装JDK"><a href="#二、下载和安装JDK" class="headerlink" title="二、下载和安装JDK"></a>二、下载和安装JDK</h1><p>说明： jdk是由sun公司提出的，内含java编译器、java运行工具、java文档生成工具、Java打包工具等等，可以说只要安装好jdk就可以编译执行java程序了。</p>
+<p>（1）官网下载：<a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/downloads/#jdk17-windows">https://www.oracle.com/java/technologies/downloads/#jdk17-windows</a></p>
+<p>这个链接只给出了一个版本，如果需要的是其他版本的话就要点击 早期版本</p>
+<p><img src="/img/image-20211209172344778.png" alt="image-20211209172344778"></p>
+<p>（2）安装，安装时需要注意安装的路径，可默认也可以选择自己想要安装的位置。</p>
+<h1 id="三、JDK目录介绍"><a href="#三、JDK目录介绍" class="headerlink" title="三、JDK目录介绍"></a>三、JDK目录介绍</h1><h2 id="1-bin目录"><a href="#1-bin目录" class="headerlink" title="1. bin目录"></a>1. bin目录</h2><ul>
+<li>作用：存放一些可执行的文件</li>
+<li>javac.exe：java的编译工具  &#x3D;&#x3D;》作用：将编写好的java文件（.java）编译成java字节码文件（.class）</li>
+<li>java.exe：Java的运行工具  &#x3D;&#x3D;》运行编译好的java字节码文件</li>
+<li>jar.exe：将 java 程序生成jar压缩包</li>
+<li>javadoc.exe：为 java 程序自动生成帮助文档</li>
+</ul>
+<h2 id="2-jre目录"><a href="#2-jre目录" class="headerlink" title="2. jre目录"></a>2. jre目录</h2><p>是Java运行环境的根目录，包含java虚拟机、运行时的类库</p>
+<h2 id="3-include目录"><a href="#3-include目录" class="headerlink" title="3. include目录"></a>3. include目录</h2><p>包含java启动时需要引入的C语言头文件</p>
+<h2 id="4-lib目录"><a href="#4-lib目录" class="headerlink" title="4. lib目录"></a>4. lib目录</h2><p>包含java类库或库文件</p>
+<h2 id="5-src-zip文件"><a href="#5-src-zip文件" class="headerlink" title="5. src.zip文件"></a>5. src.zip文件</h2><p>jak的科学类的源代码，可以通过该文件查看java基础类的源代码</p>
+<h1 id="四-环境变量的配置"><a href="#四-环境变量的配置" class="headerlink" title="四. 环境变量的配置"></a>四. 环境变量的配置</h1><p>配置环境的作用：为了在任何路径下执行某个命令。</p>
+<h2 id="1-配置环境变量"><a href="#1-配置环境变量" class="headerlink" title="1. 配置环境变量"></a>1. 配置环境变量</h2><ul>
+<li><h5 id="搜索环境变量，进入"><a href="#搜索环境变量，进入" class="headerlink" title="搜索环境变量，进入"></a>搜索环境变量，进入</h5></li>
+<li><h5 id="新建-gt-变量名”JAVA-HOME”，变量值”C-Program-Files-Java-jdk-17-0-1”（即JDK的安装路径）"><a href="#新建-gt-变量名”JAVA-HOME”，变量值”C-Program-Files-Java-jdk-17-0-1”（即JDK的安装路径）" class="headerlink" title="新建-&gt;变量名”JAVA_HOME”，变量值”C:\Program Files\Java\jdk-17.0.1”（即JDK的安装路径）"></a>新建-&gt;变量名”JAVA_HOME”，变量值”C:\Program Files\Java\jdk-17.0.1”（即JDK的安装路径）</h5></li>
+<li><h5 id="双击-变量名”Path”，点击”新建”，然后输入上”-JAVA-HOME-bin”，点击”确定”，再次点击”新建”，然后输入上”-JAVA-HOME-jre-bin”，点击确定。"><a href="#双击-变量名”Path”，点击”新建”，然后输入上”-JAVA-HOME-bin”，点击”确定”，再次点击”新建”，然后输入上”-JAVA-HOME-jre-bin”，点击确定。" class="headerlink" title="双击 变量名”Path”，点击”新建”，然后输入上”%JAVA_HOME%\bin”，点击”确定”，再次点击”新建”，然后输入上”%JAVA_HOME%\jre\bin”，点击确定。"></a>双击 变量名”Path”，点击”新建”，然后输入上”%JAVA_HOME%\bin”，点击”确定”，再次点击”新建”，然后输入上”%JAVA_HOME%\jre\bin”，点击确定。</h5><p><img src="/img/image-20211209174024687.png" alt="image-20211209174024687"></p>
+</li>
+<li><h5 id="新建-gt-变量名”CLASSPATH”-变量值”-JAVA-HOME-lib-JAVA-HOME-lib-dt-jar-JAVA-HOME-lib-tools-jar”"><a href="#新建-gt-变量名”CLASSPATH”-变量值”-JAVA-HOME-lib-JAVA-HOME-lib-dt-jar-JAVA-HOME-lib-tools-jar”" class="headerlink" title="新建-&gt;变量名”CLASSPATH”,变量值”.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar”"></a>新建-&gt;变量名”CLASSPATH”,变量值”.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar”</h5></li>
+<li><p>最后按确定退出</p>
+</li>
+<li><h5 id="检测jdk安装是否完成：进入cmd-输入java-–version，如果显示出jdk版本即证明安装完成"><a href="#检测jdk安装是否完成：进入cmd-输入java-–version，如果显示出jdk版本即证明安装完成" class="headerlink" title="检测jdk安装是否完成：进入cmd 输入java –version，如果显示出jdk版本即证明安装完成"></a>检测jdk安装是否完成：进入cmd 输入java –version，如果显示出jdk版本即证明安装完成</h5></li>
+</ul>
+<h2 id="2-环境变量说明"><a href="#2-环境变量说明" class="headerlink" title="2. 环境变量说明"></a>2. 环境变量说明</h2><p>（1）path环境变量</p>
+<blockquote>
+<p>path ： 用于保存一系列的路径，当在命令行运行一个可执行文件时，操作系统首先会在当前目录下查找是否存在该文件，存在执行，不存在则在环境变量path所定义的路径中从前往后依次寻找，找到则执行，否则系统报错。（从前往后，所以会先执行放在前面的环境）。</p>
+<p>因为编译和执行java程序需要用到 bin目录的内容，所以设置的路径path就在C:\Program Files\Java\jdk-17.0.1\bin；至于为什么要设置JAVA_HOME，是为了简化输入的路径。最终达到在任何路径下识别java、javac、javadoc等等命令</p>
+</blockquote>
+<p>（2）CLASSPATH环境变量</p>
+<blockquote>
+<p>告诉jvm要使用或执行的class放在什么路径上，便于JVM加载class文件，</p>
+<p>注意：.;表示当前路径，tools.jar和dt.jar为类库路径。在最开始有一个“.”   ，如果没有加上，那么java虚拟机会自动将安装目录下的bin目录作为当前目录。</p>
+</blockquote>
+<h1 id="四、Java的运行机制"><a href="#四、Java的运行机制" class="headerlink" title="四、Java的运行机制"></a>四、Java的运行机制</h1><h2 id="1-运行方式"><a href="#1-运行方式" class="headerlink" title="1. 运行方式"></a>1. 运行方式</h2><p>通过自己写好一个带后缀为.java的文件吗，然后通过sun公司提供的jdk 编译运行最终变成一个可执行的exe文件。     编译（javac.exe） + 运行（java.exe）</p>
+<p><img src="/img/image-20211209183657006-16593312617573.png" alt="image-20211209183657006"></p>
+<h2 id="2-举例说明："><a href="#2-举例说明：" class="headerlink" title="2. 举例说明："></a>2. 举例说明：</h2><p>① 用记事本或任意一个编辑器编写一个 HelloWorld.Java的文件。然后输入：</p>
+<pre><code class="Java">public class HelloWorld &#123;
+    public static void main(String[] args) &#123;
+        System.out.println(&quot;Hello World&quot;);
+    &#125;
 &#125;
 </code></pre>
-<p>（2）gcc编译</p>
+<p>② 使用“Javac HelloWorld.Java”命令开启Java编译器并进行编译。编译结束后，它会自动生成一个HelloWorld. class的字节码文件</p>
+<p>③ 使用“ Java HelloWorld”命令启动Java虚拟机（JVM）运行程序，Java虚拟机首先将编译好的字节码文件加载到内存，这个过程被称为类加载，它是由类加载器完成的，然后虚拟机将加载到内存中的代码转换为与操作系统相对应的执行代码，并解释执行，执行后可以得到运行结果。</p>
+<p><img src="/img/image-20211209190103139.png" alt="image-20211209190103139"></p>
+<p>说明：</p>
 <blockquote>
-<p>gcc test.c -o test</p>
+<ul>
+<li>通过上面的分析不难发现，Java程序是由虚拟机负责解释执行的，而并非操作系统。</li>
+<li>这样做的好处是可以实现跨平台性，也就是说针对不同的操作系统可以编写相同的程序，只需安装不同版本的虚拟机即可。</li>
+<li>上面的程序是通过cmd命令行输入，然后编译运行编写好的java程序。但是这个方式比较麻烦，一般都是利用集成开发工具来实现的，像eclipse、idea等等</li>
+</ul>
 </blockquote>
-<p>（3）用vmmap查看执行mprotect前面程序的权限的变化。可以发现程序增加了可读的权限</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220207224656792.png" alt="image-20220207224656792"></p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220207224724684.png" alt="image-20220207224724684"></p>
-<h2 id="0x3：实例解析"><a href="#0x3：实例解析" class="headerlink" title="0x3：实例解析"></a>0x3：实例解析</h2>
+<h1 id="五、使用Java集成开发工具IDEA"><a href="#五、使用Java集成开发工具IDEA" class="headerlink" title="五、使用Java集成开发工具IDEA"></a>五、使用Java集成开发工具IDEA</h1><h2 id="1、安装目录"><a href="#1、安装目录" class="headerlink" title="1、安装目录"></a>1、安装目录</h2><p><img src="/img/image-20220120012607164.png" alt="image-20220120012607164"></p>
+<p>bin：一些启动文件、配置文件</p>
+<p>idea64.exe.vmoptions：虚拟机的配置信息</p>
+<p><img src="/img/image-20220120012952724.png" alt="image-20220120012952724"></p>
+<p>Xms：初始内存，可提高启动的速度</p>
+<p>Xmx：最大内存，降低垃圾回收的频率</p>
+<p>ReservedCodeCacheSize：可保存代码的缓冲大小</p>
+<p>hlep：帮助文档</p>
+<p>jbr：</p>
+<p>lib：库</p>
+<p>license：插件的一些许可信息</p>
+<p>plugins：插件2</p>
+<h2 id="2、设置目录"><a href="#2、设置目录" class="headerlink" title="2、设置目录"></a>2、设置目录</h2><p>config目录：配置信息：文件的模板、快捷键、插件等等</p>
+<p>system目录：缓冲数据、索引caches下</p>
+<p>如果配置出现问题，删除这两个目录然后重启即可修改成默认的初始的状态</p>
+<h2 id="3、获取激活码"><a href="#3、获取激活码" class="headerlink" title="3、获取激活码"></a>3、获取激活码</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46167872/article/details/122580926?spm=1001.2014.3001.5501">https://blog.csdn.net/weixin_46167872/article/details/122580926?spm=1001.2014.3001.5501</a></p>
+<h2 id="4、常见的设置"><a href="#4、常见的设置" class="headerlink" title="4、常见的设置"></a>4、常见的设置</h2><h3 id="（1）设置文件头信息"><a href="#（1）设置文件头信息" class="headerlink" title="（1）设置文件头信息"></a>（1）设置文件头信息</h3><p><img src="/img/image-20220120201030151.png" alt="image-20220120201030151"></p>
+<pre><code class="java">/**
+* @description:
+* @author: swedsn
+* @time: $&#123;DATE&#125;-$&#123;TIME&#125;
+*/
+</code></pre>
+<h1 id="六、-JDK、JRE、JVM的作用及区别"><a href="#六、-JDK、JRE、JVM的作用及区别" class="headerlink" title="六、 JDK、JRE、JVM的作用及区别"></a>六、 JDK、JRE、JVM的作用及区别</h1><p>具体去查看：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33862644/article/details/81182344">https://blog.csdn.net/qq_33862644/article/details/81182344</a></p>
+<p>（1）JDK：</p>
+<ul>
+<li><p>JDK是Java开发工具包，是Sun Microsystems针对Java开发员的产品。是用来给开发人员使用的</p>
+</li>
+<li><p>JDK包含java运行环境JRE、一堆Java工具（javac、java、jdb）、Java的基础类库</p>
+</li>
+</ul>
+<p>（2）JRE</p>
+<ul>
+<li>JRE 是运行基于Java语言编写的程序所不可缺少的运行环境。</li>
+<li>JRE中包含是运行Java程序的必要组件，如JVM。并没有包含任何开发工具（如编译器和调试器），是来给普通用户使用的</li>
+</ul>
+<p>（3）JVM</p>
+<ul>
+<li><p>JVM就是Java虚拟机，是整个java实现跨平台的最核心的部分。所有的Java程序首先会被编译成.class的文件，这种文件可以在虚拟机上面执行，就是说程序通过虚拟机将程序解释给操作系统听。</p>
+</li>
+<li><p>只有JVM还不能成class的执行，因为在解释class的时候JVM需要调用解释所需要的类库lib，而jre包含lib类库。</p>
+</li>
+<li><p>JVM屏蔽了与具体操作系统平台相关的信息，使得Java程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p>
+</li>
+<li><p>所有的程序只要有java虚拟机的支持，那么就可以实现程序的执行，并且不同的操作系统上会有不同版本的jvm。</p>
+</li>
+</ul>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
     </div>

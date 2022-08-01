@@ -2,21 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>基础知识（1-1）-Linux基础 | swedsn</title>
+  <title>Linux基础学习 | swedsn</title>
   <meta name="keywords" content="">
-  <meta name="description" content="基础知识（1-1）-Linux基础 | swedsn">
+  <meta name="description" content="Linux基础学习 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://example.com/about/index.html">
+<meta name="description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞学习">
+<meta property="og:url" content="http://example.com/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="swedsn">
-<meta property="og:description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
+<meta property="og:description" content="一、格式化字符串的基本原理1、了解printf函数族格式化字符串漏洞主要是printf函数家族的问题。像printf、fprintf、sprintf、snprintf等格式化字符串函数课接受变数量的参数，并且将第一个参数作为格式化字符串 像下面的printf函数一样：前面的第一个参数表示的是格式化字符串，当中的符号说明与后面的参数一一对应。第一个参数中的格式化字符串的数量决定了后面参数的数量  常">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-20T11:44:45.000Z">
-<meta property="article:modified_time" content="2022-07-20T12:14:09.781Z">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101408921.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101529916.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430101458769.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153742463.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153850406.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430153944418.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104238788.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430104303662.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430102055996.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430183334854.png">
+<meta property="og:image" content="http://example.com/img/image-20220430183527080.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211730385.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211756994.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430211920243.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212240038.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212852204.png">
+<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430212730081.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215436958-16593323952891.png">
+<meta property="og:image" content="http://example.com/img/image-20220322215947385-16593323952893.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165419041-16593323952895.png">
+<meta property="og:image" content="http://example.com/img/image-20220720165444148.png">
+<meta property="article:published_time" content="2022-07-12T05:51:39.000Z">
+<meta property="article:modified_time" content="2022-08-01T05:44:29.049Z">
 <meta property="article:author" content="swedsn">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220430215411006.png">
 
 
 <link rel="icon" href="/img/logo.png">
@@ -126,7 +149,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(23)</small>
+                <small>(17)</small>
             
         </div>
     </li>
@@ -255,7 +278,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Pwn入门
-                        <small>(15)</small>
+                        <small>(11)</small>
                         
                     </div>
                     
@@ -266,7 +289,7 @@
                                         
                                         格式化字符串漏洞
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -290,7 +313,7 @@
                                         
                                         栈溢出
                                         
-                                            <small>(8
+                                            <small>(5
                                                 )</small>
                                         
                                     </div>
@@ -314,7 +337,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         Web安全
-                        <small>(2)</small>
+                        <small>(1)</small>
                         
                     </div>
                     
@@ -325,7 +348,7 @@
                                         
                                         SQL注入
                                         
-                                            <small>(2
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -358,8 +381,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="23">
-<input type="hidden" id="yelog_site_word_count" value="36.3k">
+<input type="hidden" id="yelog_site_posts_number" value="17">
+<input type="hidden" id="yelog_site_word_count" value="31.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -414,10 +437,6 @@
     <input id="tag-search" />
     <div class="tag-wrapper">
         
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>web安全、sql注入</a>
-            </li>
-        
     </div>
 
 </div>
@@ -427,29 +446,11 @@
         
         
         <a  class="全部文章 Web安全 SQL注入 "
-           href="/2022/07/20/ctfshow%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-sql%E6%B3%A8%E5%85%A5/"
-           data-tag="web安全、sql注入"
-           data-author="" >
-            <span class="post-title" title="ctfshow刷题记录-sql注入">ctfshow刷题记录-sql注入</span>
-            <span class="post-date" title="2022-07-20 19:05:57">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 Web安全 SQL注入 "
            href="/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="SQL注入总结">SQL注入总结</span>
             <span class="post-date" title="2022-07-20 19:05:32">2022/07/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 "
-           href="/2022/07/20/%E6%9D%82%E8%AE%B0/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="杂记">杂记</span>
-            <span class="post-date" title="2022-07-20 19:04:35">2022/07/20</span>
         </a>
         
         
@@ -463,19 +464,10 @@
         
         
         <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"
+           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--刷题记录">格式化字符串漏洞--刷题记录</span>
-            <span class="post-date" title="2022-07-12 13:51:47">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 格式化字符串漏洞 "
-           href="/2022/07/12/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="格式化字符串漏洞--基本原理">格式化字符串漏洞--基本原理</span>
+            <span class="post-title" title="格式化字符串漏洞学习">格式化字符串漏洞学习</span>
             <span class="post-date" title="2022-07-12 13:51:39">2022/07/12</span>
         </a>
         
@@ -493,7 +485,7 @@
            href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96flag/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="花式栈溢出-一键获取flag">花式栈溢出-一键获取flag</span>
+            <span class="post-title" title="Pwn学习笔记-一键获取flag">Pwn学习笔记-一键获取flag</span>
             <span class="post-date" title="2022-07-12 13:44:56">2022/07/12</span>
         </a>
         
@@ -507,26 +499,17 @@
         </a>
         
         
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-DynELF/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="花式栈溢出-DynELF">花式栈溢出-DynELF</span>
-            <span class="post-date" title="2022-07-12 13:44:40">2022/07/12</span>
-        </a>
-        
-        
         <a  class="全部文章 "
-           href="/2022/07/12/%E4%B8%AD%E7%BA%A7ROP%EF%BC%882-1%EF%BC%89-ret2csu/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-ret2csu/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="中级ROP（2-1）-ret2csu">中级ROP（2-1）-ret2csu</span>
+            <span class="post-title" title="Pwn学习笔记-ret2csu">Pwn学习笔记-ret2csu</span>
             <span class="post-date" title="2022-07-12 13:44:28">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-4%EF%BC%89-ret2libc/"
+           href="/2022/07/12/ret2libc%E8%84%9A%E6%9C%AC%E6%A8%A1%E6%9D%BF/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-4）--ret2libc">基本ROP（1-4）--ret2libc</span>
@@ -535,25 +518,7 @@
         
         
         <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-3%EF%BC%89-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-3）-系统调用">基本ROP（1-3）-系统调用</span>
-            <span class="post-date" title="2022-07-12 13:44:05">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-2%EF%BC%89-ret2shellcode/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="基本ROP（1-2）-ret2shellcode">基本ROP（1-2）-ret2shellcode</span>
-            <span class="post-date" title="2022-07-12 13:43:56">2022/07/12</span>
-        </a>
-        
-        
-        <a  class="全部文章 Pwn入门 栈溢出 "
-           href="/2022/07/12/%E5%9F%BA%E6%9C%ACROP%EF%BC%881-1%EF%BC%89-ret2text/"
+           href="/2022/07/12/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="基本ROP（1-1）-ret2text">基本ROP（1-1）-ret2text</span>
@@ -562,46 +527,46 @@
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-5%EF%BC%89-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Linux%E4%B8%8BELF%E6%96%87%E4%BB%B6%E7%9A%84%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-5）-Linux下ELF文件的保护机制">基础知识（1-5）-Linux下ELF文件的保护机制</span>
+            <span class="post-title" title="Pwn学习笔记-Linux下ELF文件的保护机制">Pwn学习笔记-Linux下ELF文件的保护机制</span>
             <span class="post-date" title="2022-07-12 13:40:54">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-4%EF%BC%89-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-4）-分析工具">基础知识（1-4）-分析工具</span>
+            <span class="post-title" title="Pwn学习笔记-分析工具">Pwn学习笔记-分析工具</span>
             <span class="post-date" title="2022-07-12 13:40:36">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-3%EF%BC%89-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-3）-二进制基础">基础知识（1-3）-二进制基础</span>
+            <span class="post-title" title="二进制基础学习">二进制基础学习</span>
             <span class="post-date" title="2022-07-12 13:40:27">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-2%EF%BC%89-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
+           href="/2022/07/12/Pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-2）-环境配置">基础知识（1-2）-环境配置</span>
+            <span class="post-title" title="Pwn学习笔记-环境配置">Pwn学习笔记-环境配置</span>
             <span class="post-date" title="2022-07-12 13:40:08">2022/07/12</span>
         </a>
         
         
         <a  class="全部文章 Pwn入门 基础知识 "
-           href="/2022/07/12/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%EF%BC%881-1%EF%BC%89-Linux%E5%9F%BA%E7%A1%80/"
+           href="/2022/07/12/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="基础知识（1-1）-Linux基础">基础知识（1-1）-Linux基础</span>
+            <span class="post-title" title="Linux基础学习">Linux基础学习</span>
             <span class="post-date" title="2022-07-12 13:39:59">2022/07/12</span>
         </a>
         
@@ -625,10 +590,10 @@
         
         
         <a  class="全部文章 开发 Java开发 基础知识 "
-           href="/2022/07/12/Java%E5%AD%A6%E4%B9%A001-%E5%89%8D%E6%8F%90%E5%87%86%E5%A4%87/"
+           href="/2022/07/12/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="Java学习01-前提准备">Java学习01-前提准备</span>
+            <span class="post-title" title="Java环境配置">Java环境配置</span>
             <span class="post-date" title="2022-07-12 09:54:29">2022/07/12</span>
         </a>
         
@@ -650,9 +615,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-基础知识（1-1）-Linux基础" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Linux基础学习" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">基础知识（1-1）-Linux基础</h1>
+        <h1 class="article-title">Linux基础学习</h1>
     
     <div class="article-meta">
         
@@ -672,7 +637,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:26:13'>2022-07-12 13:39</time>
+            发布时间 : <time class="date" title='最后更新: 2022-08-01 13:38:39'>2022-07-12 13:39</time>
         
     </div>
     <div class="article-meta">
@@ -696,7 +661,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">一、Linux基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B9%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">1. 根目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%BD%AF%E9%93%BE%E6%8E%A5%EF%BC%88%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%EF%BC%89%E4%B8%8E%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-text">2. 软链接（符号链接）与硬链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AD%97%E8%8A%82%E5%BA%8F"><span class="toc-text">2. 字节序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ld-linux-so"><span class="toc-text">3. ld-linux.so</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="toc-text">4. 调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text">5. 系统调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="toc-text">二、linux基础命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Vi%E3%80%81Vim%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">三、Vi、Vim的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Pwn%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-text">四、Pwn中重要的命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-file%E6%96%87%E4%BB%B6"><span class="toc-text">1. file文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ROPgadget%E5%91%BD%E4%BB%A4"><span class="toc-text">1. ROPgadget命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-objdump%E5%91%BD%E4%BB%A4"><span class="toc-text">2. objdump命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-readfile%E5%91%BD%E4%BB%A4"><span class="toc-text">3. readfile命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ldd%E5%91%BD%E4%BB%A4"><span class="toc-text">4. ldd命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-strace-%E5%91%BD%E4%BB%A4"><span class="toc-text">5. strace 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-gcc%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F"><span class="toc-text">6. gcc编译程序</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">一、Linux基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%B9%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">1. 根目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BD%AF%E9%93%BE%E6%8E%A5%EF%BC%88%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%EF%BC%89%E4%B8%8E%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-text">2. 软链接（符号链接）与硬链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E8%8A%82%E5%BA%8F"><span class="toc-text">2. 字节序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-ld-linux-so"><span class="toc-text">3. ld-linux.so</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="toc-text">4. 调用约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text">5. 系统调用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="toc-text">二、linux基础命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Vi%E3%80%81Vim%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">三、Vi、Vim的操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Pwn%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-text">四、Pwn中重要的命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-file%E6%96%87%E4%BB%B6"><span class="toc-text">1. file文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ROPgadget%E5%91%BD%E4%BB%A4"><span class="toc-text">1. ROPgadget命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-objdump%E5%91%BD%E4%BB%A4"><span class="toc-text">2. objdump命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-readfile%E5%91%BD%E4%BB%A4"><span class="toc-text">3. readfile命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ldd%E5%91%BD%E4%BB%A4"><span class="toc-text">4. ldd命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-strace-%E5%91%BD%E4%BB%A4"><span class="toc-text">5. strace 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-gcc%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F"><span class="toc-text">6. gcc编译程序</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -712,8 +677,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、Linux基础知识"><a href="#一、Linux基础知识" class="headerlink" title="一、Linux基础知识"></a>一、Linux基础知识</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于解题的文件大都是Linux系统下的ELF文件，而Linux操作系统相对于windows系统又不相同，它是纯命令行操作。所以对于Linux的一些基本知识需要掌握</p>
-<h3 id="1-根目录结构"><a href="#1-根目录结构" class="headerlink" title="1. 根目录结构"></a>1. 根目录结构</h3><p>​	linux中的一切都可以看成文件， Linux下的起点是在 根目录下， 都是从（&#x2F;斜杆）开始向下延申的。一般情况下程序打开终端是处在你自己的文件夹下</p>
+        <h1 id="一、Linux基础知识"><a href="#一、Linux基础知识" class="headerlink" title="一、Linux基础知识"></a>一、Linux基础知识</h1><h2 id="1-根目录结构"><a href="#1-根目录结构" class="headerlink" title="1. 根目录结构"></a>1. 根目录结构</h2><p>​	linux中的一切都可以看成文件， Linux下的起点是在 根目录下， 都是从（&#x2F;斜杆）开始向下延申的。一般情况下程序打开终端是处在你自己的文件夹下</p>
 <p>linux的文件类型主要包含三种：</p>
 <ul>
 <li>普通文件： 包含文本文件（只含 ASCII或Unicode字符，换行符为”\n”， 即十六进制0x0A）和二进制文件</li>
@@ -737,11 +701,11 @@
 <p>linux下的文件格式不以文件名的后缀确定，而是有文件的文件头决定。也就是说它本事是一个压缩包，那么即使修改了它的后缀它仍然是一个压缩包</p>
 </blockquote>
 <p>等等</p>
-<h3 id="2-软链接（符号链接）与硬链接"><a href="#2-软链接（符号链接）与硬链接" class="headerlink" title="2. 软链接（符号链接）与硬链接"></a>2. 软链接（符号链接）与硬链接</h3><blockquote>
+<h2 id="2-软链接（符号链接）与硬链接"><a href="#2-软链接（符号链接）与硬链接" class="headerlink" title="2. 软链接（符号链接）与硬链接"></a>2. 软链接（符号链接）与硬链接</h2><blockquote>
 <p>软链接：类似于windows下的快捷键</p>
 <p>硬链接：相当于复制一份文件</p>
 </blockquote>
-<h3 id="2-字节序"><a href="#2-字节序" class="headerlink" title="2. 字节序"></a>2. 字节序</h3><blockquote>
+<h2 id="2-字节序"><a href="#2-字节序" class="headerlink" title="2. 字节序"></a>2. 字节序</h2><blockquote>
 <p>计算机采用了两种字节存储机制：大端和小端。 </p>
 <p>其中大端规定在MSB在存储是放在地位，在传输时放在流的开始；LSB存储时放在高地址，在传输时放在流的末尾。</p>
 <p>小端则正好相反。</p>
@@ -750,12 +714,12 @@
 </blockquote>
 <p>以一个十六进制整数 0x12345678存入以 1000H 开始的内存为例，查看存储方式不同，可以发现大端存储就是我们日产生活中使用的形式，而小段则是相反的。这是因为······</p>
 <p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220124115718183-16583127484097.png" alt="image-20220124115718183"></p>
-<h3 id="3-ld-linux-so"><a href="#3-ld-linux-so" class="headerlink" title="3. ld-linux.so"></a>3. ld-linux.so</h3><blockquote>
+<h2 id="3-ld-linux-so"><a href="#3-ld-linux-so" class="headerlink" title="3. ld-linux.so"></a>3. ld-linux.so</h2><blockquote>
 <p>ld-linux .so是linux下的动态库链接器&#x2F;加载器。</p>
 <p>当一个 需要动态链接 的程序被操作系统加载时， 系统要通过要ld-linux.so来定位 然后加载程序所需要的所有动态库文件。</p>
 <p>此时 我们可以通过ldd命令来查看一个程序需要哪些依赖的动态库</p>
 </blockquote>
-<h3 id="4-调用约定"><a href="#4-调用约定" class="headerlink" title="4. 调用约定"></a>4. 调用约定</h3><blockquote>
+<h2 id="4-调用约定"><a href="#4-调用约定" class="headerlink" title="4. 调用约定"></a>4. 调用约定</h2><blockquote>
 <p>函数调用约定是对函数调用时如何传递参数的一种约定。关于它的预定有许多种，下面从内核接口和用户接口两仿麦呢介绍32位和64位Linux的调用约定</p>
 </blockquote>
 <p>（1）内核接口</p>
@@ -772,7 +736,7 @@
 <ol start="2">
 <li>execve函数</li>
 </ol>
-<h3 id="5-系统调用"><a href="#5-系统调用" class="headerlink" title="5. 系统调用"></a>5. 系统调用</h3><p>系统调用就是：操作系统已经抽象好了的一个接口，你要怎么操控硬件，只能经过操作系统已经制定好了的系统调用规定的规则来操控硬件，不可直接访问它。</p>
+<h2 id="5-系统调用"><a href="#5-系统调用" class="headerlink" title="5. 系统调用"></a>5. 系统调用</h2><p>系统调用就是：操作系统已经抽象好了的一个接口，你要怎么操控硬件，只能经过操作系统已经制定好了的系统调用规定的规则来操控硬件，不可直接访问它。</p>
 <p>在Linux下可以查看32位、64位程序下的系统调用号</p>
 <blockquote>
 <p>cat &#x2F;usr&#x2F;include&#x2F;asm&#x2F;unistd_32.h</p>
@@ -864,7 +828,7 @@
 </ul>
 <p>32位程序的话就是eax、ebx、ecx、edx以及int 80</p>
 </blockquote>
-<h2 id="二、linux基础命令"><a href="#二、linux基础命令" class="headerlink" title="二、linux基础命令"></a>二、linux基础命令</h2><p>（1） 查看命令：</p>
+<h1 id="二、linux基础命令"><a href="#二、linux基础命令" class="headerlink" title="二、linux基础命令"></a>二、linux基础命令</h1><p>（1） 查看命令：</p>
 <pre><code class="bash">cat flag.txt		# 查看flag.txt文件里面的内容
 
 ll flag 		# 查看flag目录里的文件
@@ -903,7 +867,7 @@ rm -f test.txt		# 直接删除，无需确认
 <blockquote>
 <p>strace .&#x2F;pwn		查看程序的系统调用（学习链接：<a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-69947851-id-5825847.html%EF%BC%89">http://blog.chinaunix.net/uid-69947851-id-5825847.html）</a></p>
 </blockquote>
-<h2 id="三、Vi、Vim的操作"><a href="#三、Vi、Vim的操作" class="headerlink" title="三、Vi、Vim的操作"></a>三、Vi、Vim的操作</h2><p>vim是从vi发展来的编辑器，相对来说更加友善。vim是一款比较常见的编辑器，在Linux操作系统下用纯命令行来实现功能。当然也可以下载其他的编辑器来实现，这样可能会更加方便、美观</p>
+<h1 id="三、Vi、Vim的操作"><a href="#三、Vi、Vim的操作" class="headerlink" title="三、Vi、Vim的操作"></a>三、Vi、Vim的操作</h1><p>vim是从vi发展来的编辑器，相对来说更加友善。vim是一款比较常见的编辑器，在Linux操作系统下用纯命令行来实现功能。当然也可以下载其他的编辑器来实现，这样可能会更加方便、美观</p>
 <p>VIM有三种模式：底线命令行模式、编辑模式、命令行模式。每一种模式都有它对应的命令行</p>
 <p>命令模式：你刚启动vim时就是命令模式，此时你并不会输入一个字符，当你按下i以后才会进入编辑模式编辑</p>
 <p>编辑模式：这种模式是来让你来进行修改文件的，</p>
@@ -915,11 +879,11 @@ rm -f test.txt		# 直接删除，无需确认
 <p>%!xxd 		查看二进制。 </p>
 <p>%!xxd -r		还原</p>
 </blockquote>
-<h2 id="四、Pwn中重要的命令"><a href="#四、Pwn中重要的命令" class="headerlink" title="四、Pwn中重要的命令"></a>四、Pwn中重要的命令</h2><h3 id="1-file文件"><a href="#1-file文件" class="headerlink" title="1. file文件"></a>1. file文件</h3><blockquote>
+<h1 id="四、Pwn中重要的命令"><a href="#四、Pwn中重要的命令" class="headerlink" title="四、Pwn中重要的命令"></a>四、Pwn中重要的命令</h1><h2 id="1-file文件"><a href="#1-file文件" class="headerlink" title="1. file文件"></a>1. file文件</h2><blockquote>
 <p>用于检测给定文件的类型，一般情况是不带参数的</p>
 <p>参数： -z： 用于读取压缩文件的内容			-L：用于解析符号链接的文件类型</p>
 </blockquote>
-<h3 id="1-ROPgadget命令"><a href="#1-ROPgadget命令" class="headerlink" title="1. ROPgadget命令"></a>1. ROPgadget命令</h3><pre><code class="bash"># 获取pwn这个二进制文件的的 只带有 pop和ret指令的地址
+<h2 id="1-ROPgadget命令"><a href="#1-ROPgadget命令" class="headerlink" title="1. ROPgadget命令"></a>1. ROPgadget命令</h2><pre><code class="bash"># 获取pwn这个二进制文件的的 只带有 pop和ret指令的地址
 ROPgadget --binary ./pwn --only “pop|ret”
 
 # 寻找带有字符串/bin/sh的地址
@@ -931,7 +895,7 @@ ROPgadget --binary 【文件名】--only int
 #寻找文件中带有cat flag字符串的地址
 ROPgadget --binary 文件名 --sting &#39;cat flag&#39;
 </code></pre>
-<h3 id="2-objdump命令"><a href="#2-objdump命令" class="headerlink" title="2. objdump命令"></a>2. objdump命令</h3><p>​	用于查看目标文件的信息，具备反汇编能力。但是其反汇编主要是依赖的是ELF文件头，而且不会进行控制流分析，其健壮性较差，常见的参数如下：</p>
+<h2 id="2-objdump命令"><a href="#2-objdump命令" class="headerlink" title="2. objdump命令"></a>2. objdump命令</h2><p>​	用于查看目标文件的信息，具备反汇编能力。但是其反汇编主要是依赖的是ELF文件头，而且不会进行控制流分析，其健壮性较差，常见的参数如下：</p>
 <blockquote>
 <p><code>-s</code> ：将目标文件转换成十六进制表示</p>
 <p><code>-d</code> ：用于对目标文件进行反汇编</p>
@@ -953,7 +917,7 @@ ROPgadget --binary 【文件名】--only int
 #寻找文件中带有cat flag字符串的地址
 ROPgadget --binary 文件名 --sting &#39;cat flag&#39;
 </code></pre>
-<h3 id="3-readfile命令"><a href="#3-readfile命令" class="headerlink" title="3. readfile命令"></a>3. readfile命令</h3><p>​	用于解析ELF格式目标文件的信息。该工具和objdump类似，但是显示的内容更具体，且不依赖BFD库，常见的参数如下：</p>
+<h2 id="3-readfile命令"><a href="#3-readfile命令" class="headerlink" title="3. readfile命令"></a>3. readfile命令</h2><p>​	用于解析ELF格式目标文件的信息。该工具和objdump类似，但是显示的内容更具体，且不依赖BFD库，常见的参数如下：</p>
 <blockquote>
 <p><code>-h  </code> ：显示目标文件的文件头<br><code>-l</code> ：显示目标文件的程序头</p>
 <p><code>-S</code> ：显示目标文件的节区头信息</p>
@@ -965,20 +929,21 @@ ROPgadget --binary 文件名 --sting &#39;cat flag&#39;
 <p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220124122334347.png" alt="image-20220124122334347"></p>
 <p>②在libc中查看system函数的偏移量</p>
 <p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220124122231282.png" alt="image-20220124122231282"></p>
-<h3 id="4-ldd命令"><a href="#4-ldd命令" class="headerlink" title="4. ldd命令"></a>4. ldd命令</h3><p>ldd命令用于查看目标文件有哪些依赖库， 以及这些依赖库在系统中的位置。常见的参数：</p>
+<h2 id="4-ldd命令"><a href="#4-ldd命令" class="headerlink" title="4. ldd命令"></a>4. ldd命令</h2><p>ldd命令用于查看目标文件有哪些依赖库， 以及这些依赖库在系统中的位置。常见的参数：</p>
 <blockquote>
 <p><code>-v</code> ：用于打印出依赖关系的详细信息 </p>
 </blockquote>
 <p>常见的使用</p>
 <p>① 在ret2_libc 当中，当使用本地调试时需要获取该程序的libcbanben<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220210112058334.png" alt="image-20220210112058334"></p>
 <h2 id="5-strace-命令"><a href="#5-strace-命令" class="headerlink" title="5. strace 命令"></a>5. strace 命令</h2><p>strace .&#x2F;pwn：查看程序的系统调用（链接：<a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-69947851-id-5825847.html%EF%BC%89">http://blog.chinaunix.net/uid-69947851-id-5825847.html）</a></p>
-<h3 id="6-gcc编译程序"><a href="#6-gcc编译程序" class="headerlink" title="6. gcc编译程序"></a>6. gcc编译程序</h3><p>方法二：</p>
+<h2 id="6-gcc编译程序"><a href="#6-gcc编译程序" class="headerlink" title="6. gcc编译程序"></a>6. gcc编译程序</h2><p>方法二：</p>
 <p>gcc test.c -o test</p>
 <p>gcc -Wall -g -o test test.c</p>
 <p>-Wall 代表编译器在编译过程中会输出警告信息（Warning），比如有些变量你并没有使用，指针指向的类型有误，main 函数没有返回整数值等。这类信息虽然不是错误，不影响编译，但是很可能是程序 bug 的源头，也有助于你寻找代码中的错误，规范代码格式。所以建议每次编译时都加上 -Wall 参数。</p>
 <p>-g 代表编译器会收集调试（debug）信息，这样如果你的程序运行出错，就可以通过 gdb 或者 lldb 等工具进行逐行调试，方便找出错误原因。如果你不是百分之百确定你的程序毫无问题，建议加上 -g 参数。这样 debug 的时候会方便很多。</p>
 <p>-o 代表编译器会将编译完成后的可执行文件以你指定的名称输出到你指定的文件夹下。-o 的空格后的名称就是输出的文件的名称。例如我这里 -o 后是 test，就是说 gcc 会在编译成功后在我的当前目录下生成一个叫 test 的可执行文件。如果不加这个参数，每次编译后生成的可执行文件都会放在根目录下，名字叫做 a.out。每次编译成功后都会把上一次的 a.out 文件覆盖。所以建议加上 -o 参数，这样可以更加条理。</p>
 <p>-m32：编译32位程序</p>
+<p>- </p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
