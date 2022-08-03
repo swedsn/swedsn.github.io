@@ -1197,7 +1197,7 @@
   text-shadow: none;
 }
 #post .pjax {
-  max-width: 900px;
+  max-width: 1120px;
   min-height: calc(100vh - 143px);
   margin: 0 auto;
   overflow-y: auto;
