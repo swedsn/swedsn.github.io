@@ -6,24 +6,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="SQL注入总结 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="SQL注入总结一、sql注入的基本原理PHP从MySQL数据库中读取数据的方式 $id &#x3D; $_GET[&quot;id&quot;]; $sql &#x3D; &quot;select * from user where id &#x3D; $id&quot;; $result &#x3D; mysqli_query($sql); $row &#x3D; mysql_fetch_array($result);   首先是通过get请求">
-<meta property="og:type" content="article">
-<meta property="og:title" content="SQL注入总结">
-<meta property="og:url" content="http://example.com/2022/07/20/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/index.html">
+<meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://example.com/about/index.html">
 <meta property="og:site_name" content="swedsn">
-<meta property="og:description" content="SQL注入总结一、sql注入的基本原理PHP从MySQL数据库中读取数据的方式 $id &#x3D; $_GET[&quot;id&quot;]; $sql &#x3D; &quot;select * from user where id &#x3D; $id&quot;; $result &#x3D; mysqli_query($sql); $row &#x3D; mysql_fetch_array($result);   首先是通过get请求">
+<meta property="og:description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718125224941.png">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713095514511.png">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718152108272.png">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718130615867.png">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713114503984.png">
-<meta property="og:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220713124746979.png">
-<meta property="article:published_time" content="2022-07-20T11:05:32.000Z">
-<meta property="article:modified_time" content="2022-07-20T11:07:28.294Z">
+<meta property="article:published_time" content="2022-07-20T11:44:45.000Z">
+<meta property="article:modified_time" content="2022-07-20T12:14:09.781Z">
 <meta property="article:author" content="swedsn">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220718125224941.png">
 
 
 <link rel="icon" href="/img/logo.png">
@@ -133,7 +126,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(17)</small>
+                <small>(19)</small>
             
         </div>
     </li>
@@ -257,6 +250,10 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="Pwn入门">
                         <i class="fold iconfont icon-right"></i>
@@ -316,21 +313,49 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="Web安全">
                         <i class="fold iconfont icon-right"></i>
                         
                         Web安全
-                        <small>(1)</small>
+                        <small>(3)</small>
                         
                     </div>
                     
                         <ul class="sub hide">
                             
                                 <li>
+                                    <div data-rel="Web安全<--->代码执行">
+                                        
+                                        代码执行
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
                                     <div data-rel="Web安全<--->SQL注入">
                                         
                                         SQL注入
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="Web安全<--->SUID提权">
+                                        
+                                        SUID提权
                                         
                                             <small>(1
                                                 )</small>
@@ -365,8 +390,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="17">
-<input type="hidden" id="yelog_site_word_count" value="31.6k">
+<input type="hidden" id="yelog_site_posts_number" value="19">
+<input type="hidden" id="yelog_site_word_count" value="34.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -421,12 +446,34 @@
     <input id="tag-search" />
     <div class="tag-wrapper">
         
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Web安全</a>
+            </li>
+        
     </div>
 
 </div>
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 Web安全 代码执行 "
+           href="/2022/09/19/%E5%9F%BA%E7%A1%80%E7%B3%BB%E5%88%9703-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C-md/"
+           data-tag="Web安全"
+           data-author="" >
+            <span class="post-title" title="基础系列03-代码执行.md">基础系列03-代码执行.md</span>
+            <span class="post-date" title="2022-09-19 21:01:40">2022/09/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 Web安全 SUID提权 "
+           href="/2022/09/19/SUID%E6%8F%90%E6%9D%83-md/"
+           data-tag="Web安全"
+           data-author="" >
+            <span class="post-title" title="SUID提权.md">SUID提权.md</span>
+            <span class="post-date" title="2022-09-19 21:00:53">2022/09/19</span>
+        </a>
         
         
         <a  class="全部文章 Web安全 SQL注入 "
@@ -1076,6 +1123,46 @@ python sqlmap.py -u &quot;http://localhost/sqli-labs-master/Less-1/?id=1&quot; -
 
 
 
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<input type="hidden" id="MathJax-js"
+        value="//cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML">
+</input>
     
 
 
