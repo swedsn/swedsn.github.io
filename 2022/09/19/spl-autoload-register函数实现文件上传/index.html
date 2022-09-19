@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>易校园自动打卡 | swedsn</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="易校园自动打卡 | swedsn">
+  <title>spl_autoload_register函数实现文件上传 | swedsn</title>
+  <meta name="keywords" content=" Web安全 ">
+  <meta name="description" content="spl_autoload_register函数实现文件上传 | swedsn">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="忙里偷闲，记录生活关于博客我认为搭建博客主要分为三个阶段  第一个阶段：刚开始搭建博客，觉得搭建博客很神奇，就想搭建一个完整的博客，感觉有成就感   第二个阶段：这个时候已经了解了如何搭建博客。此时就想搭建一个好看，功能丰富的博客，于是尝试了不同的框架，更换了各种各样的主题，想搭建一个自己喜欢的一个博客，同时对于博客的认为是给别人看的   第三阶段：现在的我，只想要有一个简单的博客，简单到只要方便">
 <meta property="og:type" content="website">
@@ -696,9 +696,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-易校园自动打卡" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-spl-autoload-register函数实现文件上传" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">易校园自动打卡</h1>
+        <h1 class="article-title">spl_autoload_register函数实现文件上传</h1>
     
     <div class="article-meta">
         
@@ -708,22 +708,29 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具箱">工具箱</a> > 
+            <a  data-rel="Web安全">Web安全</a> > 
             
-            <a  data-rel="工具箱&lt;---&gt;Misc">Misc</a>
+            <a  data-rel="Web安全&lt;---&gt;文件上传">文件上传</a>
             
         </span>
         
         
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">Web安全</a>
+            
+        </span>
+        
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-08-01 14:16:08'>2022-07-20 18:49</time>
+            发布时间 : <time class="date" title='最后更新: 2022-09-19 21:24:33'>2022-09-19 21:24</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2k</span>
+        <span>字数:740</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -742,7 +749,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">一、 实现原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-text">二、获取请求的内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="toc-text">三、发送请求</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8F%91%E9%80%81%E6%96%B9%E5%BC%8F"><span class="toc-text">1. 发送方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BD%AC%E6%8D%A2%E6%A0%BC%E5%BC%8F"><span class="toc-text">2.转换格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%B0%86-amp-%E8%BD%AC%E6%8D%A2%E6%88%90%E5%9B%9E%E8%BD%A6"><span class="toc-text">（1）将&amp;转换成回车</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%BD%AC%E6%8D%A2%E6%88%90%E5%A4%9A%E4%B8%AA%E5%85%83%E7%BB%84"><span class="toc-text">（2）转换成多个元组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E6%9C%80%E7%BB%88%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-text">（3）最终转换成字典</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%95%B0%E6%8D%AE%E4%BF%AE%E6%94%B9"><span class="toc-text">3. 数据修改</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%AF%B4%E6%98%8E"><span class="toc-text">（1）说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%89%93%E5%8D%A1%E6%97%B6%E9%97%B4%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="toc-text">（2）打卡时间的修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E7%BB%8F%E7%BA%AC%E5%BA%A6%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="toc-text">（3）经纬度的修改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%A8%E9%83%A8%E4%BB%A3%E7%A0%81"><span class="toc-text">4. 全部代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="toc-text">四、自动化运行脚本</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90"><span class="toc-text">前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E6%9E%90%E9%A2%98%E7%9B%AE"><span class="toc-text">一、分析题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-text">二、解题思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81payload"><span class="toc-text">三、payload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">1、知识点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">2、利用过程</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -758,194 +765,49 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、-实现原理"><a href="#一、-实现原理" class="headerlink" title="一、 实现原理"></a>一、 实现原理</h1><p>通过定时向健康系统的页面发送一个请求，请求的内容为每次打卡需要的信息。就可实现自动打卡</p>
-<h1 id="二、获取请求的内容"><a href="#二、获取请求的内容" class="headerlink" title="二、获取请求的内容"></a>二、获取请求的内容</h1><p>通过抓包软件抓取，手机上面主要使用的是小黄鸟——HttpCanary 抓取信息，电脑上面主要是通过Fiddler软件。抓取易校园的数据，找到有关<a target="_blank" rel="noopener" href="https://h5.xiaofubao.com/marketing/health/getDetail">https://h5.xiaofubao.com/marketing/health/getDetail</a> 链接的请求，然后里面会存在一条关于url文件，url解码即可得到自己发送请求时发送的内容</p>
-<p>可以看到抓取到的信息解码后是（只展示了解码后的一部分）</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220801134534719.png" alt="image-20220801134534719"></p>
-<p>可以发现，传递的内容就是就是你的个人信息。接下来就是将这些内容发送到指定的位置</p>
-<h1 id="三、发送请求"><a href="#三、发送请求" class="headerlink" title="三、发送请求"></a>三、发送请求</h1><p>将请求的内容，发送到健康系统的那个页面</p>
-<h2 id="1-发送方式"><a href="#1-发送方式" class="headerlink" title="1. 发送方式"></a>1. 发送方式</h2><p>发送请求的方式主要的方式是通过python中的一个requests库。</p>
-<p>request库方法介绍</p>
-<table>
-<thead>
-<tr>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">requests.request()</td>
-<td align="center">构造一个请求，支撑一下各方法的基础方法</td>
-</tr>
-<tr>
-<td align="center">requests.get()</td>
-<td align="center">获取HTML网页的主要方法，对应于HTTP的GET</td>
-</tr>
-<tr>
-<td align="center">requests.head()</td>
-<td align="center">获取HTML网页头信息的方法，对应于HTTP的HEAD</td>
-</tr>
-<tr>
-<td align="center">requests.post()</td>
-<td align="center">向HTML网页提交POST请求的方法，对应于HTTP的POST</td>
-</tr>
-<tr>
-<td align="center">requests.put()</td>
-<td align="center">向HTML网页提交PUT请求的方法，对应于HTTP的PUT</td>
-</tr>
-<tr>
-<td align="center">requests.patch()</td>
-<td align="center">向HTML网页提交局部修改请求，对应于HTTP的PATCH</td>
-</tr>
-<tr>
-<td align="center">requests.delete()</td>
-<td align="center">向HTML页面提交删除请求，对应于HTTP的DELETE</td>
-</tr>
-</tbody></table>
-<p>由于在抓取的数据时，发现易校园主要采用的时post的请求方式，所以这里要使用到的是post方法</p>
-<p>requests.put(url, data&#x3D;None, **kwargs)</p>
-<ul>
-<li>url：拟更新页面的url链接</li>
-<li>data：字典、字节序列或文件，Request的内容</li>
-<li>**kwargs：12个控制访问参数</li>
-</ul>
-<p>也就是说通过下面的方式就可以发送请求</p>
-<pre><code class="python">requests.post(url, data= &quot;传递的内容&quot;)
-</code></pre>
-<h2 id="2-转换格式"><a href="#2-转换格式" class="headerlink" title="2.转换格式"></a>2.转换格式</h2><p>可以看到前面传递内容的data采取的是一个字典的格式，字典就是键值对（一个键对应一个数值），所以需要把上面url内容转换成下面这种格式，才能发送内容</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235523762.png"></p>
-<p>转换的话有两种解法：</p>
-<p>（1）自己一个一个的手动修改成字典的形式，这样的话就很费时费力</p>
-<p>（2）写脚本</p>
-<p>这里我采用第二种，脚本不唯一，下面的只是一种思路</p>
-<h3 id="（1）将-amp-转换成回车"><a href="#（1）将-amp-转换成回车" class="headerlink" title="（1）将&amp;转换成回车"></a>（1）将&amp;转换成回车</h3><p>首先查看两者的区别， 字典中没有&amp;， 而且&amp;是作为一组键值对的分界</p>
-<p>利用python中正则表达式的一个方法sub， 来将&amp;替换成回车</p>
+        <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>2022年强网杯的rcefile题目，题目打开网页是一个文件上传题目。但是题目给出了源码，肯定结合源码进行操作，但是在阅读源码时，忽略了一个最重要的代码spl_autoload_register函数。</p>
+<h2 id="一、分析题目"><a href="#一、分析题目" class="headerlink" title="一、分析题目"></a>一、分析题目</h2><p>扫目录发现备份文件<a href="http://www.zip，备份文件存在四个文件：index.php、upload.php、config.ini.php、showfile.php">www.zip，备份文件存在四个文件：index.php、upload.php、config.ini.php、showfile.php</a></p>
 <blockquote>
-<p>正则表达式是一个特殊的字符序列，它能帮助你方便的检查一个字符串是否与某种模式匹配。</p>
-<p>sub方法：实现正则的替换</p>
-</blockquote>
-<p>函数原型：re.sub(pattern, repl, string, count&#x3D;0, flags&#x3D;0)	</p>
 <ul>
-<li>pattern : 正则中的模式字符串。</li>
-<li>repl : 替换的字符串，也可为一个函数。</li>
-<li>string : 要被查找替换的原始字符串。</li>
-<li>count : 模式匹配后替换的最大次数，默认 0 表示替换所有的匹配。</li>
-<li>flags : 编译时用的匹配模式，数字形式。</li>
+<li>上传文件存在黑名单：”php”, “php5”, “php3”, “html”, “swf”, “htm”,”phtml”</li>
+<li>上传的文件名经过md5的时间加密后进行重命名， 然后再移动上传文件的位置至根目录下</li>
+<li>程序会将文件名保存到到userfile数组里面，然后讲userfile数组经过序列化以后设置成cookie，</li>
+<li>config.ini.php文件中存在spl_autoload_register()函数，而且这里会将收到的cookie又反序列化保存到userfile当中</li>
+<li>showfile.php会for然后for循环遍历数组以此展示上传的文件名（类型是字符串）</li>
 </ul>
-<p><font color=red>其中前三个为必选参数，后两个为可选参数。</font></p>
-<p>这里利用的方式：</p>
-<pre><code class="python">data_str = re.sub(r&#39;&amp;&#39;, &#39;\n&#39;, info_daka)  # 其中 info_daka 表示的是你url解码以后的内容，data_str表示转换的内容
-</code></pre>
-<p>将&amp;换成 回车</p>
-<p>目前已经被修改成了：</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235613591.png"></p>
-<h3 id="（2）转换成多个元组"><a href="#（2）转换成多个元组" class="headerlink" title="（2）转换成多个元组"></a>（2）转换成多个元组</h3><p>利用正则表达式的findall方法将上面的data_str转换成元组（类似于列表，不了解就当作C语言的数组）</p>
-<p>findall方法：</p>
+</blockquote>
+<h2 id="二、解题思路"><a href="#二、解题思路" class="headerlink" title="二、解题思路"></a>二、解题思路</h2><blockquote>
+<ol>
+<li><p>首先程序没有限制大小写，可以尝试使用大小写进行绕过，失败</p>
+</li>
+<li><p>由于题目对文件进行了重命名，那么就无法使用配置文件，也无法使用解析漏洞进行绕过</p>
+</li>
+<li><p>又由于题目是先重命名以后再移动文件的，那么就无法使用条件竞争来进行绕过了</p>
+</li>
+<li><p>尝试使用修改cookie老修改文件名，失败。因为showfile展示的文件名是字符串形式的，并不能执行</p>
+</li>
+<li><p>又尝试使用文件读取来做，发现题目是直接以路径的形式直接展示的</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;》上面的结论是：无法使用常规的文件上传来解析php代码</p>
+</li>
+<li><p>最终的实现方式是利用spl_autoload_register函数：在不指定处理用的函数，就会自动包含“类名.php”或者是“类名.inc”的文件，并加载其中的“类名”类</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="三、payload"><a href="#三、payload" class="headerlink" title="三、payload"></a>三、payload</h2><h3 id="1、知识点"><a href="#1、知识点" class="headerlink" title="1、知识点"></a>1、知识点</h3><p>（1）spl_autoload_register()函数</p>
 <blockquote>
-<p>在字符串中找到正则表达式所匹配的所有子串，并返回一个列表，如果有多个匹配模式，则返回元组列表，如果没有找到匹配的，则返回空列表。</p>
-<p><strong>注意：</strong> match 和 search 是匹配一次 findall 匹配所有。</p>
+<p>spl_autoload_register()：欲注册的自动装载函数。如果没有提供任何参数，则自动注册 autoload 的默认实现函数spl_autoload()</p>
+<ul>
+<li>spl_autoload()：本函数提供了_autoload()的一个默认实现，如果不使用任何参数调用 spl_autoload_register() 函数，则以后在进行 __autoload() 调用时会自动使用此函数。</li>
+<li>__autoload()函数：尝试加载未定义的类，但是PHP7.2.0起被废弃，PHP8以后被移除</li>
+</ul>
 </blockquote>
-<p>语法格式为：</p>
-<pre><code class="python">findall(string[, pos[, endpos]])
+<pre><code class="php">spl_autoload(string $class_name, string $file_extensions = ?): void
 </code></pre>
 <ul>
-<li><strong>string</strong> : 待匹配的字符串。</li>
-<li><strong>pos</strong> : 可选参数，指定字符串的起始位置，默认为 0。</li>
-<li><strong>endpos</strong> : 可选参数，指定字符串的结束位置，默认为字符串的长度。</li>
+<li>file_extentsions：在默认情况下，本函数先将类名转换成小写，再在小写的类名后面加上.inc或者是php的拓展名作为文件名，然后在所以的包含路径（include paths）中检查是否存在文件</li>
 </ul>
-<pre><code class="python">content = re.findall(r&#39;(.*?)=(.*)&#39;, data_str)
-</code></pre>
-<p>这里重点讲一下<font color=red>‘(.*?)&#x3D;(.*)’</font>的作用， </p>
-<p>首先先看 不加（） 的情况。其中的？表示非贪婪模式，它会自动匹配最少的内容，一般情况默为贪婪模式。匹配更多的情况</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117012037635.png"></p>
-<p>可以发现它是以回车键为截断的，首先它会将回车键的前部分转换成元组的一个元素，然后将后面的name作为一个元素，放到第二位</p>
-<p>但是加上一个（）以后就发生了变化</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117012347741.png"></p>
-<p>？就是不贪婪了，前一个括号里不会有等号</p>
-<p>从前往后，找到的第一个等号，就作为划分，后面全部算等号右边的值，包括又出现等号的情况，因为后面是贪婪匹配</p>
-<p><font color=red>这里理解可能还存在问题</font></p>
-<p>那么此时的content里面的内容为：</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220116235846679.png"></p>
-<h3 id="（3）最终转换成字典"><a href="#（3）最终转换成字典" class="headerlink" title="（3）最终转换成字典"></a>（3）最终转换成字典</h3><p>最终再通过for循环每一个元组将元素提取出来形成字典，i表示每一个元组，第一个元组：key&#x3D;id，vaule为id的值</p>
-<pre><code class="python">  for i in content:
-        key = i[0]
-        value = i[1]
-        sign_data[key] = value
-</code></pre>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117001711505.png"></p>
-<h2 id="3-数据修改"><a href="#3-数据修改" class="headerlink" title="3. 数据修改"></a>3. 数据修改</h2><h3 id="（1）说明"><a href="#（1）说明" class="headerlink" title="（1）说明"></a>（1）说明</h3><p>上面的转换成了字典，但是还有一些内容是实时的需要修改，这里我只修改了其中的两项</p>
-<h3 id="（2）打卡时间的修改"><a href="#（2）打卡时间的修改" class="headerlink" title="（2）打卡时间的修改"></a>（2）打卡时间的修改</h3><p>利用python中的time库的strftime方法实现当前的时间</p>
-<pre><code class="python">datatime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, time.localtime(time.time()))
-</code></pre>
-<p>然后直接利用update修改字典里面的键对应的值即可</p>
-<pre><code> sign_data.update(&#123;&#39;updateTime&#39;: datatime&#125;)
-</code></pre>
-<h3 id="（3）经纬度的修改"><a href="#（3）经纬度的修改" class="headerlink" title="（3）经纬度的修改"></a>（3）经纬度的修改</h3><p>这个经纬度其实可改可不改</p>
-<pre><code class="python">num1 = random.randrange(100, 999)
-num2 = random.randrange(100, 999)
-
-addres = re.findall(&#39;(\d&#123;3&#125;\.\d&#123;3&#125;)\d*,(\d&#123;2&#125;\.\d&#123;3&#125;)&#39;, sign_data[&#39;longitudeAndLatitude&#39;])
-sign_data[&#39;longitudeAndLatitude&#39;]  =  f&#39;&#123;addres[0][0]&#125;&#123;num1&#125;,&#123;addres[0][1]&#125;&#123;num2&#125;&#39;
-</code></pre>
-<p>前面两行代码表示随机生成随机数</p>
-<p>第三行代码表示减小精度，</p>
-<p>第四行代码表示在最后几位数上随机生成几个数，以此来造成变化</p>
-<h2 id="4-全部代码"><a href="#4-全部代码" class="headerlink" title="4. 全部代码"></a>4. 全部代码</h2><pre><code class="python"># -*- coding:utf-8 -*-
-import re
-import time
-
-import random
-import requests
-
-datatime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, time.localtime(time.time()))
-
-num1 = random.randrange(100, 999)
-num2 = random.randrange(100, 999)
-
-info_daka = &#39;&#39;
-
-def main(*args):
-    sign_url = &#39;https://h5.xiaofubao.com/marketing/health/doDetail&#39;
-
-    data_str = re.sub(r&#39;&amp;&#39;, &#39;\n&#39;, info_daka)
-    content = re.findall(r&#39;(.*?)=(.*)&#39;, data_str)
-    sign_data = &#123;&#125;
-    for i in content:
-        key = i[0]
-        value = i[1]
-        sign_data[key] = value
-    # print(sign_data)
-    addres = re.findall(&#39;(\d&#123;3&#125;\.\d&#123;3&#125;)\d*,(\d&#123;2&#125;\.\d&#123;3&#125;)&#39;, sign_data[&#39;longitudeAndLatitude&#39;])
-    sign_data[
-        &#39;longitudeAndLatitude&#39;] = f&#39;&#123;addres[0][0]&#125;&#123;num1&#125;,&#123;addres[0][1]&#125;&#123;num2&#125;&#39;
-    sign_data.update(&#123;&#39;updateTime&#39;: datatime&#125;)
-    print(sign_data)
-    res_sign = requests.post(url=sign_url, data=sign_data)
-    print(res_sign.text)
-
-
-# 云函数入口
-def main_handler(event, context):
-    main()
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220112180434408.png"></p>
-<h1 id="四、自动化运行脚本"><a href="#四、自动化运行脚本" class="headerlink" title="四、自动化运行脚本"></a>四、自动化运行脚本</h1><p>上面的脚本虽然实现了内容的传递的方式，但是仍然需要运行脚本才能发送请求，如果每次打卡都需要运行脚本的话，那么所做的将毫无意义。采取的方式是，利用腾讯云的云函数，利用里面的定时触发器，每日定时打卡。</p>
-<p>在使用之前，需要在代码中添上两行代码作为云函数的入口</p>
-<pre><code class="python"># 云函数入口
-def main_handler(event, context):
-    main()
-</code></pre>
-<p>接下来就是注册一个腾讯云账号，进入腾讯云函数网址<a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/scf/list">https://console.cloud.tencent.com/scf/list</a></p>
-<p>（1）新建函数，选择从头开始，</p>
-<p>（2）在高级配置中修改执行超过时间</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117002904550.png"></p>
-<p>（3）在触发配置中选择自定义创建，具体要实现的情况自己选择，也可以直接确定</p>
-<p><img src="https://myblog-1305715400.cos.ap-nanjing.myqcloud.com/img/image-20220117003015028.png"></p>
-<p>（4）在函数管理中，将前面的代码写进去，然后再测试，部署即可</p>
+<h3 id="2、利用过程"><a href="#2、利用过程" class="headerlink" title="2、利用过程"></a>2、利用过程</h3><p>（1）上传webshell，文件名是“文件名.inc”。此时程序会生成md5生成一个新的文件名xxx.inc。</p>
+<p>（2）将重命名后的名字xxx进行发序列化以后，以此来作为修改cookie值</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮箱至 1627319559@qq.com </span>
